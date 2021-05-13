@@ -5,4 +5,4 @@
 1. colored (pip install colored)
 
 # TODO List ❗
-- Check out the issues page for this game project [here](https://github.com/JordanLeich/Zombie-Survival-Game/issues).
+- Check out the issues page for this game project [here](https://github.com/JordanLeich/Zombie-Survival-Game/issues/1).
