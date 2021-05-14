@@ -29,6 +29,9 @@ def game_intro_description():
 def game():
     global user_health, user_balance
     user_name = str(input('What is your survivors name? '))
+    while user_name == '' or user_name == ' ':
+        print(f'{colors.red}Username cannot be{colors.reset}')
+        user_name = str(input('What is your survivors name? '))
     print()
     difficulty()
 
