@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 
-# Made by Jordan Leich & Mordy Waldner on 5/11/2021, Last updated on 5/14/2021, Version 1.5
+# Made by Jordan Leich & Mordy Waldner on 5/11/2021, Last updated on 5/14/2021, Version 2.0
 
-# TODO List complete the storyline, add more checkpoints as story progresses, finish merchant function
 
 # Imports
 import colors
@@ -20,6 +19,7 @@ try:
         baseball_bat = data['Baseball Bat']
         beretta_pistol = data['Beretta Pistol']
         ak_47_rifle = data['AK_47 Rifle']
+        rocker_launcher = data['Rocket Missile Launcher']
 except FileNotFoundError:
     print(colors.yellow + 'No saved data found...\n' + colors.reset + colors.green + 'Starting a fresh game...\n' +
           colors.reset)
@@ -39,7 +39,8 @@ def game_intro_description():
 
 
 def game():
-    global user_health, user_balance, merchant_luck, starting_knife, ak_47_rifle, beretta_pistol, baseball_bat
+    global user_health, user_balance, merchant_luck, starting_knife, ak_47_rifle, beretta_pistol, baseball_bat, \
+        rocker_launcher
     difficulty()
 
     print('You have ended up in a small local town called Hinesville. This old town contains a population of about '
@@ -66,7 +67,7 @@ def game():
 
 
 def merchant():
-    global merchant_luck, user_balance
+    global merchant_luck, user_balance, baseball_bat, beretta_pistol, ak_47_rifle, rocker_launcher
     merchant_luck = random.randint(1, 7)
 
     if merchant_luck == 4:
@@ -78,7 +79,7 @@ def merchant():
                                   'money!\n', colors.reset)
             time.sleep(1)
 
-        user_choice = str(input('Would you like to buy from the merchant or skip past him (buy / skip): '))
+        user_choice = str(input('Would you like to buy from the merchant or skip past the merchant (buy / skip): '))
         print()
         time.sleep(1)
 
@@ -86,23 +87,52 @@ def merchant():
                 lower() == 'yes':
             user_item_buy = int(input('''--- Merchants inventory ---
 (1) Spiked Baseball Bat (5 Dollars)
-(2) 1997 Beretta Pistol (20 Dollars)
-(3) 1999 AK-47 Assault Rifle (5 Dollars)
+(2) 1997 Beretta Pistol (15 Dollars)
+(3) 1999 AK-47 Assault Rifle (25 Dollars)
+(4) Rocket Missile Launcher (100 Dollars)
 What would you like to buy or skip the merchant: '''))
             print()
             time.sleep(1)
 
             if user_item_buy == 1:
+                user_balance -= 5
                 print(colors.green + 'Spiked Baseball Bat has been purchased!\n', colors.reset)
+                baseball_bat = True
                 time.sleep(1)
+            elif user_item_buy == 2:
+                user_balance -= 15
+                print(colors.green + '1997 Beretta Pistol has been purchased!\n', colors.reset)
+                beretta_pistol = True
+                time.sleep(1)
+            elif user_item_buy == 3:
+                print(colors.green + '1999 AK-47 Assault Rifle has been purchased!\n', colors.reset)
+                user_balance -= 25
+                ak_47_rifle = True
+                time.sleep(1)
+            elif user_item_buy == 4:
+                print(colors.green + 'Rocket Missile Launcher has been purchased!\n', colors.reset)
+                user_balance -= 100
+                rocker_launcher = True
+                time.sleep(1)
+            else:
+                error_message()
 
         elif user_choice.lower() == 's' or user_choice.lower() == 'sell' or user_choice.lower() == 'n' or user_choice. \
                 lower() == 'no':
-            print()
+            print('The merchant has been skipped but can be brought back later...\n')
+            time.sleep(1)
+        else:
+            error_message()
+
+
+def continue_message():
+    print('continue story here')
+    quit()
 
 
 def gas_station():
-    global user_health, user_balance, merchant_luck
+    global user_health, user_balance, merchant_luck, starting_knife, rocker_launcher, baseball_bat, beretta_pistol, \
+        ak_47_rifle
     print('You have entered the local gas station...\n', colors.green + 'A checkpoint has been reached...\n',
           colors.reset)
     time.sleep(1)
@@ -113,7 +143,9 @@ def gas_station():
         user_data_file.write(json.dumps({'Balance': user_balance, 'Health': user_health,
                                          'Merchant Luck': merchant_luck, 'Starting Knife': starting_knife,
                                          'Baseball Bat': baseball_bat, 'Beretta Pistol': beretta_pistol,
-                                         'AK 47 Rifle': ak_47_rifle}))
+                                         'AK 47 Rifle': ak_47_rifle, 'Rocket Missile Launcher': rocker_launcher}))
+
+    continue_message()
 
 
 def outside_area():
@@ -142,7 +174,9 @@ def outside_area():
 
         if user_choice == 1:
             print('You attacked the zombie with the knife you found earlier and killed the zombie... '
-                  'You search the body of the zombie and woman and find a total of 11 Dollars...')
+                  'You search the body of the zombie and woman and find a total of 11 Dollars...\n')
+            time.sleep(2)
+            continue_message()
 
         elif user_choice == 2:
             gas_station()
