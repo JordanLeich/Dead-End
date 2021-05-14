@@ -9,8 +9,11 @@ import json
 import time
 import random
 
+import sounds_effects
+
 try:
     with open('data.json', 'r') as data:
+        print(colors.green + 'Saved data checkpoint has been found!', colors.reset)
         data = json.load(data)
         user_balance = data['Balance']
         user_health = data['Health']
@@ -18,23 +21,31 @@ try:
         starting_knife = data['Starting Knife']
         baseball_bat = data['Baseball Bat']
         beretta_pistol = data['Beretta Pistol']
-        ak_47_rifle = data['AK_47 Rifle']
+        ak_47_rifle = data['AK 47 Rifle']
         rocker_launcher = data['Rocket Missile Launcher']
+        print(colors.green + 'Saved data has been loaded successfully!\n', colors.reset)
 except FileNotFoundError:
+    print()
     print(colors.yellow + 'No saved data found...\n' + colors.reset + colors.green + 'Starting a fresh game...\n' +
           colors.reset)
     user_balance = 0
     user_health = 0
     merchant_luck = 0
+    baseball_bat = False
+    beretta_pistol = False
+    starting_knife = False
+    rocker_launcher = False
+    ak_47_rifle = False
     time.sleep(1)
 
 
 def game_intro_description():
+    sounds_effects.intro_sound()
     print('This is a zombie survival game where you must make the best choices and decisions possible in order to live.'
           ' As a survivor, you will encounter zombies, weapons, people, and a merchant to buy from with an '
           'in-game currency. Every decision you make has a cause and effect while some lead you to fortune and others '
           'lead you to death.\n')
-    time.sleep(2)
+    time.sleep(2.5)
     game()
 
 
@@ -71,6 +82,7 @@ def merchant():
     merchant_luck = random.randint(1, 7)
 
     if merchant_luck == 4:
+        # Add a good luck sound effect here
         print(colors.green + 'Whoosh! The lucky merchant has appeared in-front of you...\n' + colors.reset)
         time.sleep(1)
 
@@ -133,7 +145,8 @@ def continue_message():
 def gas_station():
     global user_health, user_balance, merchant_luck, starting_knife, rocker_launcher, baseball_bat, beretta_pistol, \
         ak_47_rifle
-    print('You have entered the local gas station...\n', colors.green + 'A checkpoint has been reached...\n',
+    sounds_effects.horror_sound_effects()
+    print('You have entered the local gas station...\n\n' + colors.green + 'A checkpoint has been reached...\n',
           colors.reset)
     time.sleep(1)
 
@@ -165,6 +178,7 @@ def outside_area():
         print('You decide to explore the outside area and along the way, you see a woman bleeding out on the ground '
               'with the shape of a man figure hovering over her...\n')
         time.sleep(2)
+        sounds_effects.zombie_attack_outside()
         print('Lone behold... the figure is eating the woman alive but you are too late to rescue her!\n')
         time.sleep(1.5)
         user_choice = int(input('Since you have the knife on you already, (1) do you attack the zombie or (2) '
@@ -173,6 +187,7 @@ def outside_area():
         time.sleep(1)
 
         if user_choice == 1:
+            sounds_effects.zombie_attack_outside()
             print('You attacked the zombie with the knife you found earlier and killed the zombie... '
                   'You search the body of the zombie and woman and find a total of 11 Dollars...\n')
             time.sleep(2)
@@ -197,6 +212,7 @@ def difficulty():
     user_difficulty = str(input('Select a difficulty: '))
     print()
     time.sleep(1)
+    sounds_effects.difficulty_select_sound()
 
     if user_difficulty.lower() == 'e' or user_difficulty.lower() == 'easy':
         print(colors.green + 'Easy mode has been selected, you will begin with 200 health.\n' + colors.reset)
@@ -214,9 +230,29 @@ def difficulty():
         error_message()
 
 
+def restart():
+    restart_choice = str(input('Would you like to restart the game (yes / no): '))
+
+    if restart_choice.lower() == 'y' or restart_choice.lower() == 'yes':
+        game_intro_description()
+    elif restart_choice.lower() == 'n' or restart_choice.lower() == 'no':
+        print('Ending game...')
+        time.sleep(.5)
+        quit()
+    else:
+        error_message()
+
+
+def end_game():
+    print(colors.green + 'Congratulations, you have reached the end of the horrors...\n', colors.reset)
+    time.sleep(1.5)
+    restart()
+
+
 def error_message():
     time.sleep(1)
-    print(colors.red + 'An error has been found... restarting game...\n' + colors.reset)
+    # add a bad luck sound effect here
+    print(colors.red + 'An error has been found... restarting game...\n', colors.reset)
     time.sleep(2)
     game()
 
