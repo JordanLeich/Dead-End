@@ -1,14 +1,13 @@
 #!/usr/bin/python3
 
-# Made by Jordan Leich on 5/11/2021, Last updated on 5/13/2021, Version 1.2
+# Made by Jordan Leich & Mordy Waldner on 5/11/2021, Last updated on 5/13/2021, Version 1.2
 
-# TODO List add a merchant, add a save feature, complete the storyline
+# TODO List add a merchant, complete the storyline
 
 # Imports
 import colors
 import json
 import time
-import random
 
 # Global variables
 user_balance = 0
@@ -19,7 +18,8 @@ try:
         data = json.load(data)
         print(data)
 except FileNotFoundError:
-    print(f'{colors.green}No saved data found...\nStarting fresh game\n{colors.reset}')
+    print(colors.green + 'No saved data found...\nStarting fresh game\n' + colors.reset)
+
 
 def game_intro_description():
     print('start here, this game is about...\n')
@@ -30,7 +30,7 @@ def game():
     global user_health, user_balance
     user_name = str(input('What is your survivors name? '))
     while user_name == '' or user_name == ' ':
-        print(f'{colors.red}Username cannot be{colors.reset}')
+        print(colors.red + 'Username cannot be null!' + colors.reset)
         user_name = str(input('What is your survivors name? '))
     print()
     difficulty()
