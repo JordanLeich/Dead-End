@@ -1,17 +1,21 @@
 #!/usr/bin/python3
 
-# Made by Jordan Leich & Mordy Waldner on 5/11/2021, Last updated on 5/13/2021, Version 1.2
+# Made by Jordan Leich & Mordy Waldner on 5/11/2021, Last updated on 5/14/2021, Version 1.5
 
 # TODO List add a merchant, complete the storyline
 
 # Imports
+import random
+
 import colors
 import json
 import time
+import random
 
 # Global variables
 user_balance = 0
 user_health = 0
+merchant_luck = 0
 
 try:
     with open('data.json', 'r') as data:
@@ -64,32 +68,71 @@ def game():
         error_message()
 
 
+def merchant():
+    global merchant_luck, user_balance
+    merchant_luck = random.randint(1, 15)
+
+    if merchant_luck == 5:
+        print(colors.green + 'Whoosh! The lucky merchant has appeared...\n' + colors.reset)
+        time.sleep(1)
+        user_choice = str(input('Would you like to buy from the merchant or skip past him (buy / skip): '))
+        print()
+        time.sleep(1)
+
+        if user_choice.lower() == 'b' or user_choice.lower() == 'buy' or user_choice.lower() == 'y' or user_choice. \
+                lower() == 'yes':
+            print()
+        elif user_choice.lower() == 's' or user_choice.lower() == 'sell' or user_choice.lower() == 'n' or user_choice. \
+                lower() == 'no':
+            print()
+
+
 def gas_station():
-    print('You have entered the local gas station...\n')
+    global user_health, user_balance, merchant_luck
+    print('You have entered the local gas station...\n', colors.green + 'A checkpoint has been reached...\n',
+          colors.reset)
+    time.sleep(1)
 
 
 def outside_area():
-    global user_health, user_balance
+    global user_health, user_balance, merchant_luck
     print('You make your way to the outside area...\n')
     time.sleep(1)
     print('You instantly notice something is not right... a dark gloomy fog covers all of the town and you do not see '
           'a single friendly soul insight... You start to come to a conclusion about where everybody in the small '
           'town of Hinesville has went but nothing is making sense...\n')
     time.sleep(2)
-    user_choice2 = int(input('You have the choice to either explore (1) outside area or (2) '
-                             'visit the local gas station: '))
+    user_choice = int(input('You have the choice to either explore (1) outside area or (2) visit the local gas '
+                            'station: '))
     print()
     time.sleep(1)
 
-    if user_choice2 == 1:
+    if user_choice == 1:
+        print('You decide to explore the outside area and along the way, you see a woman bleeding out on the ground '
+              'with the shape of a man figure hovering over her...\n')
+        time.sleep(2)
+        print('Lone behold... the figure is eating the woman alive but you are too late to rescue her!\n')
+        time.sleep(1.5)
+        user_choice = int(input('Since you have the knife on you already, (1) do you attack the zombie or (2) '
+                                'avoid the zombie and run to the local gas station: '))
         print()
-    elif user_choice2 == 2:
+        time.sleep(1)
+
+        if user_choice == 1:
+            print()
+        elif user_choice == 2:
+            gas_station()
+        else:
+            error_message()
+
+    elif user_choice == 2:
         gas_station()
     else:
         error_message()
 
 
 def difficulty():
+    global user_health
     print(colors.green + 'Easy\n' + colors.reset + colors.yellow + 'Medium\n' + colors.reset + colors.red + 'Hardcore\n'
           + colors.reset)
 
