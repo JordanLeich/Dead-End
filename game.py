@@ -52,7 +52,7 @@ def game():
 
     if user_choice1 == 1:
         print('You have decided to look around your apartment and decide to grab a concealed knife that you legally '
-              'are allowed to carry in public areas just in case something happens...\n')
+              'are allowed to carry in public areas just in case anything happens...\n')
         time.sleep(1)
         starting_knife = True
         outside_area()
