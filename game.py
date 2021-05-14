@@ -14,6 +14,12 @@ import random
 user_balance = 0
 user_health = 0
 
+try:
+    with open('data.json', 'r') as data:
+        data = json.load(data)
+        print(data)
+except FileNotFoundError:
+    print(f'{colors.green}No saved data found...\nStarting fresh game\n{colors.reset}')
 
 def game_intro_description():
     print('start here, this game is about...\n')
@@ -23,6 +29,9 @@ def game_intro_description():
 def game():
     global user_health, user_balance
     user_name = str(input('What is your survivors name? '))
+    while user_name == '' or user_name == ' ':
+        print(f'{colors.red}Username cannot be{colors.reset}')
+        user_name = str(input('What is your survivors name? '))
     print()
     difficulty()
 
