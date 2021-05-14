@@ -21,7 +21,8 @@ try:
         beretta_pistol = data['Beretta Pistol']
         ak_47_rifle = data['AK_47 Rifle']
 except FileNotFoundError:
-    print(colors.green + 'No saved data found...\nStarting a fresh game...\n' + colors.reset)
+    print(colors.yellow + 'No saved data found...\n' + colors.reset + colors.green + 'Starting a fresh game...\n' +
+          colors.reset)
     user_balance = 0
     user_health = 0
     merchant_luck = 0
