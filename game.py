@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# Made by Jordan Leich & Mordy Waldner on 5/11/2021, Last updated on 5/14/2021, Version 2.0
+# Made by Jordan Leich & Mordy Waldner on 5/11/2021, Last updated on 5/16/2021, Version 2.5
 
 
 # Imports
@@ -8,7 +8,6 @@ import colors
 import json
 import time
 import random
-
 import sounds_effects
 
 try:
@@ -51,8 +50,14 @@ def game_intro_description():
 
 def game():
     global user_health, user_balance, merchant_luck, starting_knife, ak_47_rifle, beretta_pistol, baseball_bat, \
-        rocker_launcher
-    difficulty()
+        rocker_launcher, data
+
+    try:
+        with open('data.json', 'r') as data:
+            print(colors.green + 'Difficulty screen skipped due to saved data already existing...\n', colors.reset)
+            time.sleep(1)
+    except FileNotFoundError:
+        difficulty()
 
     print('You have ended up in a small local town called Hinesville. This old town contains a population of about '
           'only 6000 people and holds only a gas station, local diner, and a park. The current year is 1999 and you '
@@ -97,6 +102,8 @@ def merchant():
 
         if user_choice.lower() == 'b' or user_choice.lower() == 'buy' or user_choice.lower() == 'y' or user_choice. \
                 lower() == 'yes':
+            print(colors.green + 'Your current cash balance is:', user_balance, '\n', colors.reset)
+            time.sleep(1)
             user_item_buy = int(input('''--- Merchants inventory ---
 (1) Spiked Baseball Bat (5 Dollars)
 (2) 1997 Beretta Pistol (15 Dollars)
@@ -106,22 +113,22 @@ What would you like to buy or skip the merchant: '''))
             print()
             time.sleep(1)
 
-            if user_item_buy == 1:
+            if user_item_buy == 1 and user_balance >= 5:
                 user_balance -= 5
                 print(colors.green + 'Spiked Baseball Bat has been purchased!\n', colors.reset)
                 baseball_bat = True
                 time.sleep(1)
-            elif user_item_buy == 2:
+            elif user_item_buy == 2 and user_balance >= 15:
                 user_balance -= 15
                 print(colors.green + '1997 Beretta Pistol has been purchased!\n', colors.reset)
                 beretta_pistol = True
                 time.sleep(1)
-            elif user_item_buy == 3:
+            elif user_item_buy == 3 and user_balance >= 25:
                 print(colors.green + '1999 AK-47 Assault Rifle has been purchased!\n', colors.reset)
                 user_balance -= 25
                 ak_47_rifle = True
                 time.sleep(1)
-            elif user_item_buy == 4:
+            elif user_item_buy == 4 and user_balance >= 100:
                 print(colors.green + 'Rocket Missile Launcher has been purchased!\n', colors.reset)
                 user_balance -= 100
                 rocker_launcher = True
@@ -150,15 +157,72 @@ def gas_station():
           colors.reset)
     time.sleep(1)
 
-    merchant()
+    checkpoint_save()
 
-    with open('data.json', 'w') as user_data_file:
-        user_data_file.write(json.dumps({'Balance': user_balance, 'Health': user_health,
-                                         'Merchant Luck': merchant_luck, 'Starting Knife': starting_knife,
-                                         'Baseball Bat': baseball_bat, 'Beretta Pistol': beretta_pistol,
-                                         'AK 47 Rifle': ak_47_rifle, 'Rocket Missile Launcher': rocker_launcher}))
+    print('From the front counter, you see a man who points his gun at you while you walk in! The man tells you to '
+          'freeze but then notices that you are a survivor just like him... You both discuss and try to figure out '
+          'what the hell is going on in this city and the man tells you that there has been a bacteria that can '
+          'contaminated all meat supply chains across the world...\n')
+    time.sleep(5)
+    user_choice = int(input('You have the choice to either (1) keep talking to the man or (2) ask the man for any '
+                            'supplies along your journey: '))
+    print()
+    time.sleep(1)
 
-    continue_message()
+    if user_choice == 1:
+        print('As you keep talking to the man, he starts to tell you about his family and how they would always '
+              'venture out to the park with his young daughter and son...\n')
+        time.sleep(2)
+        sounds_effects.zombie_attack_inside()
+        print('Out of nowhere, a group of 3 zombies begin to bang on the glass door from which you entered in from...'
+              '\n')
+        time.sleep(2.5)
+        sounds_effects.zombie_attack_inside()
+        print('While attempting to save you, the man fights off 2 zombies with his pump shotgun and get eaten alive '
+              'while saying, RUN! but more zombies come to arise on you...\n')
+        time.sleep(2.5)
+        print('You decide to fight off the zombies in the will of your hopes for living...\n')
+        time.sleep(1.5)
+
+        if rocker_launcher:
+            user_health -= 0
+            print('You have used the rocker missile launcher and defeated the zombies without losing any health!\n')
+            time.sleep(1)
+        elif ak_47_rifle:
+            user_health -= 10
+            print('You have used the ak-47 rifle and defeated the zombies with only losing 10 health!\n')
+            time.sleep(1)
+        elif beretta_pistol:
+            user_health -= 25
+            print('You have used the beretta pistol and defeated the zombies with only losing 25 health!\n')
+            time.sleep(1)
+        elif baseball_bat:
+            user_health -= 35
+            print('You have used the baseball bat and defeated the zombies with losing 35 health!\n')
+            time.sleep(1)
+        elif starting_knife:
+            user_health -= 45
+            print('You have used the starting knife and defeated the zombies with losing 45 health!\n')
+            time.sleep(1)
+        else:
+            error_message()
+
+        continue_message()
+
+    elif user_choice == 2:
+        print('The man hands over some cash (16 dollars) and tells you about a mysterious lurking salesman who would '
+              'wonder around the town quite often... The man says that he has not seen him since the apocalypse has '
+              'happened but keep the money on you in-case he shows...\n')
+        user_balance += 16
+        time.sleep(2)
+        print('You give thanks to the man and exit the local gas station and make your way down a tumbled and broken '
+              'road... The gleaming fog and ashe outside is giving way to your vision and you see more and more '
+              'unclear... Deep down inside... you know you must go on further...\n')
+        time.sleep(2)
+        checkpoint_save()
+        continue_message()
+    else:
+        error_message()
 
 
 def outside_area():
@@ -181,17 +245,20 @@ def outside_area():
         sounds_effects.zombie_attack_outside()
         print('Lone behold... the figure is eating the woman alive but you are too late to rescue her!\n')
         time.sleep(1.5)
-        user_choice = int(input('Since you have the knife on you already, (1) do you attack the zombie or (2) '
-                                'avoid the zombie and run to the local gas station: '))
+        user_choice = int(input('(1) attack the zombie or (2) avoid the zombie and run to the local gas station: '))
         print()
         time.sleep(1)
 
         if user_choice == 1:
             sounds_effects.zombie_attack_outside()
-            print('You attacked the zombie with the knife you found earlier and killed the zombie... '
-                  'You search the body of the zombie and woman and find a total of 11 Dollars...\n')
+            print('You attacked the zombie with the knife you found earlier and killed the zombie while losing 15 '
+                  'health... You search the body of the zombie and woman and find a total of 11 Dollars...\n')
+            user_balance += 11
+            user_health -= 15
             time.sleep(2)
-            continue_message()
+            print('You then finally get to make your way over to the local gas station...\n')
+            time.sleep(1)
+            gas_station()
 
         elif user_choice == 2:
             gas_station()
@@ -246,6 +313,7 @@ def restart():
 def end_game():
     print(colors.green + 'Congratulations, you have reached the end of the horrors...\n', colors.reset)
     time.sleep(1.5)
+    checkpoint_save()
     restart()
 
 
@@ -255,6 +323,15 @@ def error_message():
     print(colors.red + 'An error has been found... restarting game...\n', colors.reset)
     time.sleep(2)
     game()
+
+
+def checkpoint_save():
+    merchant()
+    with open('data.json', 'w') as user_data_file:
+        user_data_file.write(json.dumps({'Balance': user_balance, 'Health': user_health,
+                                         'Merchant Luck': merchant_luck, 'Starting Knife': starting_knife,
+                                         'Baseball Bat': baseball_bat, 'Beretta Pistol': beretta_pistol,
+                                         'AK 47 Rifle': ak_47_rifle, 'Rocket Missile Launcher': rocker_launcher}))
 
 
 game_intro_description()
