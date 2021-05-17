@@ -54,6 +54,7 @@ def game():
 
     try:
         with open('data.json', 'r') as data:
+            sounds_effects.difficulty_select_sound()
             print(colors.green + 'Difficulty screen skipped due to saved data already existing...\n', colors.reset)
             time.sleep(1)
     except FileNotFoundError:
