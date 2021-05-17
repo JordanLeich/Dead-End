@@ -17,6 +17,21 @@ def difficulty_select_sound():
     soundObj.play()
 
 
+def bad_luck():
+    soundObj = pygame.mixer.Sound('sounds/badluck.wav')
+    soundObj.play()
+
+
+def good_luck():
+    soundObj = pygame.mixer.Sound('sounds/goodluck.wav')
+    soundObj.play()
+
+
+def merchant_purchase_sound():
+    soundObj = pygame.mixer.Sound('sounds/cashreg.wav')
+    soundObj.play()
+
+
 def horror_sound_effects():
     number = random.randint(1, 3)
 

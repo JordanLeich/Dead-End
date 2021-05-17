@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# Made by Jordan Leich & Mordy Waldner on 5/11/2021, Last updated on 5/16/2021, Version 2.5
+# Made by Jordan Leich & Mordy Waldner on 5/11/2021, Last updated on 5/17/2021, Version 2.6
 
 
 # Imports
@@ -77,7 +77,6 @@ def game():
         outside_area()
     elif user_choice1 == 2:
         time.sleep(1)
-        starting_knife = False
         outside_area()
     else:
         error_message()
@@ -88,7 +87,7 @@ def merchant():
     merchant_luck = random.randint(1, 7)
 
     if merchant_luck == 4:
-        # Add a good luck sound effect here
+        sounds_effects.good_luck()
         print(colors.green + 'Whoosh! The lucky merchant has appeared in-front of you...\n' + colors.reset)
         time.sleep(1)
 
@@ -115,21 +114,25 @@ What would you like to buy or skip the merchant: '''))
             time.sleep(1)
 
             if user_item_buy == 1 and user_balance >= 5:
+                sounds_effects.merchant_purchase_sound()
                 user_balance -= 5
                 print(colors.green + 'Spiked Baseball Bat has been purchased!\n', colors.reset)
                 baseball_bat = True
                 time.sleep(1)
             elif user_item_buy == 2 and user_balance >= 15:
+                sounds_effects.merchant_purchase_sound()
                 user_balance -= 15
                 print(colors.green + '1997 Beretta Pistol has been purchased!\n', colors.reset)
                 beretta_pistol = True
                 time.sleep(1)
             elif user_item_buy == 3 and user_balance >= 25:
+                sounds_effects.merchant_purchase_sound()
                 print(colors.green + '1999 AK-47 Assault Rifle has been purchased!\n', colors.reset)
                 user_balance -= 25
                 ak_47_rifle = True
                 time.sleep(1)
             elif user_item_buy == 4 and user_balance >= 100:
+                sounds_effects.merchant_purchase_sound()
                 print(colors.green + 'Rocket Missile Launcher has been purchased!\n', colors.reset)
                 user_balance -= 100
                 rocker_launcher = True
@@ -148,6 +151,36 @@ What would you like to buy or skip the merchant: '''))
 def continue_message():
     print('continue story here')
     quit()
+
+
+def user_attack():
+    if rocker_launcher:
+        user_health -= 0
+        print('You have used the rocker missile launcher and defeated the zombies without losing any health!\n')
+        time.sleep(1)
+    elif ak_47_rifle:
+        user_health -= 10
+        print('You have used the ak-47 rifle and defeated the zombies with only losing 10 health!\n')
+        time.sleep(1)
+    elif beretta_pistol:
+        user_health -= 25
+        print('You have used the beretta pistol and defeated the zombies with only losing 25 health!\n')
+        time.sleep(1)
+    elif baseball_bat:
+        user_health -= 35
+        print('You have used the baseball bat and defeated the zombies with losing 35 health!\n')
+        time.sleep(1)
+    elif starting_knife:
+        user_health -= 45
+        print('You have used the starting knife and defeated the zombies with losing 45 health!\n')
+        time.sleep(1)
+    elif not starting_knife and not baseball_bat and not beretta_pistol and not ak_47_rifle and not rocker_launcher:
+        print(colors.red + 'Due to not having any available weapons or guns on you... You automatically cannot defend '
+                           'yourself and you have lost all of your health!\n', colors.reset)
+        time.sleep(2)
+        good_ending()
+    else:
+        error_message()
 
 
 def gas_station():
@@ -185,28 +218,7 @@ def gas_station():
         print('You decide to fight off the zombies in the will of your hopes for living...\n')
         time.sleep(1.5)
 
-        if rocker_launcher:
-            user_health -= 0
-            print('You have used the rocker missile launcher and defeated the zombies without losing any health!\n')
-            time.sleep(1)
-        elif ak_47_rifle:
-            user_health -= 10
-            print('You have used the ak-47 rifle and defeated the zombies with only losing 10 health!\n')
-            time.sleep(1)
-        elif beretta_pistol:
-            user_health -= 25
-            print('You have used the beretta pistol and defeated the zombies with only losing 25 health!\n')
-            time.sleep(1)
-        elif baseball_bat:
-            user_health -= 35
-            print('You have used the baseball bat and defeated the zombies with losing 35 health!\n')
-            time.sleep(1)
-        elif starting_knife:
-            user_health -= 45
-            print('You have used the starting knife and defeated the zombies with losing 45 health!\n')
-            time.sleep(1)
-        else:
-            error_message()
+        user_attack()
 
         continue_message()
 
@@ -311,8 +323,15 @@ def restart():
         error_message()
 
 
-def end_game():
+def good_ending():
     print(colors.green + 'Congratulations, you have reached the end of the horrors...\n', colors.reset)
+    time.sleep(1.5)
+    checkpoint_save()
+    restart()
+
+
+def bad_ending():
+    print(colors.red + 'You have not reached the end of the horrors...\n', colors.reset)
     time.sleep(1.5)
     checkpoint_save()
     restart()
@@ -320,7 +339,7 @@ def end_game():
 
 def error_message():
     time.sleep(1)
-    # add a bad luck sound effect here
+    sounds_effects.bad_luck()
     print(colors.red + 'An error has been found... restarting game...\n', colors.reset)
     time.sleep(2)
     game()
