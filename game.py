@@ -9,21 +9,31 @@ import time
 import random
 
 try:
-    with open('data.json', 'r') as data:
-        print(colors.green + 'Saved data checkpoint has been found!\n', colors.reset)
-        data = json.load(data)
-        user_balance = data['Balance']
-        user_health = data['Health']
-        merchant_luck = data['Merchant Luck']
-        user_difficulty = data['Difficulty']
-        starting_knife = data['Starting Knife']
-        baseball_bat = data['Baseball Bat']
-        beretta_pistol = data['Beretta Pistol']
-        ak_47_rifle = data['AK 47 Rifle']
-        rocker_launcher = data['Rocket Missile Launcher']
+    with open('data.json', 'r') as user_data_file:
+        user_data = json.load(user_data_file)
+        user_balance = user_data['Balance']
+        user_health = user_data['Health']
+        merchant_luck = user_data['Merchant Luck']
+        user_difficulty = user_data['Difficulty']
+        starting_knife = user_data['Starting Knife']
+        baseball_bat = user_data['Baseball Bat']
+        beretta_pistol = user_data['Beretta Pistol']
+        ak_47_rifle = user_data['AK 47 Rifle']
+        rocker_launcher = user_data['Rocket Missile Launcher']
         print(colors.green + 'Saved data has been loaded successfully!\n', colors.reset)
+except KeyError:
+    print(colors.yellow + 'Key error in save data found...\n\n' + colors.reset + colors.green +
+          'Starting a fresh game...\n' + colors.reset)
+    user_balance = 0
+    user_health = 0
+    merchant_luck = 0
+    baseball_bat = False
+    beretta_pistol = False
+    starting_knife = False
+    rocker_launcher = False
+    ak_47_rifle = False
+    time.sleep(1)
 except FileNotFoundError:
-    print()
     print(colors.yellow + 'No saved data found...\n\n' + colors.reset + colors.green + 'Starting a fresh game...\n' +
           colors.reset)
     user_balance = 0
@@ -49,13 +59,36 @@ lead you to death.\n''')
 
 def game():
     global user_health, user_balance, merchant_luck, starting_knife, ak_47_rifle, beretta_pistol, baseball_bat, \
-        rocker_launcher, data
+        rocker_launcher, user_data_file
 
     try:
-        with open('data.json', 'r') as data:
+        with open('data.json', 'r') as user_data_file:
             sounds_effects.difficulty_select_sound()
             print(colors.green + 'Difficulty screen skipped due to saved data already existing...\n', colors.reset)
             time.sleep(1)
+            choice = str(input('Would you like to restart the game from scratch or continue with your saved data '
+                               '(restart / continue): '))
+            print()
+            time.sleep(1)
+            if choice.lower() in ['r', 'restart']:
+                user_health = 100
+                user_balance = 0
+                merchant_luck = 0
+                baseball_bat = False
+                beretta_pistol = False
+                starting_knife = False
+                rocker_launcher = False
+                ak_47_rifle = False
+                print(colors.green + 'Default stats have been loaded/saved and a new game will begin...\n',
+                      colors.reset)
+                time.sleep(1)
+                checkpoint_save()
+                game_intro_description()
+            elif choice.lower() in ['c', 'continue']:
+                print(colors.green + 'Continuing game...\n', colors.reset)
+                time.sleep(1)
+            else:
+                error_message()
     except FileNotFoundError:
         difficulty()
 
@@ -566,7 +599,7 @@ def error_message():
 
 def checkpoint_save():
     global user_health, user_balance, merchant_luck, starting_knife, rocker_launcher, baseball_bat, beretta_pistol, \
-        ak_47_rifle, user_difficulty
+        ak_47_rifle, user_difficulty, user_data_file
     merchant()
     print(colors.green + 'A checkpoint has been reached...\n', colors.reset)
     time.sleep(.5)
