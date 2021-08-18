@@ -98,7 +98,7 @@ def game():
         bad_ending()
 
     print('You have ended up in a small local town called Hinesville. This old town contains a population of about '
-          'only 6000 people and holds only a gas station, local diner, and a park. The current year is 1999 and you '
+          'only 6000 people and holds only a Gas Station, Diner, and a Park. The current year is 1999 and you '
           'cannot wait to finally get on with your life and move somewhere more alive\n')
     time.sleep(2)
     user_choice = int(input('While sitting down in your living room apartment, you can either (1) Look around '
@@ -144,9 +144,9 @@ def merchant():  # sourcery no-metrics
             time.sleep(1)
 
             if user_choice.lower() in ['b', 'buy', 'y', 'yes']:
-                print(colors.green + 'Your current health is:', user_health, '\n', colors.reset)
+                print(colors.green + 'Health:', user_health, '\n', colors.reset)
                 time.sleep(1)
-                print(colors.green + 'Your current cash balance is:', user_balance, '\n', colors.reset)
+                print(colors.green + 'Balance:', user_balance, '\n', colors.reset)
                 time.sleep(1)
                 user_item_buy = int(input('''--- Merchants inventory ---
 (1) Spiked Baseball Bat (5 Dollars)
@@ -210,24 +210,29 @@ def user_attack():  # sourcery skip: remove-redundant-if
         ak_47_rifle
     if rocker_launcher:
         user_health -= 0
-        print('You have used the rocker missile launcher and defeated the zombies without losing any health!\n')
-        time.sleep(1)
+        print(colors.green + 'You have used the rocker missile launcher and defeated the zombies without losing any '
+                             'health!\n', colors.reset)
+        time.sleep(2)
     elif ak_47_rifle:
         user_health -= 10
-        print('You have used the ak-47 rifle and defeated the zombies with only losing 10 health!\n')
-        time.sleep(1)
+        print(colors.green + 'You have used the ak-47 rifle and defeated the zombies with only losing 10 health!\n',
+              colors.reset)
+        time.sleep(2)
     elif beretta_pistol:
         user_health -= 25
-        print('You have used the beretta pistol and defeated the zombies with only losing 25 health!\n')
-        time.sleep(1)
+        print(colors.green + 'You have used the beretta pistol and defeated the zombies with only losing 25 health!\n',
+              colors.reset)
+        time.sleep(2)
     elif baseball_bat:
         user_health -= 35
-        print('You have used the baseball bat and defeated the zombies with losing 35 health!\n')
-        time.sleep(1)
+        print(colors.green + 'You have used the baseball bat and defeated the zombies with losing 35 health!\n',
+              colors.reset)
+        time.sleep(2)
     elif starting_knife:
         user_health -= 45
-        print('You have used the starting knife and defeated the zombies with losing 45 health!\n')
-        time.sleep(1)
+        print(colors.green + 'You have used the starting knife and defeated the zombies with losing 45 health!\n',
+              colors.reset)
+        time.sleep(2)
     elif not starting_knife and not baseball_bat and not beretta_pistol and not ak_47_rifle and not rocker_launcher:
         user_health = 0
         print(colors.red + 'Due to not having any available weapons or guns on you... You automatically cannot defend '
@@ -242,7 +247,7 @@ def gas_station():  # sourcery skip: remove-redundant-if
     global user_health, user_balance, merchant_luck, starting_knife, rocker_launcher, baseball_bat, beretta_pistol, \
         ak_47_rifle
     sounds_effects.horror_sound_effects()
-    print('You have entered the local gas station...\n')
+    print('You have entered the local Gas Station...\n')
     time.sleep(1)
 
     checkpoint_save()
@@ -279,14 +284,15 @@ def gas_station():  # sourcery skip: remove-redundant-if
                                'unfortunate the man you found could not make it...\n', colors.reset)
             time.sleep(2)
             user_choice = int(input('You have the choice to either (1) Search the all the bodies of zombies and the '
-                                    'dead man (2) Head over to the Local Diner: '))
+                                    'dead man (2) Head over to the local Diner: '))
             print()
             time.sleep(1)
 
             if user_choice == 1:
-                print('After search everybody in the gas station, you manage to find a total of 8 dollars and you '
-                      'then continue your way over to the local diner...\n')
-                user_balance += 8
+                random_money = random.randint(5, 30)
+                print('After search everybody in the gas station, you manage to find a total of', random_money,
+                      'dollars and you then continue your way over to the local Diner...\n')
+                user_balance += random_money
                 time.sleep(2)
                 diner_area()
             elif user_choice == 2:
@@ -298,13 +304,16 @@ def gas_station():  # sourcery skip: remove-redundant-if
             bad_ending()
 
     elif user_choice == 2:
-        print('The man hands over some cash (16 dollars) and tells you about a mysterious lurking salesman who would '
-              'wonder around the town quite often... The man says that he has not seen him since the apocalypse has '
-              'happened but keep the money on you in-case he shows...\n')
-        user_balance += 16
+        sounds_effects.good_luck()
+        random_money = random.randint(5, 30)
+        print('The man hands over some cash (' + str(random_money),
+              'dollars) and tells you about a mysterious lurking salesman who would wonder around the town quite '
+              'often... The man says that he has not seen him since the apocalypse has happened but keep the money on '
+              'you in-case he shows...\n')
+        user_balance += random_money
         time.sleep(2.5)
         sounds_effects.wind_sound()
-        print('You give thanks to the man and exit the local gas station and make your way down a tumbled and broken '
+        print('You give thanks to the man and exit the local Gas Station and make your way down a tumbled and broken '
               'road... The gleaming fog and ashe outside is giving way to your vision and you see more and more '
               'unclear... Deep down inside... you know you must go on further...\n')
         time.sleep(3.5)
@@ -322,7 +331,7 @@ def outside_area():
           'a single friendly soul insight... You start to come to a conclusion about where everybody in the small '
           'town of Hinesville has went but nothing is making sense...\n')
     time.sleep(3.5)
-    user_choice = int(input('You have the choice to either (1) Explore the Outside Area (2) Visit the Local Gas '
+    user_choice = int(input('You have the choice to either (1) Explore the Outside Area (2) Visit the local Gas '
                             'Station: '))
     print()
     time.sleep(1)
@@ -334,19 +343,21 @@ def outside_area():
         sounds_effects.zombie_attack_outside()
         print('Lone behold... the figure is eating the woman alive but you are too late to rescue her!\n')
         time.sleep(1.5)
-        user_choice = int(input('(1) Attack the zombie or (2) Avoid the zombie and run to the Local Gas Station: '))
+        user_choice = int(input('(1) Attack the zombie or (2) Avoid the zombie and run to the local Gas Station: '))
         print()
         time.sleep(1)
 
-        if user_choice == 1:
+        if user_choice == 1 and starting_knife:
             sounds_effects.zombie_attack_outside()
+            random_money = random.randint(5, 30)
             print('You attacked the zombie with the knife you found earlier and killed the zombie while losing 15 '
-                  'health... You search the body of the zombie and woman and find a total of 11 Dollars...\n')
-            user_balance += 11
+                  'health... You search the body of the zombie and woman to find a total of', random_money,
+                  'Dollars...\n')
+            user_balance += random_money
             user_health -= 15
             time.sleep(2)
-            print('You then finally get to make your way over to the local gas station...\n')
-            time.sleep(1)
+            print('You then finally get to make your way over to the local Gas Station...\n')
+            time.sleep(1.5)
             gas_station()
 
         elif user_choice == 2:
@@ -364,7 +375,7 @@ def diner_area():  # sourcery skip: remove-redundant-if
     global user_health, user_balance, merchant_luck, starting_knife, rocker_launcher, baseball_bat, beretta_pistol, \
         ak_47_rifle
     sounds_effects.horror_sound_effects()
-    print('You have entered the local diner...\n')
+    print('You have entered the local Diner...\n')
     time.sleep(1)
     checkpoint_save()
     user_choice = int(input('You have the choice to either (1) Search inside the Diner Restaurant Area (2) '
@@ -373,13 +384,20 @@ def diner_area():  # sourcery skip: remove-redundant-if
     time.sleep(1)
 
     if user_choice == 1:
-        print('After finishing up your entire search of the diner, you find a total of 14 dollars and you refresh up '
-              'on some food and gain a total of 10 health!\n')
-        user_balance += 14
-        user_health += 10
-        time.sleep(2.5)
+        sounds_effects.good_luck()
+        random_money = random.randint(5, 30)
+        random_health = random.randint(5, 15)
+        print('After finishing up your entire search of the diner, you find a total of', random_money, 'dollars and '
+                                                                                                       'you refresh '
+                                                                                                       'up on some '
+                                                                                                       'food and gain '
+                                                                                                       'a total of',
+              random_health, 'health!\n')
+        user_balance += random_money
+        user_health += random_health
+        time.sleep(3)
         print('You also manage to find a bloody photograph on the ground and upon looking at the image, you see a '
-              'familiar face... You see the face of the man you met earlier at the local gas station taking a group '
+              'familiar face... You see the face of the man you met earlier at the local Gas Station taking a group '
               'family picture!\n')
         time.sleep(3)
         sounds_effects.horror_sound_effects()
@@ -396,8 +414,8 @@ def diner_area():  # sourcery skip: remove-redundant-if
         user_attack()
 
         if user_health > 0:
-            print(colors.green + 'You have successfully defended off the zombies outside the local diner... You will '
-                                 'now head over to the parkview area\n', colors.reset)
+            print(colors.green + 'You have successfully defended off the zombies outside the local Diner... You will '
+                                 'now head over to the Parkview Area\n', colors.reset)
             time.sleep(2)
             parkview_area()
 
@@ -424,11 +442,12 @@ def broken_roads_area():  # sourcery skip: remove-redundant-if
         print(colors.green + 'You have successfully fought off the zombies surrounding the running vehicle... You then '
                              'enter the running vehicle... The manage to put the vehicle into drive and you drive '
                              'away into the sunrise...\n')
-        time.sleep(3.5)
+        time.sleep(4)
         good_ending()
-
     elif user_health <= 0:
         bad_ending()
+    else:
+        error_message()
 
 
 def parkview_area():  # sourcery skip: remove-redundant-if
@@ -463,9 +482,10 @@ def parkview_area():  # sourcery skip: remove-redundant-if
             user_attack()
 
             if user_health > 0:
-                print(colors.green + 'You have successfully killed the man! Upon searching his body, you find only '
-                                     '7 dollars!\n', colors.reset)
-                user_balance += 7
+                random_money = random.randint(5, 30)
+                print(colors.green + 'You have successfully killed the man! Upon searching his body, you find a total '
+                                     'of', random_money, 'dollars!\n', colors.reset)
+                user_balance += random_money
                 time.sleep(1)
                 checkpoint_save()
                 sounds_effects.horror_sound_effects()
@@ -485,12 +505,14 @@ def parkview_area():  # sourcery skip: remove-redundant-if
             user_attack()
 
             if user_health > 0:
-                print('You have successfully killed the man! Upon searching his body, you find only 5 dollars!\n')
-                user_balance += 5
+                random_money = random.randint(5, 30)
+                print(colors.green + 'You have successfully killed the man! Upon searching his body, you find a total '
+                                     'of', random_money, 'dollars!\n', colors.reset)
+                user_balance += random_money
                 time.sleep(1)
                 checkpoint_save()
                 sounds_effects.horror_sound_effects()
-                print('You now decide to leave the parkview area...\n')
+                print('You now decide to leave the Parkview Area...\n')
                 time.sleep(1.5)
                 broken_roads_area()
 
@@ -577,6 +599,8 @@ def good_ending():
     sounds_effects.good_luck()
     print(colors.green + 'Congratulations, you have survived and reached the end of the horrors...\n', colors.reset)
     time.sleep(1)
+    print(colors.green + 'You survived with a total of', user_health, 'health left!\n', colors.reset)
+    time.sleep(1)
     checkpoint_save()
     restart()
 
@@ -600,6 +624,11 @@ def error_message():
 def checkpoint_save():
     global user_health, user_balance, merchant_luck, starting_knife, rocker_launcher, baseball_bat, beretta_pistol, \
         ak_47_rifle, user_difficulty, user_data_file
+    if user_health <= 0:
+        print(colors.red + 'You have reached a checkpoint and currently have no more health! You have lost the game!\n',
+              colors.reset)
+        time.sleep(1)
+        restart()
     merchant()
     print(colors.green + 'A checkpoint has been reached...\n', colors.reset)
     time.sleep(.5)
@@ -609,6 +638,12 @@ def checkpoint_save():
                                          'Starting Knife': starting_knife,
                                          'Baseball Bat': baseball_bat, 'Beretta Pistol': beretta_pistol,
                                          'AK 47 Rifle': ak_47_rifle, 'Rocket Missile Launcher': rocker_launcher}))
+        print(colors.green + 'Health:', user_health, '\n')
+        time.sleep(1)
+        print(colors.green + 'Balance:', user_balance, '\n')
+        time.sleep(1)
+        print(colors.green + 'Current Difficulty:', user_difficulty, '\n', colors.reset)
+        time.sleep(1)
 
 
 game_intro_description()
