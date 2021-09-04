@@ -3,6 +3,8 @@
 # Made by Jordan Leich & Mordy Waldner on 5/11/2021, Last updated on 5/17/2021, Version 3.5
 
 # Imports
+import sys
+
 from other import colors, sounds_effects
 import json
 import time
@@ -202,7 +204,7 @@ This is purely only used for development and has no impact on the game
     """
     print('Continue here...')
     time.sleep(3)
-    quit()
+    sys.exit()
 
 
 def user_attack():  # sourcery skip: remove-redundant-if
@@ -590,7 +592,7 @@ def restart():
     elif restart_choice.lower() in ['n', 'no']:
         print('Ending game...')
         time.sleep(1)
-        quit()
+        sys.exit()
     else:
         error_message()
 
