@@ -1,12 +1,23 @@
-<a style="text-decoration:none" href="https://github.com/JordanLeich/Zombie-Survival-Game/releases">
-    <img src="https://img.shields.io/github/release/JordanLeich/Zombie-Survival-Game.svg?style=flat-square" alt="Releases" />
-  </a>
-<a style="text-decoration:none" href="https://github.com/JordanLeich/Zombie-Survival-Game/contributors/">
-    <img src="https://img.shields.io/github/contributors/JordanLeich/Zombie-Survival-Game?style=flat-square" alt="Contributors" />
-  </a>
-  <a style="text-decoration:none" href="https://github.com/JordanLeich/Zombie-Survival-Game/stargazers">
-    <img src="https://img.shields.io/github/stars/JordanLeich/Zombie-Survival-Game.svg?style=flat-square" alt="Stars" />
-  </a>
+<h1 align="center">
+    Zombie Survival Game 🧟
+</h1>
+<hr>
+<p align="center">
+    <img src="https://img.shields.io/github/license/jordanleich/Zombie-Survival-Game">
+    <img src="https://img.shields.io/github/contributors/jordanleich/Zombie-Survival-Game">
+    <img src="https://img.shields.io/badge/-Spooky-brightgreen">    
+    <img src="https://img.shields.io/github/languages/code-size/JordanLeich/Zombie-Survival-Game">    
+    <img src="https://img.shields.io/github/repo-size/JordanLeich/Zombie-Survival-Game"> 
+    <img src="https://img.shields.io/tokei/lines/github/JordanLeich/Zombie-Survival-Game?label=lines%20of%20code">
+    <img src="https://img.shields.io/github/stars/jordanleich/Zombie-Survival-Game?style=socialhttps://img.shields.io/tokei/lines/github/JordanLeich/Zombie-Survival-Game?label=lines%20of%20code"> 
+    <img src="https://img.shields.io/github/stars/jordanleich?label=user%20stars&style=social"> 
+    <img src="https://img.shields.io/github/v/release/jordanleich/Zombie-Survival-Game?include_prereleases"> 
+    <img src="https://img.shields.io/github/last-commit/jordanleich/Zombie-Survival-Game">    
+</p>
+
+<p align="center">
+    <img src="images/gif.gif" alt="wallpaper">
+</p>
 
 # Description 🎮
 - This is a zombie survival game where you must make the best choices and decisions possible in order to live. As a
@@ -21,5 +32,3 @@
 
 # TODO List ❗
 - Check out the issues page for this game project [here](https://github.com/JordanLeich/Zombie-Survival-Game/issues/1).
-
-![Zombies](images/gif.gif "Zombies")
