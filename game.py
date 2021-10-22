@@ -6,7 +6,7 @@
 import sys
 
 from other import colors, sounds_effects
-from classes import *
+from classes import Player
 import json
 import time
 import random
@@ -57,10 +57,10 @@ As a survivor, you will encounter zombies, weapons, people, and a merchant to bu
 in-game currency. Every decision you make has a cause and effect while some lead you to fortune and others will 
 lead you to death.\n''')
     time.sleep(2.5)
-    game()
+    game(user_health)
 
 
-def game():
+def game(user_health):
     try:
         with open('data.json', 'r') as user_data_file:
             sounds_effects.difficulty_select_sound()
@@ -111,15 +111,15 @@ def game():
               'are allowed to carry in public areas just in case anything happens...\n')
         time.sleep(1)
         starting_knife = True
-        outside_area()
+        outside_area(user_health, user_balance)
     elif user_choice == 2:
         time.sleep(1)
-        outside_area()
+        outside_area(user_health, user_balance)
     else:
         error_message()
 
 
-def merchant():  # sourcery no-metrics
+def merchant(user_balance):  # sourcery no-metrics
 
     if user_health <= 0:
         print(colors.red + 'You currently have no health left...\n', colors.reset)
@@ -204,7 +204,7 @@ This is purely only used for development and has no impact on the game
     sys.exit()
 
 
-def user_attack():
+def user_attack(user_health):
     if rocker_launcher:
         user_health -= 0
         print(colors.green + 'You have used the rocker missile launcher and defeated the zombies without losing any '
@@ -230,17 +230,15 @@ def user_attack():
         print(colors.green + 'You have used the starting knife and defeated the zombies with losing 45 health!\n',
               colors.reset)
         time.sleep(2)
-    elif not starting_knife and not baseball_bat and not beretta_pistol and not ak_47_rifle and not rocker_launcher:
+    else:
         user_health = 0
         print(colors.red + 'Due to not having any available weapons or guns on you... You automatically cannot defend '
                            'yourself and you have lost all of your health!\n', colors.reset)
         time.sleep(2)
         bad_ending()
-    else:
-        error_message()
 
 
-def gas_station():
+def gas_station(user_balance):
     sounds_effects.horror_sound_effects()
     print('You have entered the local Gas Station...\n')
     time.sleep(1)
@@ -271,7 +269,7 @@ def gas_station():
         time.sleep(2.5)
         print('You decide to fight off the zombies in the will of your hopes for living...\n')
         time.sleep(1.5)
-        user_attack()
+        user_attack(user_health)
 
         if user_health > 0:
             print(
@@ -289,13 +287,13 @@ def gas_station():
                       'dollars and you then continue your way over to the local Diner...\n')
                 user_balance += random_money
                 time.sleep(2)
-                diner_area()
+                diner_area(user_health, user_balance)
             elif user_choice == 2:
-                diner_area()
+                diner_area(user_health, user_balance)
             else:
                 error_message()
 
-        elif user_health <= 0:
+        else:
             bad_ending()
 
     elif user_choice == 2:
@@ -312,12 +310,12 @@ def gas_station():
               'road... The gleaming fog and ashe outside is giving way to your vision and you see more and more '
               'unclear... Deep down inside... you know you must go on further...\n')
         time.sleep(3.5)
-        diner_area()
+        diner_area(user_health, user_balance)
     else:
         error_message()
 
 
-def outside_area():
+def outside_area(user_health, user_balance):
     print('You make your way to the outside area...\n')
     time.sleep(1)
     sounds_effects.wind_sound()
@@ -352,20 +350,20 @@ def outside_area():
             time.sleep(2)
             print('You then finally get to make your way over to the local Gas Station...\n')
             time.sleep(1.5)
-            gas_station()
+            gas_station(user_balance)
 
         elif user_choice == 2:
-            gas_station()
+            gas_station(user_balance)
         else:
             error_message()
 
     elif user_choice == 2:
-        gas_station()
+        gas_station(user_balance)
     else:
         error_message()
 
 
-def diner_area():
+def diner_area(user_balance, user_health):
     sounds_effects.horror_sound_effects()
     print('You have entered the local Diner...\n')
     time.sleep(1)
@@ -396,22 +394,22 @@ def diner_area():
         print('Since you are finished exploring and searching the diner area, you proceed on your path to the '
               'parkview area...\n')
         time.sleep(3.5)
-        parkview_area()
+        parkview_area(user_balance)
 
     elif user_choice == 2:
         sounds_effects.zombie_attack_outside()
         print(colors.red + 'Upon leaving the diner area, you come across a group of about 5 zombies heading directly '
                            'towards you!\n', colors.reset)
         time.sleep(1.5)
-        user_attack()
+        user_attack(user_health)
 
         if user_health > 0:
             print(colors.green + 'You have successfully defended off the zombies outside the local Diner... You will '
                                  'now head over to the Parkview Area\n', colors.reset)
             time.sleep(2)
-            parkview_area()
+            parkview_area(user_balance)
 
-        elif user_health <= 0:
+        else:
             bad_ending()
 
     else:
@@ -424,7 +422,7 @@ def broken_roads_area():
           'about 3 zombies surrounding the vehicle... The zombies begin to head directly towards you and you prepare '
           'to fight once more...\n')
     time.sleep(4.5)
-    user_attack()
+    user_attack(user_health)
     checkpoint_save()
 
     if user_health > 0:
@@ -434,13 +432,11 @@ def broken_roads_area():
                              'away into the sunrise...\n')
         time.sleep(4)
         good_ending()
-    elif user_health <= 0:
-        bad_ending()
     else:
-        error_message()
+        bad_ending()
 
 
-def parkview_area():
+def parkview_area(user_balance):
     sounds_effects.horror_sound_effects()
     print('You have entered the parkview area...\n')
     time.sleep(1)
@@ -467,7 +463,7 @@ def parkview_area():
             print('In attempts of helping the man, he screams get the hell away from me, I will blow your head off! '
                   'You now prepare to fight him off!\n')
             time.sleep(2.5)
-            user_attack()
+            user_attack(user_health)
 
             if user_health > 0:
                 random_money = random.randint(5, 30)
@@ -481,7 +477,7 @@ def parkview_area():
                 time.sleep(1.5)
                 broken_roads_area()
 
-            elif user_health <= 0:
+            else:
                 sounds_effects.bad_luck()
                 print(colors.red + 'The man has killed you and zombies start to feast on your dead decaying flesh...'
                                    '\n', colors.reset)
@@ -490,7 +486,7 @@ def parkview_area():
 
         elif user_choice == 2:
             sounds_effects.bad_luck()
-            user_attack()
+            user_attack(user_health)
 
             if user_health > 0:
                 random_money = random.randint(5, 30)
@@ -504,7 +500,7 @@ def parkview_area():
                 time.sleep(1.5)
                 broken_roads_area()
 
-            elif user_health <= 0:
+            else:
                 sounds_effects.bad_luck()
                 print(colors.red + 'The man has killed you and zombies start to feast on your dead decaying flesh...'
                                    '\n', colors.reset)
@@ -603,7 +599,7 @@ def error_message():
     sounds_effects.bad_luck()
     print(colors.red + 'An error has been found... restarting game...\n', colors.reset)
     time.sleep(2)
-    game()
+    game(user_health)
 
 
 def checkpoint_save():
@@ -612,7 +608,7 @@ def checkpoint_save():
               colors.reset)
         time.sleep(1)
         restart()
-    merchant()
+    merchant(user_balance)
     print(colors.green + 'A checkpoint has been reached...\n', colors.reset)
     time.sleep(.5)
     with open('data.json', 'w') as user_data_file:
