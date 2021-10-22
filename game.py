@@ -6,6 +6,7 @@
 import sys
 
 from other import colors, sounds_effects
+from classes import *
 import json
 import time
 import random
@@ -60,9 +61,6 @@ lead you to death.\n''')
 
 
 def game():
-    global user_health, user_balance, merchant_luck, starting_knife, ak_47_rifle, beretta_pistol, baseball_bat, \
-        rocker_launcher, user_data_file
-
     try:
         with open('data.json', 'r') as user_data_file:
             sounds_effects.difficulty_select_sound()
@@ -122,7 +120,6 @@ def game():
 
 
 def merchant():  # sourcery no-metrics
-    global merchant_luck, user_balance, baseball_bat, beretta_pistol, ak_47_rifle, rocker_launcher
 
     if user_health <= 0:
         print(colors.red + 'You currently have no health left...\n', colors.reset)
@@ -207,9 +204,7 @@ This is purely only used for development and has no impact on the game
     sys.exit()
 
 
-def user_attack():  # sourcery skip: remove-redundant-if
-    global user_health, user_balance, merchant_luck, starting_knife, rocker_launcher, baseball_bat, beretta_pistol, \
-        ak_47_rifle
+def user_attack():
     if rocker_launcher:
         user_health -= 0
         print(colors.green + 'You have used the rocker missile launcher and defeated the zombies without losing any '
@@ -245,9 +240,7 @@ def user_attack():  # sourcery skip: remove-redundant-if
         error_message()
 
 
-def gas_station():  # sourcery skip: remove-redundant-if
-    global user_health, user_balance, merchant_luck, starting_knife, rocker_launcher, baseball_bat, beretta_pistol, \
-        ak_47_rifle
+def gas_station():
     sounds_effects.horror_sound_effects()
     print('You have entered the local Gas Station...\n')
     time.sleep(1)
@@ -325,7 +318,6 @@ def gas_station():  # sourcery skip: remove-redundant-if
 
 
 def outside_area():
-    global user_health, user_balance, merchant_luck, starting_knife
     print('You make your way to the outside area...\n')
     time.sleep(1)
     sounds_effects.wind_sound()
@@ -373,9 +365,7 @@ def outside_area():
         error_message()
 
 
-def diner_area():  # sourcery skip: remove-redundant-if
-    global user_health, user_balance, merchant_luck, starting_knife, rocker_launcher, baseball_bat, beretta_pistol, \
-        ak_47_rifle
+def diner_area():
     sounds_effects.horror_sound_effects()
     print('You have entered the local Diner...\n')
     time.sleep(1)
@@ -428,9 +418,7 @@ def diner_area():  # sourcery skip: remove-redundant-if
         error_message()
 
 
-def broken_roads_area():  # sourcery skip: remove-redundant-if
-    global user_health, user_balance, merchant_luck, starting_knife, rocker_launcher, baseball_bat, beretta_pistol, \
-        ak_47_rifle
+def broken_roads_area():
     sounds_effects.zombie_attack_outside()
     print('You have reached the broken roads area and managed to find a running vehicle but there are a group of '
           'about 3 zombies surrounding the vehicle... The zombies begin to head directly towards you and you prepare '
@@ -452,9 +440,7 @@ def broken_roads_area():  # sourcery skip: remove-redundant-if
         error_message()
 
 
-def parkview_area():  # sourcery skip: remove-redundant-if
-    global user_health, user_balance, merchant_luck, starting_knife, rocker_launcher, baseball_bat, beretta_pistol, \
-        ak_47_rifle
+def parkview_area():
     sounds_effects.horror_sound_effects()
     print('You have entered the parkview area...\n')
     time.sleep(1)
@@ -532,7 +518,6 @@ def parkview_area():  # sourcery skip: remove-redundant-if
 
 
 def difficulty():
-    global user_health, user_difficulty
     print(colors.green + 'Easy\n' + colors.reset + colors.yellow + 'Medium\n' + colors.reset + colors.red + 'Hardcore\n'
           + colors.reset)
 
@@ -558,8 +543,6 @@ def difficulty():
 
 
 def restart():
-    global user_health, user_balance, merchant_luck, baseball_bat, beretta_pistol, starting_knife, rocker_launcher, \
-        ak_47_rifle, user_difficulty
     restart_choice = str(input('Would you like to restart the game (yes / no): '))
     print()
 
@@ -624,8 +607,6 @@ def error_message():
 
 
 def checkpoint_save():
-    global user_health, user_balance, merchant_luck, starting_knife, rocker_launcher, baseball_bat, beretta_pistol, \
-        ak_47_rifle, user_difficulty, user_data_file
     if user_health <= 0:
         print(colors.red + 'You have reached a checkpoint and currently have no more health! You have lost the game!\n',
               colors.reset)
