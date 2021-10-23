@@ -1,163 +1,85 @@
-import random
-import time
-from pygame import *
+from random import randint
 import pygame
-from other import colors
+
+# plays all the sounds given from file path
+def _play_sound(file_path):
+    pygame.mixer.init()
+    pygame.mixer.music.load(file_path)
+    pygame.mixer.music.play()
 
 
 def intro_sound():
-    mixer.init()
-    mixer.music.load('sounds/introsoundtrack.mp3')
-    mixer.music.play()
+    _play_sound('sounds/introsoundtrack.mp3')
 
 
 def bad_ending():
-    soundObj = pygame.mixer.Sound('sounds/dark_element_burst.wav')
-    soundObj.play()
+    _play_sound('sounds/dark_element_burst.wav')
 
 
 def difficulty_select_sound():
-    soundObj = pygame.mixer.Sound('sounds/deep_doom.wav')
-    soundObj.play()
+    _play_sound('sounds/deep_doom.wav')
 
 
 def bad_luck():
-    number = random.randint(1, 3)
-
-    if number == 1:
-        soundObj = pygame.mixer.Sound('sounds/badluck.wav')
-        soundObj.play()
-    elif number == 2:
-        soundObj = pygame.mixer.Sound('sounds/dark_slam.wav')
-        soundObj.play()
-    elif number == 3:
-        soundObj = pygame.mixer.Sound('sounds/effect_horror_alerted.wav')
-        soundObj.play()
-    else:
-        error_message()
-
+    badluck_paths = ['sounds/badluck.wav', 
+                     'sounds/dark_slam.wav',
+                     'sounds/effect_horror_alerted.wav',
+                    ]
+    _play_sound(badluck_paths[randint(0, len(badluck_paths))])
 
 def good_luck():
-    soundObj = pygame.mixer.Sound('sounds/goodluck.wav')
-    soundObj.play()
+    _play_sound('sounds/goodluck.wav')
 
 
 def merchant_purchase_sound():
-    number = random.randint(1, 2)
-
-    if number == 1:
-        soundObj = pygame.mixer.Sound('sounds/cashreg.wav')
-        soundObj.play()
-    elif number == 2:
-        soundObj = pygame.mixer.Sound('sounds/metal_shing.wav')
-        soundObj.play()
+    merchant_paths = ['sounds/cashreg.wav', 
+                      'sounds/metal_shing.wav',
+                     ]
+    _play_sound(merchant_paths[randint(0, len(merchant_paths))])
 
 
 def horror_sound_effects():
-    number = random.randint(1, 7)
-
-    if number == 1:
-        mixer.init()
-        mixer.music.load('sounds/horrorsoundeffect1.mp3')
-        mixer.music.play()
-    elif number == 2:
-        mixer.init()
-        mixer.music.load('sounds/horrorsoundeffect2.mp3')
-        mixer.music.play()
-    elif number == 3:
-        mixer.init()
-        mixer.music.load('sounds/horrorsoundeffect3.mp3')
-        mixer.music.play()
-    elif number == 4:
-        soundObj = pygame.mixer.Sound('sounds/ghost_movement.wav')
-        soundObj.play()
-    elif number == 5:
-        soundObj = pygame.mixer.Sound('sounds/supernatural.wav')
-        soundObj.play()
-    elif number == 6:
-        soundObj = pygame.mixer.Sound('sounds/spooky_breathe_evil.wav')
-        soundObj.play()
-    elif number == 7:
-        soundObj = pygame.mixer.Sound('sounds/spooky_ambience.wav')
-        soundObj.play()
-    else:
-        error_message()
+    horror_paths = ['sounds/horrorsoundeffect1.mp3',
+                    'sounds/horrorsoundeffect2.mp3',
+                    'sounds/horrorsoundeffect3.mp3',
+                    'sounds/ghost_movement.wav',
+                    'sounds/supernatural.wav',
+                    'sounds/spooky_breathe_evil.wav',
+                    'sounds/spooky_ambience.wav',
+                   ]
+    _play_sound(horror_paths[randint(0, len(horror_paths))])
 
 
 def wind_sound():
-    soundObj = pygame.mixer.Sound('sounds/heavy_wind.wav')
-    soundObj.play()
+    _play_sound('sounds/heavy_wind.wav')
 
 
 def zombie_attack_inside():
-    number = random.randint(1, 5)
-
-    if number == 1:
-        mixer.init()
-        mixer.music.load('sounds/zombieattack1inside.mp3')
-        mixer.music.play()
-    elif number == 2:
-        mixer.init()
-        mixer.music.load('sounds/zombieattack2inside.mp3')
-        mixer.music.play()
-    elif number == 3:
-        mixer.init()
-        mixer.music.load('sounds/zombieattack3inside.mp3')
-        mixer.music.play()
-    elif number == 4:
-        soundObj = pygame.mixer.Sound('sounds/monster_screech.wav')
-        soundObj.play()
-    elif number == 5:
-        soundObj = pygame.mixer.Sound('sounds/breathe_ghost_eerie.wav')
-        soundObj.play()
-    else:
-        error_message()
+    zombie_inside_path = ['sounds/zombieattack1inside.mp3',
+                          'sounds/zombieattack2inside.mp3',
+                          'sounds/zombieattack3inside.mp3',
+                          'sounds/monster_screech.wav',
+                          'sounds/breathe_ghost_eerie.wav',
+                         ]
+    _play_sound(zombie_inside_path[randint(0, len(zombie_inside_path))])
 
 
 def parkview_entrance():
-    soundObj = pygame.mixer.Sound('sounds/spooky_werewolf_howl.wav')
-    soundObj.play()
+    _play_sound('sounds/spooky_werewolf_howl.wav')
 
 
 def climatic():
-    number = random.randint(1, 2)
-
-    if number == 1:
-        soundObj = pygame.mixer.Sound('sounds/climatic.wav')
-        soundObj.play()
-    elif number == 2:
-        soundObj = pygame.mixer.Sound('sounds/action_riser.wav')
-        soundObj.play()
-    else:
-        error_message()
+    climatic_paths = ['sounds/climatic.wav',
+                      'sounds/action_riser.wav',
+                     ]
+    _play_sound(climatic_paths[randint(0, len(climatic_paths))])
 
 
 def zombie_attack_outside():
-    number = random.randint(1, 5)
-
-    if number == 1:
-        mixer.init()
-        mixer.music.load('sounds/zombieattack1outside.mp3')
-        mixer.music.play()
-    elif number == 2:
-        mixer.init()
-        mixer.music.load('sounds/zombieattack2outside.mp3')
-        mixer.music.play()
-    elif number == 3:
-        mixer.init()
-        mixer.music.load('sounds/zombieattack3outside.mp3')
-        mixer.music.play()
-    elif number == 4:
-        soundObj = pygame.mixer.Sound('sounds/monster_ghost_death.wav')
-        soundObj.play()
-    elif number == 5:
-        soundObj = pygame.mixer.Sound('sounds/breathe_ghost_eerie.wav')
-        soundObj.play()
-    else:
-        error_message()
-
-
-def error_message():
-    print(colors.red + 'Sound effect error found...\n', colors.reset)
-    time.sleep(2)
-    quit()
+    zombie_outside_path = ['sounds/zombieattack1inside.mp3',
+                           'sounds/zombieattack2inside.mp3',
+                           'sounds/zombieattack3inside.mp3',
+                           'sounds/monster_ghost_death.wav',
+                           'sounds/breathe_ghost_eerie.wav',
+                          ]
+    _play_sound(zombie_outside_path[randint(0, len(zombie_outside_path))])
