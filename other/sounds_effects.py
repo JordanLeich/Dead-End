@@ -4,8 +4,8 @@ import pygame
 # plays all the sounds given from file path
 def _play_sound(file_path):
     pygame.mixer.init()
-    pygame.mixer.music.load(file_path)
-    pygame.mixer.music.play()
+    soundObj = pygame.mixer.Sound(file_path)
+    soundObj.play()
 
 
 def intro_sound():
