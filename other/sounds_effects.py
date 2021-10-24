@@ -1,6 +1,7 @@
 from random import randint
 import pygame
 
+
 # plays all the sounds given from file path
 def _play_sound(file_path):
     pygame.mixer.init()
@@ -21,20 +22,21 @@ def difficulty_select_sound():
 
 
 def bad_luck():
-    badluck_paths = ['sounds/badluck.wav', 
+    badluck_paths = ['sounds/badluck.wav',
                      'sounds/dark_slam.wav',
                      'sounds/effect_horror_alerted.wav',
-                    ]
+                     ]
     _play_sound(badluck_paths[randint(0, len(badluck_paths)-1)])
+
 
 def good_luck():
     _play_sound('sounds/goodluck.wav')
 
 
 def merchant_purchase_sound():
-    merchant_paths = ['sounds/cashreg.wav', 
+    merchant_paths = ['sounds/cashreg.wav',
                       'sounds/metal_shing.wav',
-                     ]
+                      ]
     _play_sound(merchant_paths[randint(0, len(merchant_paths)-1)])
 
 
@@ -46,7 +48,7 @@ def horror_sound_effects():
                     'sounds/supernatural.wav',
                     'sounds/spooky_breathe_evil.wav',
                     'sounds/spooky_ambience.wav',
-                   ]
+                    ]
     _play_sound(horror_paths[randint(0, len(horror_paths)-1)])
 
 
@@ -60,7 +62,7 @@ def zombie_attack_inside():
                           'sounds/zombieattack3inside.mp3',
                           'sounds/monster_screech.wav',
                           'sounds/breathe_ghost_eerie.wav',
-                         ]
+                          ]
     _play_sound(zombie_inside_path[randint(0, len(zombie_inside_path)-1)])
 
 
@@ -71,7 +73,7 @@ def parkview_entrance():
 def climatic():
     climatic_paths = ['sounds/climatic.wav',
                       'sounds/action_riser.wav',
-                     ]
+                      ]
     _play_sound(climatic_paths[randint(0, len(climatic_paths)-1)])
 
 
@@ -81,5 +83,5 @@ def zombie_attack_outside():
                            'sounds/zombieattack3inside.mp3',
                            'sounds/monster_ghost_death.wav',
                            'sounds/breathe_ghost_eerie.wav',
-                          ]
+                           ]
     _play_sound(zombie_outside_path[randint(0, len(zombie_outside_path)-1)])
