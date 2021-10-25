@@ -2,13 +2,14 @@ import json
 from os.path import exists as file_exists
 from other import colors
 
+
 class Game_data:
     """This class will offer loading and saving of game data for
     Zombie-Survival-Game."""
 
     def __init__(self):
         self.file = 'data.json'
-        self.file_exists = True if file_exists(self.file) else False
+        self.file_exists = bool(file_exists(self.file))
 
     def load_game(self, player1: object):
         if self.file_exists:

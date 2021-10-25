@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# Made by Jordan Leich & Mordy Waldner on 5/11/2021
+# Created on 5/11/2021
 
 # Imports
 import sys
