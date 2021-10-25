@@ -1,4 +1,8 @@
 class Player:
+    """This class is to setup the player with all variables needed
+    through out the game. If more variabls are needed. they can be
+    added here."""
+
     def __init__(self):
         # user attributes
         self.user_balance = 0

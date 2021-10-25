@@ -5,54 +5,19 @@
 # Imports
 import sys
 import time
-from other import colors, sounds_effects
-from classes import Player
-import json
-from time import sleep
 import random
 
+from other import colors, sounds_effects
+from classes import Player
+from time import sleep
+from gamedata import Game_data
+
 player1 = Player()
+game_data = Game_data()
 
 
 def load_or_save_data():
-    try:
-        with open('data.json', 'r') as user_data_file:
-            user_data = json.load(user_data_file)
-            player1.user_balance = user_data['Balance']
-            player1.user_health = user_data['Health']
-            player1.merchant_luck = user_data['Merchant Luck']
-            player1.user_difficulty = user_data['Difficulty']
-            player1.starting_knife = user_data['Starting Knife']
-            player1.baseball_bat = user_data['Baseball Bat']
-            player1.beretta_pistol = user_data['Beretta Pistol']
-            player1.ak_47_rifle = user_data['AK 47 Rifle']
-            player1.rocker_launcher = user_data['Rocket Missile Launcher']
-            print(colors.green + 'Saved data has been loaded successfully!\n', colors.reset)
-    except KeyError:
-        print(colors.yellow + 'Key error in save data found...\n\n' + colors.reset + colors.green +
-              'Starting a fresh game...\n' + colors.reset)
-        player1.user_balance = 0
-        player1.user_health = 0
-        player1.merchant_luck = 0
-        player1.baseball_bat = False
-        player1.beretta_pistol = False
-        player1.starting_knife = False
-        player1.rocker_launcher = False
-        player1.ak_47_rifle = False
-        sleep(1)
-    except FileNotFoundError:
-        print(
-            colors.yellow + 'No saved data found...\n\n' + colors.reset + colors.green + 'Starting a fresh game...\n' +
-            colors.reset)
-        player1.user_balance = 0
-        player1.user_health = 0
-        player1.merchant_luck = 0
-        player1.baseball_bat = False
-        player1.beretta_pistol = False
-        player1.starting_knife = False
-        player1.rocker_launcher = False
-        player1.ak_47_rifle = False
-        sleep(1)
+    game_data.load_game(player1)
 
 
 def game_intro_description():
@@ -74,7 +39,7 @@ def basement_area():
 
 def game():
     try:
-        with open('data.json', 'r') as user_data_file:
+        with open('data.json', 'r'):
             sounds_effects.difficulty_select_sound()
             print(colors.green + 'Difficulty screen skipped due to saved data already existing...\n', colors.reset)
             sleep(1)
@@ -109,8 +74,8 @@ def game():
         sleep(1)
         bad_ending()
 
-    print('You have ended up in a small local town called Hinesville. This old town contains a population of about '
-          'only 6000 people and holds only a Gas Station, Diner, and a Park. The current year is 1999 and you '
+    print('You have ended up in a small local town called Hinesville. This old town contains a population of about\n'
+          'only 6000 people and holds only a Gas Station, Diner, and a Park. The current year is 1999 and you\n'
           'cannot wait to finally get on with your life and move somewhere more alive\n')
     sleep(2)
     user_choice = int(input('While sitting down in your living room apartment, you can either (1) Look around '
@@ -119,7 +84,7 @@ def game():
     sleep(1)
 
     if user_choice == 1:
-        print('You have decided to look around your apartment and decide to grab a concealed knife that you legally '
+        print('You have decided to look around your apartment and decide to grab a concealed knife that you legally\n'
               'are allowed to carry in public areas just in case anything happens...\n')
         sleep(1)
         player1.starting_knife = True
@@ -247,7 +212,7 @@ def user_attack():
         sleep(2)
     else:
         player1.user_health = 0
-        print(colors.red + 'Due to not having any available weapons or guns on you... You automatically cannot defend '
+        print(colors.red + 'Due to not having any available weapons or guns on you... You automatically cannot defend\n'
                            'yourself and you have lost all of your health!\n', colors.reset)
         sleep(2)
         bad_ending()
@@ -260,9 +225,9 @@ def gas_station():
 
     checkpoint_save()
 
-    print('From the front counter, you see a man who points his gun at you while you walk in! The man tells you to '
-          'freeze but then notices that you are a survivor just like him... You both discuss and try to figure out '
-          'what the hell is going on in this city and the man tells you that there has been a bacteria that can '
+    print('From the front counter, you see a man who points his gun at you while you walk in! The man tells you to\n'
+          'freeze but then notices that you are a survivor just like him... You both discuss and try to figure out\n'
+          'what the hell is going on in this city and the man tells you that there has been a bacteria that can \n'
           'contaminated all meat supply chains across the world...\n')
     sleep(5)
     user_choice = int(input('You have the choice to either (1) Keep talking to the man (2) Ask the man for any '
@@ -271,7 +236,7 @@ def gas_station():
     sleep(1)
 
     if user_choice == 1:
-        print('As you keep talking to the man, he starts to tell you about his family and how they would always '
+        print('As you keep talking to the man, he starts to tell you about his family and how they would always\n'
               'venture out to the park with his young daughter and son...\n')
         sleep(2)
         sounds_effects.zombie_attack_inside()
@@ -625,19 +590,13 @@ def checkpoint_save():
     merchant()
     print(colors.green + 'A checkpoint has been reached...\n', colors.reset)
     sleep(.5)
-    with open('data.json', 'w') as user_data_file:
-        user_data_file.write(json.dumps({'Balance': player1.user_balance, 'Health': player1.user_health,
-                                         'Merchant Luck': player1.merchant_luck, 'Difficulty': player1.user_difficulty,
-                                         'Starting Knife': player1.starting_knife,
-                                         'Baseball Bat': player1.baseball_bat, 'Beretta Pistol': player1.beretta_pistol,
-                                         'AK 47 Rifle': player1.ak_47_rifle,
-                                         'Rocket Missile Launcher': player1.rocker_launcher}))
-        print(colors.green + 'Current Health:', player1.user_health, '\n')
-        sleep(1)
-        print(colors.green + 'Current Balance:', player1.user_balance, '\n')
-        sleep(1)
-        print(colors.green + 'Current Difficulty:', player1.user_difficulty, '\n', colors.reset)
-        sleep(1)
+    game_data.save_game(player1)  # Sends player1 info to save file
+    print(colors.green + 'Current Health:', player1.user_health, '\n')
+    sleep(1)
+    print(colors.green + 'Current Balance:', player1.user_balance, '\n')
+    sleep(1)
+    print(colors.green + 'Current Difficulty:', player1.user_difficulty, '\n', colors.reset)
+    sleep(1)
 
 
 if __name__ == '__main__':
