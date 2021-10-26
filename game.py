@@ -270,13 +270,16 @@ def gas_station():
         random_money = randint(5, 30)
         print('The man hands over some cash (' + str(random_money),
               'dollars) and tells you about a mysterious lurking salesman who would wonder around the town quite '
-              'often... The man says that he has not seen him since the apocalypse has happened but keep the money on '
+              'often... ')
+        print('The man says that he has not seen him since the apocalypse has happened but keep the money on '
               'you in-case he shows...\n')
+
         player1.user_balance += random_money
         sleep(2.5)
         sounds_effects.wind_sound()
         print('You give thanks to the man and exit the local Gas Station and make your way down a tumbled and broken '
-              'road... The gleaming fog and ashe outside is giving way to your vision and you see more and more '
+              'road... ')
+        print('The gleaming fog and ashe outside is giving way to your vision and you see more and more '
               'unclear... Deep down inside... you know you must go on further...\n')
         sleep(3.5)
         diner_area()
@@ -289,8 +292,10 @@ def outside_area():
     sleep(1)
     sounds_effects.wind_sound()
     print('You instantly notice something is not right... a dark gloomy fog covers all of the town and you do not see '
-          'a single friendly soul insight... You start to come to a conclusion about where everybody in the small '
-          'town of Hinesville has went but nothing is making sense...\n')
+          'a single friendly soul insight... ')
+    print('You start to come to a conclusion about where everybody in the small town of Hinesville has went but '
+          'nothing is making sense...\n')
+
     sleep(3.5)
     user_choice = int(input('You have the choice to either (1) Explore the Outside Area (2) Visit the local Gas '
                             'Station: '))
@@ -356,7 +361,8 @@ def diner_area():
         player1.user_health += random_health
         sleep(3)
         print('You also manage to find a bloody photograph on the ground and upon looking at the image, you see a '
-              'familiar face... You see the face of the man you met earlier at the local Gas Station taking a group '
+              'familiar face...')
+        print('You see the face of the man you met earlier at the local Gas Station taking a group '
               'family picture!\n')
         sleep(3)
         sounds_effects.horror_sound_effects()

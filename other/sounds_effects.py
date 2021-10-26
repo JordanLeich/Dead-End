@@ -2,11 +2,13 @@ from random import randint
 import pygame
 
 
-# plays all the sounds given from file path
 def _play_sound(file_path):
+    """
+Plays all the sounds given from file path
+    """
     pygame.mixer.init()
-    pygame.mixer.Sound.set_volume(file_path, 0.5)  # Max volume is 1.0 and Min volume is 0.0
     soundObj = pygame.mixer.Sound(file_path)
+    soundObj.set_volume(0.05)  # Default volume is 0.05. Max volume is 1.0 and Min volume is 0.0
     soundObj.play()
 
 
