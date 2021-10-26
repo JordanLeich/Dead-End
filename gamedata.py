@@ -15,9 +15,10 @@ class Game_data:
         if self.file_exists:
             with open(self.file, 'r') as user_data_file:
                 user_data = json.load(user_data_file)
+                # TODO Fix bug here
                 player1.load_data(user_data)
                 print_green('Saved data has been loaded successfully!\n')
-        else: # don't need to initalize values -- already initalized when class created
+        else:  # don't need to initialize values -- already initialized when class created
             print_yellow('No saved data found...\n\n')
             print_green('Starting a fresh game...\n')
 
@@ -26,4 +27,5 @@ class Game_data:
             print("No previous save. Creating new save.")
 
         with open(self.file, 'w') as user_data_file:
+            # TODO Fix bug here
             json.dump(player1.get_data(), user_data_file)

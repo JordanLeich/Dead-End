@@ -202,7 +202,8 @@ def user_attack():
         sleep(2)
     else:
         player1.user_health = 0
-        print_red('Due to not having any available weapons or guns on you... You automatically cannot defend\nyourself and you have lost all of your health!\n')
+        print_red(
+            'Due to not having any available weapons or guns on you... You automatically cannot defend\nyourself and you have lost all of your health!\n')
         sleep(2)
         bad_ending()
 
@@ -241,9 +242,8 @@ def gas_station():
         user_attack()
 
         if player1.user_health > 0:
-            print(
-               _green 'You have successfully defended off the zombies inside the gas station but it was most '
-                               'unfortunate the man you found could not make it...\n')
+            print_green('You have successfully defended off the zombies inside the gas station but it was most '
+                        'unfortunate the man you found could not make it...\n')
             sleep(2)
             user_choice = int(input('You have the choice to either (1) Search the all the bodies of zombies and the '
                                     'dead man (2) Head over to the local Diner: '))
@@ -367,12 +367,14 @@ def diner_area():
 
     elif user_choice == 2:
         sounds_effects.zombie_attack_outside()
-        print_red('Upon leaving the diner area, you come across a group of about 5 zombies heading directly towards you!\n')
+        print_red(
+            'Upon leaving the diner area, you come across a group of about 5 zombies heading directly towards you!\n')
         sleep(1.5)
         user_attack()
 
         if player1.user_health > 0:
-            print_green('You have successfully defended off the zombies outside the local Diner... You will now head over to the Parkview Area\n')
+            print_green(
+                'You have successfully defended off the zombies outside the local Diner... You will now head over to the Parkview Area\n')
             sleep(2)
             parkview_area()
 
@@ -394,7 +396,8 @@ def broken_roads_area():
 
     if player1.user_health > 0:
         sounds_effects.horror_sound_effects()
-        print_green('You have successfully fought off the zombies surrounding the running vehicle... You then enter the running vehicle... The manage to put the vehicle into drive and you drive away into the sunrise...\n')
+        print_green(
+            'You have successfully fought off the zombies surrounding the running vehicle... You then enter the running vehicle... The manage to put the vehicle into drive and you drive away into the sunrise...\n')
         sleep(4)
         good_ending()
     else:
@@ -432,7 +435,8 @@ def parkview_area():
 
             if player1.user_health > 0:
                 random_money = randint(5, 30)
-                print_green(f'You have successfully killed the man! Upon searching his body, you find a total of ${random_money}!\n')
+                print_green(
+                    f'You have successfully killed the man! Upon searching his body, you find a total of ${random_money}!\n')
                 player1.user_balance += random_money
                 sleep(1)
                 checkpoint_save()
@@ -453,7 +457,8 @@ def parkview_area():
 
             if player1.user_health > 0:
                 random_money = randint(5, 30)
-                print_green(f'You have successfully killed the man! Upon searching his body, you find a total of ${random_money}!\n')
+                print_green(
+                    f'You have successfully killed the man! Upon searching his body, you find a total of ${random_money}!\n')
                 player1.user_balance += random_money
                 sleep(1)
                 checkpoint_save()
