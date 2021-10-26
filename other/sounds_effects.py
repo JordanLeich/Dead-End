@@ -8,7 +8,11 @@ Plays all the sounds given from file path
     """
     pygame.mixer.init()
     soundObj = pygame.mixer.Sound(file_path)
+<<<<<<< Updated upstream
     soundObj.set_volume(0.05)  # Default volume is 0.05. Max volume is 1.0 and Min volume is 0.0
+=======
+    soundObj.set_volume(0.5)  # Max volume is 1.0 and Min volume is 0.0
+>>>>>>> Stashed changes
     soundObj.play()
 
 

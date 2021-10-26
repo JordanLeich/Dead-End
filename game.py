@@ -37,34 +37,35 @@ def basement_area():
 
 
 def game():
-    try:
-        with open('data.json', 'r'):
-            sounds_effects.difficulty_select_sound()
-            print_green('Difficulty screen skipped due to saved data already existing...\n')
+    if player1.user_difficulty in [1, 2, 3]:
+        sounds_effects.difficulty_select_sound()
+        print_green('Difficulty screen skipped due to saved data already existing...\n')
+        sleep(1)
+        choice = str(input('Would you like to restart the game from scratch or continue with your saved data '
+                           '(restart / continue): '))
+        print()
+        sleep(1)
+        if choice.lower() in ['r', 'restart']:
+            player1.user_health = 100
+            player1.user_balance = 0
+            player1.merchant_luck = 0
+            player1.user_difficulty = 0
+            player1.baseball_bat = False
+            player1.beretta_pistol = False
+            player1.starting_knife = False
+            player1.rocket_launcher = False
+            player1.ak_47_rifle = False
+            player1.check_point = ''
+            print_green('Default stats have been loaded/saved and a new game will begin...\n')
             sleep(1)
-            choice = str(input('Would you like to restart the game from scratch or continue with your saved data '
-                               '(restart / continue): '))
-            print()
+            checkpoint_save()
+            game_intro_description()
+        elif choice.lower() in ['c', 'continue']:
+            print_green('Continuing game...\n')
             sleep(1)
-            if choice.lower() in ['r', 'restart']:
-                player1.user_health = 100
-                player1.user_balance = 0
-                player1.merchant_luck = 0
-                player1.baseball_bat = False
-                player1.beretta_pistol = False
-                player1.starting_knife = False
-                player1.rocket_launcher = False
-                player1.ak_47_rifle = False
-                print_green('Default stats have been loaded/saved and a new game will begin...\n')
-                sleep(1)
-                checkpoint_save()
-                game_intro_description()
-            elif choice.lower() in ['c', 'continue']:
-                print_green('Continuing game...\n')
-                sleep(1)
-            else:
-                error_message()
-    except FileNotFoundError:
+        else:
+            error_message()
+    else:
         difficulty()
 
     if player1.user_health <= 0:
@@ -291,11 +292,17 @@ def outside_area():
     print('You make your way to the outside area...\n')
     sleep(1)
     sounds_effects.wind_sound()
+<<<<<<< Updated upstream
     print('You instantly notice something is not right... a dark gloomy fog covers all of the town and you do not see '
           'a single friendly soul insight... ')
     print('You start to come to a conclusion about where everybody in the small town of Hinesville has went but '
           'nothing is making sense...\n')
 
+=======
+    print('You instantly notice something is not right... a dark gloomy fog covers all of the town and you do not see\n'
+          'a single friendly soul insight... You start to come to a conclusion about where everybody in the small\n'
+          'town of Hinesville has went but nothing is making sense...\n')
+>>>>>>> Stashed changes
     sleep(3.5)
     user_choice = int(input('You have the choice to either (1) Explore the Outside Area (2) Visit the local Gas '
                             'Station: '))
@@ -317,7 +324,7 @@ def outside_area():
             sounds_effects.zombie_attack_outside()
             random_money = randint(5, 30)
             print('You attacked the zombie with the knife you found earlier and killed the zombie while losing 15 '
-                  'health... You search the body of the zombie and woman to find a total of', random_money,
+                  'health... \nYou search the body of the zombie and woman to find a total of', random_money,
                   'Dollars...\n')
             player1.user_balance += random_money
             player1.user_health -= 15
@@ -361,8 +368,12 @@ def diner_area():
         player1.user_health += random_health
         sleep(3)
         print('You also manage to find a bloody photograph on the ground and upon looking at the image, you see a '
+<<<<<<< Updated upstream
               'familiar face...')
         print('You see the face of the man you met earlier at the local Gas Station taking a group '
+=======
+              'familiar face... \nYou see the face of the man you met earlier at the local Gas Station taking a group '
+>>>>>>> Stashed changes
               'family picture!\n')
         sleep(3)
         sounds_effects.horror_sound_effects()
@@ -394,7 +405,7 @@ def diner_area():
 def broken_roads_area():
     sounds_effects.zombie_attack_outside()
     print('You have reached the broken roads area and managed to find a running vehicle but there are a group of '
-          'about 3 zombies surrounding the vehicle... The zombies begin to head directly towards you and you prepare '
+          'about 3 zombies surrounding the vehicle... \nThe zombies begin to head directly towards you and you prepare '
           'to fight once more...\n')
     sleep(4.5)
     user_attack()
@@ -586,10 +597,39 @@ def checkpoint_save():
     sleep(1)
     print_green(f'Current Balance: {player1.user_balance}\n')
     sleep(1)
-    print_green(f'Current Difficulty: {player1.user_difficulty}\n')
+    if player1.user_difficulty == 1:
+        print_green('Current Difficulty: Easy\n')
+    elif player1.user_difficulty == 2:
+        print_yellow('Current Difficulty: Medium\n')
+    else:
+        print_red('Current Difficulty: Hard\n')
     sleep(1)
 
 
+def game_menu():
+
+    while True:
+        print('Welcome to Zombie Survival Game\n'
+              'Where your choices will allow\n'
+              'you to Live or lead to Doom!!')
+        print('(1) New Game')
+        print('(2) Load Game')
+        print('(3) Options')
+        print('(4) Exit')
+        user_input = str(input('Selection?: '))
+
+        if user_input not in ['1', '2', '3', '4']:
+            print('That is not a valid input. Please select a number between (1-4)')
+        elif user_input == '1':
+            game_intro_description()
+        elif user_input == '2':
+            load_or_save_data()
+            game_intro_description()
+        elif user_input == '3':
+            pass  # TODO: create an option menu for player settings and credits
+        else:
+            sys.exit()
+
+
 if __name__ == '__main__':
-    load_or_save_data()
-    game_intro_description()
+    game_menu()
