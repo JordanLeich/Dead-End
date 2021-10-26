@@ -2,14 +2,13 @@
 
 # Created on 5/11/2021
 
-# Imports
 import sys
-import time
-import random
-
-from other import colors, sounds_effects
-from classes import Player
 from time import sleep
+from random import randint
+# files
+from other import sounds_effects
+from other.colors import print_green, print_yellow, print_red
+from classes import Player
 from gamedata import Game_data
 
 player1 = Player()
@@ -33,7 +32,7 @@ lead you to death.\n''')
 def basement_area():
     # TODO: continue story here with the basement function
     print('finish story here...\n')
-    time.sleep(5)
+    sleep(5)
     sys.exit()
 
 
@@ -41,7 +40,7 @@ def game():
     try:
         with open('data.json', 'r'):
             sounds_effects.difficulty_select_sound()
-            print(colors.green + 'Difficulty screen skipped due to saved data already existing...\n', colors.reset)
+            print_green('Difficulty screen skipped due to saved data already existing...\n')
             sleep(1)
             choice = str(input('Would you like to restart the game from scratch or continue with your saved data '
                                '(restart / continue): '))
@@ -54,15 +53,14 @@ def game():
                 player1.baseball_bat = False
                 player1.beretta_pistol = False
                 player1.starting_knife = False
-                player1.rocker_launcher = False
+                player1.rocket_launcher = False
                 player1.ak_47_rifle = False
-                print(colors.green + 'Default stats have been loaded/saved and a new game will begin...\n',
-                      colors.reset)
+                print_green('Default stats have been loaded/saved and a new game will begin...\n')
                 sleep(1)
                 checkpoint_save()
                 game_intro_description()
             elif choice.lower() in ['c', 'continue']:
-                print(colors.green + 'Continuing game...\n', colors.reset)
+                print_green('Continuing game...\n')
                 sleep(1)
             else:
                 error_message()
@@ -70,7 +68,7 @@ def game():
         difficulty()
 
     if player1.user_health <= 0:
-        print(colors.red + 'You currently have no health left...\n', colors.reset)
+        print_red('You currently have no health left...\n')
         sleep(1)
         bad_ending()
 
@@ -102,20 +100,19 @@ def game():
 def merchant():  # sourcery no-metrics
 
     if player1.user_health <= 0:
-        print(colors.red + 'You currently have no health left...\n', colors.reset)
+        print_red('You currently have no health left...\n')
         sleep(1)
         bad_ending()
 
-    player1.merchant_luck = random.randint(1, 7)
+    player1.merchant_luck = randint(1, 7)
 
     if player1.merchant_luck == 3:
         sounds_effects.good_luck()
-        print(colors.green + 'Whoosh! The lucky merchant has appeared in-front of you...\n' + colors.reset)
+        print_green('Whoosh! The lucky merchant has appeared in-front of you...\n')
         sleep(1)
 
         if player1.user_balance <= 0:
-            print(colors.yellow + 'Uh-Oh! You do not have enough money to buy anything... keep playing to acquire more '
-                                  'money!\n', colors.reset)
+            print_yellow('Uh-Oh! You do not have enough money to buy anything... keep playing to acquire more money!\n')
             sleep(1)
         else:
             user_choice = str(input('Would you like to buy from the merchant or skip past the merchant (buy / skip): '))
@@ -123,9 +120,7 @@ def merchant():  # sourcery no-metrics
             sleep(1)
 
             if user_choice.lower() in ['b', 'buy', 'y', 'yes']:
-                print(colors.green + 'Health:', player1.user_health, '\n', colors.reset)
-                sleep(1)
-                print(colors.green + 'Balance:', player1.user_balance, '\n', colors.reset)
+                print_green(f'Balance: {player1.user_balance}\n')
                 sleep(1)
                 user_item_buy = int(input('''--- Merchants inventory ---
 (1) Spiked Baseball Bat (5 Dollars)
@@ -141,29 +136,29 @@ What would you like to buy: '''))
                 if user_item_buy == 1 and player1.user_balance >= 5:
                     sounds_effects.merchant_purchase_sound()
                     player1.user_balance -= 5
-                    print(colors.green + 'Spiked Baseball Bat has been purchased!\n', colors.reset)
+                    print_green('Spiked Baseball Bat has been purchased!\n')
                     player1.baseball_bat = True
                     sleep(1)
                 elif user_item_buy == 2 and player1.user_balance >= 15:
                     sounds_effects.merchant_purchase_sound()
                     player1.user_balance -= 15
-                    print(colors.green + '1997 Beretta Pistol has been purchased!\n', colors.reset)
+                    print_green('1997 Beretta Pistol has been purchased!\n')
                     player1.beretta_pistol = True
                     sleep(1)
                 elif user_item_buy == 3 and player1.user_balance >= 25:
                     sounds_effects.merchant_purchase_sound()
-                    print(colors.green + '1999 AK-47 Assault Rifle has been purchased!\n', colors.reset)
+                    print_green('1999 AK-47 Assault Rifle has been purchased!\n')
                     player1.user_balance -= 25
                     player1.ak_47_rifle = True
                     sleep(1)
                 elif user_item_buy == 4 and player1.user_balance >= 100:
                     sounds_effects.merchant_purchase_sound()
-                    print(colors.green + 'Rocket Missile Launcher has been purchased!\n', colors.reset)
+                    print_green('Rocket Missile Launcher has been purchased!\n')
                     player1.user_balance -= 100
-                    player1.rocker_launcher = True
+                    player1.rocket_launcher = True
                     sleep(1)
                 elif user_item_buy == 5:
-                    print(colors.green + 'Purchasing from the merchant has been skipped...\n', colors.reset)
+                    print_green('Purchasing from the merchant has been skipped...\n')
                     sleep(1)
                 else:
                     error_message()
@@ -185,35 +180,29 @@ This is purely only used for development and has no impact on the game
 
 
 def user_attack():
-    if player1.rocker_launcher:
+    if player1.rocket_launcher:
         player1.user_health -= 0
-        print(colors.green + 'You have used the rocker missile launcher and defeated the zombies without losing any '
-                             'health!\n', colors.reset)
+        print_green('You have used the rocket missile launcher and defeated the zombies without losing any health!\n')
         sleep(2)
     elif player1.ak_47_rifle:
         player1.user_health -= 10
-        print(colors.green + 'You have used the ak-47 rifle and defeated the zombies with only losing 10 health!\n',
-              colors.reset)
+        print_green('You have used the ak-47 rifle and defeated the zombies with only losing 10 health!\n')
         sleep(2)
     elif player1.beretta_pistol:
         player1.user_health -= 25
-        print(colors.green + 'You have used the beretta pistol and defeated the zombies with only losing 25 health!\n',
-              colors.reset)
+        print_green('You have used the beretta pistol and defeated the zombies with only losing 25 health!\n')
         sleep(2)
     elif player1.baseball_bat:
         player1.user_health -= 35
-        print(colors.green + 'You have used the baseball bat and defeated the zombies with losing 35 health!\n',
-              colors.reset)
+        print_green('You have used the baseball bat and defeated the zombies with losing 35 health!\n')
         sleep(2)
     elif player1.starting_knife:
         player1.user_health -= 45
-        print(colors.green + 'You have used the starting knife and defeated the zombies with losing 45 health!\n',
-              colors.reset)
+        print_green('You have used the starting knife and defeated the zombies with losing 45 health!\n')
         sleep(2)
     else:
         player1.user_health = 0
-        print(colors.red + 'Due to not having any available weapons or guns on you... You automatically cannot defend\n'
-                           'yourself and you have lost all of your health!\n', colors.reset)
+        print_red('Due to not having any available weapons or guns on you... You automatically cannot defend\nyourself and you have lost all of your health!\n')
         sleep(2)
         bad_ending()
 
@@ -253,8 +242,8 @@ def gas_station():
 
         if player1.user_health > 0:
             print(
-                colors.green + 'You have successfully defended off the zombies inside the gas station but it was most '
-                               'unfortunate the man you found could not make it...\n', colors.reset)
+               _green 'You have successfully defended off the zombies inside the gas station but it was most '
+                               'unfortunate the man you found could not make it...\n')
             sleep(2)
             user_choice = int(input('You have the choice to either (1) Search the all the bodies of zombies and the '
                                     'dead man (2) Head over to the local Diner: '))
@@ -262,7 +251,7 @@ def gas_station():
             sleep(1)
 
             if user_choice == 1:
-                random_money = random.randint(5, 30)
+                random_money = randint(5, 30)
                 print('After search everybody in the gas station, you manage to find a total of', random_money,
                       'dollars and you then continue your way over to the local Diner...\n')
                 player1.user_balance += random_money
@@ -278,7 +267,7 @@ def gas_station():
 
     elif user_choice == 2:
         sounds_effects.good_luck()
-        random_money = random.randint(5, 30)
+        random_money = randint(5, 30)
         print('The man hands over some cash (' + str(random_money),
               'dollars) and tells you about a mysterious lurking salesman who would wonder around the town quite '
               'often... The man says that he has not seen him since the apocalypse has happened but keep the money on '
@@ -321,7 +310,7 @@ def outside_area():
 
         if user_choice == 1 and player1.starting_knife:
             sounds_effects.zombie_attack_outside()
-            random_money = random.randint(5, 30)
+            random_money = randint(5, 30)
             print('You attacked the zombie with the knife you found earlier and killed the zombie while losing 15 '
                   'health... You search the body of the zombie and woman to find a total of', random_money,
                   'Dollars...\n')
@@ -355,8 +344,8 @@ def diner_area():
 
     if user_choice == 1:
         sounds_effects.good_luck()
-        random_money = random.randint(5, 30)
-        random_health = random.randint(5, 15)
+        random_money = randint(5, 30)
+        random_health = randint(5, 15)
         print('After finishing up your entire search of the diner, you find a total of', random_money, 'dollars and '
                                                                                                        'you refresh '
                                                                                                        'up on some '
@@ -378,14 +367,12 @@ def diner_area():
 
     elif user_choice == 2:
         sounds_effects.zombie_attack_outside()
-        print(colors.red + 'Upon leaving the diner area, you come across a group of about 5 zombies heading directly '
-                           'towards you!\n', colors.reset)
+        print_red('Upon leaving the diner area, you come across a group of about 5 zombies heading directly towards you!\n')
         sleep(1.5)
         user_attack()
 
         if player1.user_health > 0:
-            print(colors.green + 'You have successfully defended off the zombies outside the local Diner... You will '
-                                 'now head over to the Parkview Area\n', colors.reset)
+            print_green('You have successfully defended off the zombies outside the local Diner... You will now head over to the Parkview Area\n')
             sleep(2)
             parkview_area()
 
@@ -407,9 +394,7 @@ def broken_roads_area():
 
     if player1.user_health > 0:
         sounds_effects.horror_sound_effects()
-        print(colors.green + 'You have successfully fought off the zombies surrounding the running vehicle... You then '
-                             'enter the running vehicle... The manage to put the vehicle into drive and you drive '
-                             'away into the sunrise...\n')
+        print_green('You have successfully fought off the zombies surrounding the running vehicle... You then enter the running vehicle... The manage to put the vehicle into drive and you drive away into the sunrise...\n')
         sleep(4)
         good_ending()
     else:
@@ -446,9 +431,8 @@ def parkview_area():
             user_attack()
 
             if player1.user_health > 0:
-                random_money = random.randint(5, 30)
-                print(colors.green + 'You have successfully killed the man! Upon searching his body, you find a total '
-                                     'of', random_money, 'dollars!\n', colors.reset)
+                random_money = randint(5, 30)
+                print_green(f'You have successfully killed the man! Upon searching his body, you find a total of ${random_money}!\n')
                 player1.user_balance += random_money
                 sleep(1)
                 checkpoint_save()
@@ -459,8 +443,7 @@ def parkview_area():
 
             else:
                 sounds_effects.bad_luck()
-                print(colors.red + 'The man has killed you and zombies start to feast on your dead decaying flesh...'
-                                   '\n', colors.reset)
+                print_red('The man has killed you and zombies start to feast on your dead decaying flesh...\n')
                 sleep(2)
                 bad_ending()
 
@@ -469,9 +452,8 @@ def parkview_area():
             user_attack()
 
             if player1.user_health > 0:
-                random_money = random.randint(5, 30)
-                print(colors.green + 'You have successfully killed the man! Upon searching his body, you find a total '
-                                     'of', random_money, 'dollars!\n', colors.reset)
+                random_money = randint(5, 30)
+                print_green(f'You have successfully killed the man! Upon searching his body, you find a total of ${random_money}!\n')
                 player1.user_balance += random_money
                 sleep(1)
                 checkpoint_save()
@@ -482,8 +464,7 @@ def parkview_area():
 
             else:
                 sounds_effects.bad_luck()
-                print(colors.red + 'The man has killed you and zombies start to feast on your dead decaying flesh...'
-                                   '\n', colors.reset)
+                print_red('The man has killed you and zombies start to feast on your dead decaying flesh...\n')
                 sleep(2)
                 bad_ending()
 
@@ -494,23 +475,24 @@ def parkview_area():
 
 
 def difficulty():
-    print(colors.green + '(1) Easy\n' + colors.reset + colors.yellow + '(2) Medium\n' + colors.reset + colors.red +
-          '(3) Hardcore\n' + colors.reset)
+    print_green('(1) Easy\n')
+    print_yellow('(2) Medium\n')
+    print_red('(3) Hardcore\n')
     player1.user_difficulty = int(input('Select a difficulty: '))
     print()
     sleep(1)
     sounds_effects.difficulty_select_sound()
 
     if player1.user_difficulty == 1:
-        print(colors.green + 'Easy mode has been selected, you will begin with 200 health.\n' + colors.reset)
+        print_green('Easy mode has been selected, you will begin with 200 health.\n')
         player1.user_health = 200
         sleep(1)
     elif player1.user_difficulty == 2:
-        print(colors.yellow + 'Medium mode has been selected, you will begin with 100 health.\n' + colors.reset)
+        print_yellow('Medium mode has been selected, you will begin with 100 health.\n')
         player1.user_health = 100
         sleep(1)
     elif player1.user_difficulty == 3:
-        print(colors.red + 'Hardcore mode has been selected, you will begin with only 50 health.\n' + colors.reset)
+        print_red('Hardcore mode has been selected, you will begin with only 50 health.\n')
         player1.user_health = 50
         sleep(1)
     else:
@@ -523,17 +505,16 @@ def restart():
 
     if restart_choice.lower() in ['y', 'yes']:
         if player1.user_difficulty == 1:
-            print(colors.green + 'You will begin with 200 health.\n' + colors.reset)
+            print_green('You will begin with 200 health.\n')
             player1.user_health = 200
         elif player1.user_difficulty == 2:
-            print(colors.green + 'You will begin with 100 health.\n' + colors.reset)
+            print_green('You will begin with 100 health.\n')
             player1.user_health = 100
         elif player1.user_difficulty == 3:
-            print(colors.green + 'You will begin with 50 health.\n' + colors.reset)
+            print_green('You will begin with 50 health.\n')
             player1.user_health = 50
         else:
-            print(colors.yellow + 'Since a saved difficulty value could not be found... you will start with 100 '
-                                  'health...\n', colors.reset)
+            print_yellow('Since a saved difficulty value could not be found... you will start with 100 health...\n')
             sleep(1)
             player1.user_health = 100
         player1.user_balance = 0
@@ -541,9 +522,9 @@ def restart():
         player1.baseball_bat = False
         player1.beretta_pistol = False
         player1.starting_knife = False
-        player1.rocker_launcher = False
+        player1.rocket_launcher = False
         player1.ak_47_rifle = False
-        print(colors.green + 'Default stats have been loaded/saved and a new game will begin...\n', colors.reset)
+        print_green('Default stats have been loaded/saved and a new game will begin...\n')
         sleep(1)
         checkpoint_save()
         game_intro_description()
@@ -557,9 +538,9 @@ def restart():
 
 def good_ending():
     sounds_effects.good_luck()
-    print(colors.green + 'Congratulations, you have survived and reached the end of the horrors...\n', colors.reset)
+    print_green('Congratulations, you have survived and reached the end of the horrors...\n')
     sleep(1)
-    print(colors.green + 'You survived with a total of', player1.user_health, 'health left!\n', colors.reset)
+    print_green(f'You survived with a total of {player1.user_health} health left!\n')
     sleep(1)
     checkpoint_save()
     restart()
@@ -567,7 +548,7 @@ def good_ending():
 
 def bad_ending():
     sounds_effects.bad_ending()
-    print(colors.red + 'You have died and not reached the end of the horrors...\n', colors.reset)
+    print_red('You have died and not reached the end of the horrors...\n')
     sleep(1)
     checkpoint_save()
     restart()
@@ -576,26 +557,25 @@ def bad_ending():
 def error_message():
     sleep(1)
     sounds_effects.bad_luck()
-    print(colors.red + 'An error has been found... restarting game...\n', colors.reset)
+    print_red('An error has been found... restarting game...\n')
     sleep(2)
     game()
 
 
 def checkpoint_save():
     if player1.user_health <= 0:
-        print(colors.red + 'You have reached a checkpoint and currently have no more health! You have lost the game!\n',
-              colors.reset)
+        print_red('You have reached a checkpoint and currently have no more health! You have lost the game!\n')
         sleep(1)
         restart()
     merchant()
-    print(colors.green + 'A checkpoint has been reached...\n', colors.reset)
+    print_green('A checkpoint has been reached...\n')
     sleep(.5)
     game_data.save_game(player1)  # Sends player1 info to save file
-    print(colors.green + 'Current Health:', player1.user_health, '\n')
+    print_green(f'Current Health: {player1.user_health}\n')
     sleep(1)
-    print(colors.green + 'Current Balance:', player1.user_balance, '\n')
+    print_green(f'Current Balance: {player1.user_balance}\n')
     sleep(1)
-    print(colors.green + 'Current Difficulty:', player1.user_difficulty, '\n', colors.reset)
+    print_green(f'Current Difficulty: {player1.user_difficulty}\n')
     sleep(1)
 
 
