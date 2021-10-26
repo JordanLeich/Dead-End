@@ -15,6 +15,8 @@ class Player:
         self.beretta_pistol = pistol
         self.baseball_bat = bat
         self.rocket_launcher = rpg
+        #  check point location
+        self.check_point = ''
 
     def get_data(self):
         return vars(self)
@@ -29,3 +31,4 @@ class Player:
         self.beretta_pistol = user_data['beretta_pistol']
         self.ak_47_rifle = user_data['ak_47_rifle']
         self.rocket_launcher = user_data['rocket_launcher']
+        self.check_point = user_data['check_point']
