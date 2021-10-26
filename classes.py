@@ -3,15 +3,29 @@ class Player:
     through out the game. If more variables are needed. they can be
     added here."""
 
-    def __init__(self):
+    def __init__(self, balance=0, health=0, luck=0, difficulty=0, knife=False, rifle=False, pistol=False, bat=False, rpg=False):
         # user attributes
-        self.user_balance = 0
-        self.user_health = 0
-        self.merchant_luck = 0
-        self.user_difficulty = 0
-        # user weapons, either true or false boolean values
-        self.starting_knife = False
-        self.ak_47_rifle = False
-        self.beretta_pistol = False
-        self.baseball_bat = False
-        self.rocker_launcher = False
+        self.user_balance = balance
+        self.user_health = health
+        self.merchant_luck = luck
+        self.user_difficulty = difficulty
+        # user weapons
+        self.starting_knife = knife
+        self.ak_47_rifle = rifle
+        self.beretta_pistol = pistol
+        self.baseball_bat = bat
+        self.rocket_launcher = rpg
+
+    def get_data(self):
+        return vars(self)
+
+    def load_data(self, user_data):
+        self.user_balance = user_data['user_balance']
+        self.user_health = user_data['user_health']
+        self.merchant_luck = user_data['merchant_luck']
+        self.user_difficulty = user_data['user_difficulty']
+        self.starting_knife = user_data['starting_knife']
+        self.baseball_bat = user_data['baseball_bat']
+        self.beretta_pistol = user_data['beretta_pistol']
+        self.ak_47_rifle = user_data['ak_47_rifle']
+        self.rocket_launcher = user_data['rocket_launcher']
