@@ -10,9 +10,11 @@ from random import randint
 from other.colors import print_green, print_yellow, print_red
 from classes import Player
 from gamedata import Game_data
+from other.sounds_effects import Game_Sounds
 
-player1 = Player()
-game_data = Game_data()
+player1 = Player() # Creates an instance of a player
+game_data = Game_data() # Creates an instance of load/save functions
+sounds = Game_Sounds() # Creates and instance of the audio that will be played
 
 
 def load_or_save_data():
@@ -20,7 +22,7 @@ def load_or_save_data():
 
 
 def game_intro_description():
-    player1.sounds_effects.intro_sound()
+    sounds.intro_sound()
     print('''This is a zombie survival game where you must make the best decisions possible in order to live.
 As a survivor, you will encounter zombies, weapons, people, and a merchant to buy from with an
 in-game currency. Every decision you make has a cause and effect while some lead you to fortune and others will 
@@ -36,7 +38,7 @@ def basement_area():
 
 def game():
     if player1.user_difficulty in [1, 2, 3]:
-        player1.sounds_effects.difficulty_select_sound()
+        sounds.difficulty_select_sound()
         print_green('Difficulty screen skipped due to saved data already existing...\n')
         sleep(1)
         choice = str(input('Would you like to restart the game from scratch or continue with your saved data '
@@ -107,7 +109,7 @@ def merchant():  # sourcery no-metrics
     player1.merchant_luck = randint(1, 7)
 
     if player1.merchant_luck == 3:
-        player1.sounds_effects.good_luck()
+        sounds.good_luck()
         print_green('Whoosh! The lucky merchant has appeared in-front of you...\n')
         sleep(1)
 
@@ -134,25 +136,25 @@ What would you like to buy: '''))
                 sleep(1)
 
                 if user_item_buy == 1 and player1.user_balance >= 5:
-                    player1.sounds_effects.merchant_purchase_sound()
+                    sounds.merchant_purchase_sound()
                     player1.user_balance -= 5
                     print_green('Spiked Baseball Bat has been purchased!\n')
                     player1.baseball_bat = True
                     sleep(1)
                 elif user_item_buy == 2 and player1.user_balance >= 15:
-                    player1.sounds_effects.merchant_purchase_sound()
+                    sounds.merchant_purchase_sound()
                     player1.user_balance -= 15
                     print_green('1997 Beretta Pistol has been purchased!\n')
                     player1.beretta_pistol = True
                     sleep(1)
                 elif user_item_buy == 3 and player1.user_balance >= 25:
-                    player1.sounds_effects.merchant_purchase_sound()
+                    sounds.merchant_purchase_sound()
                     print_green('1999 AK-47 Assault Rifle has been purchased!\n')
                     player1.user_balance -= 25
                     player1.ak_47_rifle = True
                     sleep(1)
                 elif user_item_buy == 4 and player1.user_balance >= 100:
-                    player1.sounds_effects.merchant_purchase_sound()
+                    sounds.merchant_purchase_sound()
                     print_green('Rocket Missile Launcher has been purchased!\n')
                     player1.user_balance -= 100
                     player1.rocket_launcher = True
@@ -209,7 +211,7 @@ def user_attack():
 
 
 def gas_station():
-    player1.sounds_effects.horror_sound_effects()
+    sounds.horror_sound_effects()
     print('You have entered the local Gas Station...\n')
     sleep(1)
 
@@ -229,11 +231,11 @@ def gas_station():
         print('As you keep talking to the man, he starts to tell you about his family and how they would always\n'
               'venture out to the park with his young daughter and son...\n')
         sleep(2)
-        player1.sounds_effects.zombie_attack_inside()
+        sounds.zombie_attack_inside()
         print('Out of nowhere, a group of 3 zombies begin to bang on the glass door from which you entered in from...'
               '\n')
         sleep(2.5)
-        player1.sounds_effects.zombie_attack_inside()
+        sounds.zombie_attack_inside()
         print('While attempting to save you, the man fights off 2 zombies with his pump shotgun and get eaten alive '
               'while saying, RUN! but more zombies come to arise on you...\n')
         sleep(2.5)
@@ -266,7 +268,7 @@ def gas_station():
             bad_ending()
 
     elif user_choice == 2:
-        player1.sounds_effects.good_luck()
+        sounds.good_luck()
         random_money = randint(5, 30)
         print('The man hands over some cash (' + str(random_money),
               'dollars) and tells you about a mysterious lurking salesman who would wonder around the town quite '
@@ -276,7 +278,7 @@ def gas_station():
 
         player1.user_balance += random_money
         sleep(2.5)
-        player1.sounds_effects.wind_sound()
+        sounds.wind_sound()
         print('You give thanks to the man and exit the local Gas Station and make your way down a tumbled and broken '
               'road... ')
         print('The gleaming fog and ashe outside is giving way to your vision and you see more and more '
@@ -290,7 +292,7 @@ def gas_station():
 def outside_area():
     print('You make your way to the outside area...\n')
     sleep(1)
-    player1.sounds_effects.wind_sound()
+    sounds.wind_sound()
     print('You instantly notice something is not right... a dark gloomy fog covers all of the town and you do not see '
           'a single friendly soul insight... ')
     print('You start to come to a conclusion about where everybody in the small town of Hinesville has went but '
@@ -308,7 +310,7 @@ def outside_area():
         print('You decide to explore the outside area and along the way, you see a woman bleeding out on the ground '
               'with the shape of a man figure hovering over her...\n')
         sleep(2)
-        player1.sounds_effects.zombie_attack_outside()
+        sounds.zombie_attack_outside()
         print('Lone behold... the figure is eating the woman alive but you are too late to rescue her!\n')
         sleep(1.5)
         user_choice = int(input('(1) Attack the zombie or (2) Avoid the zombie and run to the local Gas Station: '))
@@ -316,7 +318,7 @@ def outside_area():
         sleep(1)
 
         if user_choice == 1 and player1.starting_knife:
-            player1.sounds_effects.zombie_attack_outside()
+            sounds.zombie_attack_outside()
             random_money = randint(5, 30)
             print('You attacked the zombie with the knife you found earlier and killed the zombie while losing 15 '
                   'health... \nYou search the body of the zombie and woman to find a total of', random_money,
@@ -340,7 +342,7 @@ def outside_area():
 
 
 def diner_area():
-    player1.sounds_effects.horror_sound_effects()
+    sounds.horror_sound_effects()
     print('You have entered the local Diner...\n')
     sleep(1)
     checkpoint_save()
@@ -350,7 +352,7 @@ def diner_area():
     sleep(1)
 
     if user_choice == 1:
-        player1.sounds_effects.good_luck()
+        sounds.good_luck()
         random_money = randint(5, 30)
         random_health = randint(5, 15)
         print('After finishing up your entire search of the diner, you find a total of', random_money, 'dollars and '
@@ -368,14 +370,14 @@ def diner_area():
               'familiar face... \nYou see the face of the man you met earlier at the local Gas Station taking a group '
               'family picture!\n')
         sleep(3)
-        player1.sounds_effects.horror_sound_effects()
+        sounds.horror_sound_effects()
         print('Since you are finished exploring and searching the diner area, you proceed on your path to the '
               'parkview area...\n')
         sleep(3.5)
         parkview_area()
 
     elif user_choice == 2:
-        player1.sounds_effects.zombie_attack_outside()
+        sounds.zombie_attack_outside()
         print_red(
             'Upon leaving the diner area, you come across a group of about 5 zombies heading directly towards you!\n')
         sleep(1.5)
@@ -395,7 +397,7 @@ def diner_area():
 
 
 def broken_roads_area():
-    player1.sounds_effects.zombie_attack_outside()
+    sounds.zombie_attack_outside()
     print('You have reached the broken roads area and managed to find a running vehicle but there are a group of '
           'about 3 zombies surrounding the vehicle... \nThe zombies begin to head directly towards you and you prepare '
           'to fight once more...\n')
@@ -404,7 +406,7 @@ def broken_roads_area():
     checkpoint_save()
 
     if player1.user_health > 0:
-        player1.sounds_effects.horror_sound_effects()
+        sounds.horror_sound_effects()
         print_green(
             'You have successfully fought off the zombies surrounding the running vehicle... You then enter the running vehicle... The manage to put the vehicle into drive and you drive away into the sunrise...\n')
         sleep(4)
@@ -414,11 +416,11 @@ def broken_roads_area():
 
 
 def parkview_area():
-    player1.sounds_effects.horror_sound_effects()
+    sounds.horror_sound_effects()
     print('You have entered the parkview area...\n')
     sleep(1)
     checkpoint_save()
-    player1.sounds_effects.parkview_entrance()
+    sounds.parkview_entrance()
     sleep(2.5)
     print('Upon arriving to the parkview area, you are still incapable of seeing very much ahead of yourself...\n')
     sleep(1.5)
@@ -436,7 +438,7 @@ def parkview_area():
         sleep(1)
 
         if user_choice == 1:
-            player1.sounds_effects.horror_sound_effects()
+            sounds.horror_sound_effects()
             print('In attempts of helping the man, he screams get the hell away from me, I will blow your head off! '
                   'You now prepare to fight him off!\n')
             sleep(2.5)
@@ -449,19 +451,19 @@ def parkview_area():
                 player1.user_balance += random_money
                 sleep(1)
                 checkpoint_save()
-                player1.sounds_effects.horror_sound_effects()
+                sounds.horror_sound_effects()
                 print('You now decide to leave the parkview area...\n')
                 sleep(1.5)
                 broken_roads_area()
 
             else:
-                player1.sounds_effects.bad_luck()
+                sounds.bad_luck()
                 print_red('The man has killed you and zombies start to feast on your dead decaying flesh...\n')
                 sleep(2)
                 bad_ending()
 
         elif user_choice == 2:
-            player1.sounds_effects.bad_luck()
+            sounds.bad_luck()
             user_attack()
 
             if player1.user_health > 0:
@@ -471,13 +473,13 @@ def parkview_area():
                 player1.user_balance += random_money
                 sleep(1)
                 checkpoint_save()
-                player1.sounds_effects.horror_sound_effects()
+                sounds.horror_sound_effects()
                 print('You now decide to leave the Parkview Area...\n')
                 sleep(1.5)
                 broken_roads_area()
 
             else:
-                player1.sounds_effects.bad_luck()
+                sounds.bad_luck()
                 print_red('The man has killed you and zombies start to feast on your dead decaying flesh...\n')
                 sleep(2)
                 bad_ending()
@@ -495,7 +497,7 @@ def difficulty():
     player1.user_difficulty = int(input('Select a difficulty: '))
     print()
     sleep(1)
-    player1.sounds_effects.difficulty_select_sound()
+    sounds.difficulty_select_sound()
 
     if player1.user_difficulty == 1:
         print_green('Easy mode has been selected, you will begin with 200 health.\n')
@@ -538,7 +540,7 @@ def restart():
         player1.starting_knife = False
         player1.rocket_launcher = False
         player1.ak_47_rifle = False
-        player1.set_volume(0.0)
+        sounds.set_volume(0.05)
         print_green('Default stats have been loaded/saved and a new game will begin...\n')
         sleep(1)
         checkpoint_save()
@@ -552,7 +554,7 @@ def restart():
 
 
 def good_ending():
-    player1.sounds_effects.good_luck()
+    sounds.good_luck()
     print_green('Congratulations, you have survived and reached the end of the horrors...\n')
     sleep(1)
     print_green(f'You survived with a total of {player1.user_health} health left!\n')
@@ -562,7 +564,7 @@ def good_ending():
 
 
 def bad_ending():
-    player1.sounds_effects.bad_ending()
+    sounds.bad_ending()
     print_red('You have died and not reached the end of the horrors...\n')
     sleep(1)
     checkpoint_save()
@@ -571,7 +573,7 @@ def bad_ending():
 
 def error_message():
     sleep(1)
-    player1.sounds_effects.bad_luck()
+    sounds.bad_luck()
     print_red('An error has been found... restarting game...\n')
     sleep(2)
     game()
@@ -685,9 +687,10 @@ def audio_options():
     if volume_level < 0.0 or volume_level > 1.0:
         print_red('Please only select a volume level between 0.0 and 1.0!\n')
         sleep(1)
+        audio_options()
     else:
-        player1.set_volume(volume_level)
-        print('Your current volume level is set at', player1.volume_level, '\n')
+        sounds.set_volume(volume_level)
+        print('Your current volume level is set at', sounds.volume_level, '\n')
         sleep(1)
 
 

@@ -1,18 +1,15 @@
-from other.sounds_effects import Game_Sounds
-
 class Player:
     """This class is to setup the player with all variables needed
     through out the game. If more variables are needed. they can be
     added here."""
 
     def __init__(self, balance=0, health=0, luck=0, difficulty=0, knife=False, rifle=False, pistol=False, bat=False,
-                 rpg=False, volume=0.05):
+                 rpg=False):
         # user attributes
         self.user_balance = balance
         self.user_health = health
         self.merchant_luck = luck
         self.user_difficulty = difficulty
-        self.volume_level = volume
         # user weapons
         self.starting_knife = knife
         self.ak_47_rifle = rifle
@@ -21,17 +18,11 @@ class Player:
         self.rocket_launcher = rpg
         #  check point location
         self.check_point = ''
-        self.sounds_effects = Game_Sounds(self.volume_level)
-        print(self.volume_level, '__init__')
-
-    def set_volume(self, level):
-        self.sounds_effects = Game_Sounds(level)
-        self.volume_level = level
-
-    def get_data(self):
-        return vars(self)
 
     def load_data(self, user_data):
+        """This function will set player data from previous game"""
+
+
         self.user_balance = user_data['user_balance']
         self.user_health = user_data['user_health']
         self.merchant_luck = user_data['merchant_luck']
