@@ -18,11 +18,12 @@ class Player:
         self.rocket_launcher = rpg
         #  check point location
         self.check_point = ''
-
+    
+    def get_data(self):
+        return vars(self)
+        
     def load_data(self, user_data):
         """This function will set player data from previous game"""
-
-
         self.user_balance = user_data['user_balance']
         self.user_health = user_data['user_health']
         self.merchant_luck = user_data['merchant_luck']
