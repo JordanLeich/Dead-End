@@ -490,6 +490,18 @@ def parkview_area():
         error_message()
 
 
+def view_stats():
+    """
+Prints the users current in game stats based upon a load file
+    """
+    print_green('Your current in game stats will now be displayed below!\n')
+    sleep(1)
+    print(f'Your health is {player1.user_health}')
+    print(f'Your balance is ${player1.user_balance}')
+    print()
+    sleep(2)
+
+
 def difficulty():
     print_green('(1) Easy\n')
     print_yellow('(2) Medium\n')
@@ -636,8 +648,7 @@ Main hub UI for the user to view additional information or extra parts of this p
         sleep(.5)
 
         if choice == '1':
-            continue_message()
-            # view_stats() TODO Add a view stats function
+            view_stats()
         elif choice == '2':
             audio_options()
         elif choice == '3':
