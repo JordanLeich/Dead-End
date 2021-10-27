@@ -1,5 +1,11 @@
 from random import randint
 import pygame
+from classes import Player
+from gamedata import Game_data
+from game import audio_options
+
+player1 = Player()
+game_data = Game_data()
 
 
 def _play_sound(file_path):
@@ -8,11 +14,7 @@ Plays all the sounds given from file path
     """
     pygame.mixer.init()
     soundObj = pygame.mixer.Sound(file_path)
-<<<<<<< Updated upstream
-    soundObj.set_volume(0.05)  # Default volume is 0.05. Max volume is 1.0 and Min volume is 0.0
-=======
-    soundObj.set_volume(0.5)  # Max volume is 1.0 and Min volume is 0.0
->>>>>>> Stashed changes
+    soundObj.set_volume(player1.volume_level)  # Default volume is 0.05. Max volume is 1.0 and Min volume is 0.0
     soundObj.play()
 
 

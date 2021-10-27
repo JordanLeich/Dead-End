@@ -3,12 +3,14 @@ class Player:
     through out the game. If more variables are needed. they can be
     added here."""
 
-    def __init__(self, balance=0, health=0, luck=0, difficulty=0, knife=False, rifle=False, pistol=False, bat=False, rpg=False):
+    def __init__(self, balance=0, health=0, luck=0, difficulty=0, knife=False, rifle=False, pistol=False, bat=False,
+                 rpg=False, volume=0.05):
         # user attributes
         self.user_balance = balance
         self.user_health = health
         self.merchant_luck = luck
         self.user_difficulty = difficulty
+        self.volume_level = volume
         # user weapons
         self.starting_knife = knife
         self.ak_47_rifle = rifle

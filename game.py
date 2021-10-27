@@ -3,6 +3,7 @@
 # Created on 5/11/2021
 
 import sys
+import webbrowser
 from time import sleep
 from random import randint
 # files
@@ -30,10 +31,8 @@ lead you to death.\n''')
 
 
 def basement_area():
+    continue_message()
     # TODO: continue story here with the basement function
-    print('finish story here...\n')
-    sleep(5)
-    sys.exit()
 
 
 def game():
@@ -55,6 +54,7 @@ def game():
             player1.starting_knife = False
             player1.rocket_launcher = False
             player1.ak_47_rifle = False
+            player1.volume_level = 0.0
             player1.check_point = ''
             print_green('Default stats have been loaded/saved and a new game will begin...\n')
             sleep(1)
@@ -292,17 +292,13 @@ def outside_area():
     print('You make your way to the outside area...\n')
     sleep(1)
     sounds_effects.wind_sound()
-<<<<<<< Updated upstream
     print('You instantly notice something is not right... a dark gloomy fog covers all of the town and you do not see '
           'a single friendly soul insight... ')
     print('You start to come to a conclusion about where everybody in the small town of Hinesville has went but '
           'nothing is making sense...\n')
-
-=======
     print('You instantly notice something is not right... a dark gloomy fog covers all of the town and you do not see\n'
           'a single friendly soul insight... You start to come to a conclusion about where everybody in the small\n'
           'town of Hinesville has went but nothing is making sense...\n')
->>>>>>> Stashed changes
     sleep(3.5)
     user_choice = int(input('You have the choice to either (1) Explore the Outside Area (2) Visit the local Gas '
                             'Station: '))
@@ -368,12 +364,9 @@ def diner_area():
         player1.user_health += random_health
         sleep(3)
         print('You also manage to find a bloody photograph on the ground and upon looking at the image, you see a '
-<<<<<<< Updated upstream
               'familiar face...')
         print('You see the face of the man you met earlier at the local Gas Station taking a group '
-=======
               'familiar face... \nYou see the face of the man you met earlier at the local Gas Station taking a group '
->>>>>>> Stashed changes
               'family picture!\n')
         sleep(3)
         sounds_effects.horror_sound_effects()
@@ -546,6 +539,7 @@ def restart():
         player1.starting_knife = False
         player1.rocket_launcher = False
         player1.ak_47_rifle = False
+        player1.volume_level = 0.0
         print_green('Default stats have been loaded/saved and a new game will begin...\n')
         sleep(1)
         checkpoint_save()
@@ -606,17 +600,69 @@ def checkpoint_save():
     sleep(1)
 
 
-def game_menu():
+def open_github(print_text, website_append=''):
+    """
+    Open github in the users default web browser
+    """
+    print_green(print_text)
+    webbrowser.open_new(f'https://github.com/JordanLeich/Zombie-Survival-Game{website_append}')
+    sleep(1)
 
+
+def donation_opener(website):
+    """
+    Open a donation page in the users default web browser
+    """
+    print_green("Opening PayPal Donation page...\n")
+    webbrowser.open_new(website)
+    sleep(2)
+
+
+def options():
+    """
+Main hub UI for the user to view additional information or extra parts of this project such as donations and releases
+    """
     while True:
-        print('Welcome to Zombie Survival Game\n'
-              'Where your choices will allow\n'
-              'you to Live or lead to Doom!!')
+        print("(1) View Stats")
+        print("(2) Audio")
+        print("(3) Project Releases")
+        print("(4) Credits")
+        print("(5) Donate")
+        print("(6) Main Menu")
+        print("(7) Exit\n")
+        choice = input("Which choice would you like to pick:  ")
+        print()
+        sleep(.5)
+
+        if choice == '1':
+            continue_message()
+            # view_stats() TODO Add a view stats function
+        elif choice == '2':
+            audio_options()
+        elif choice == '3':
+            open_github("Opening the latest stable release...\n", "/releases")
+        elif choice == '4':
+            open_github("Opening all contributors of this project...\n", "/graphs/contributors")
+        elif choice == '5':
+            donation_opener("https://www.paypal.com/donate/?business=8FGHU8Z4EJPME&no_recurring=0&currency_code=USD")
+        elif choice == '6':
+            return
+        elif choice == '7':
+            sys.exit()
+        else:
+            print_red("Please select a number from 1 - 8.\n")
+
+
+def game_menu():
+    while True:
+        print_green('Welcome to Zombie Survival Game!\n\nYour choices will allow you to Live or lead to Doom!\n')
         print('(1) New Game')
         print('(2) Load Game')
         print('(3) Options')
-        print('(4) Exit')
-        user_input = str(input('Selection?: '))
+        print('(4) Exit\n')
+        user_input = str(input('Selection: '))
+        print()
+        sleep(.5)
 
         if user_input not in ['1', '2', '3', '4']:
             print('That is not a valid input. Please select a number between (1-4)')
@@ -626,9 +672,28 @@ def game_menu():
             load_or_save_data()
             game_intro_description()
         elif user_input == '3':
-            pass  # TODO: create an option menu for player settings and credits
+            options()
         else:
             sys.exit()
+
+
+def audio_options():
+    # sourcery skip: merge-duplicate-blocks, remove-redundant-if, remove-unnecessary-else, swap-if-else-branches
+    volume_level = float(input('What would you like to set your volume level to (0.05 is default, 1.0 is the max and '
+                               '0.0 is muted): '))
+    print()
+    sleep(1)
+    if volume_level < 0.0:
+        print_red('Please only select a volume level between 0.0 and 1.0!\n')
+        sleep(1)
+    elif volume_level > 1.0:
+        print_red('Please only select a volume level between 0.0 and 1.0!\n')
+        sleep(1)
+    else:
+        player1.volume_level = volume_level
+        print('Your current volume level is set at', player1.volume_level, '\n')
+        sleep(1)
+        return player1.volume_level
 
 
 if __name__ == '__main__':
