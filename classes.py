@@ -1,3 +1,5 @@
+from other.sounds_effects import Game_Sounds
+
 class Player:
     """This class is to setup the player with all variables needed
     through out the game. If more variables are needed. they can be
@@ -19,6 +21,12 @@ class Player:
         self.rocket_launcher = rpg
         #  check point location
         self.check_point = ''
+        self.sounds_effects = Game_Sounds(self.volume_level)
+        print(self.volume_level, '__init__')
+
+    def set_volume(self, level):
+        self.sounds_effects = Game_Sounds(level)
+        self.volume_level = level
 
     def get_data(self):
         return vars(self)
