@@ -12,9 +12,9 @@ from classes import Player
 from gamedata import Game_data
 from other.sounds_effects import Game_Sounds
 
-player1 = Player() # Creates an instance of a player
-game_data = Game_data() # Creates an instance of load/save functions
-sounds = Game_Sounds() # Creates and instance of the audio that will be played
+player1 = Player()  # Creates an instance of a player
+game_data = Game_data()  # Creates an instance of load/save functions
+sounds = Game_Sounds()  # Creates and instance of the audio that will be played
 
 
 def load_or_save_data():

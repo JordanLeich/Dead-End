@@ -1,7 +1,8 @@
 class Player:
-    """This class is to setup the player with all variables needed
-    through out the game. If more variables are needed. they can be
-    added here."""
+    """
+This class is to setup the player with all variables needed through out the game.
+If more variables are needed. they can be added here.
+    """
 
     def __init__(self, balance=0, health=0, luck=0, difficulty=0, knife=False, rifle=False, pistol=False, bat=False,
                  rpg=False):
