@@ -71,6 +71,7 @@ def unlock_all_cheat():
     player1.rocket_launcher = True
     player1.ak_47_rifle = True
     player1.barrett_rifle = True
+    player1.spell = True
     print_green('Unlock all cheats have been activated!\n')
     sleep(2)
     checkpoint_save()
@@ -97,6 +98,7 @@ def game():
             player1.rocket_launcher = False
             player1.ak_47_rifle = False
             player1.barrett_rifle = False
+            player1.spell = False
             player1.check_point = ''
             print_green('Default stats have been loaded/saved and a new game will begin...\n')
             sleep(1)
@@ -173,7 +175,8 @@ def merchant():  # sourcery no-metrics
 (3) 1999 AK-47 Assault Rifle (25 Dollars)
 (4) 1999 Semi-automatic Barrett Sniper Rifle (60 Dollars)
 (5) Rocket Missile Launcher (100 Dollars)
-(6) Exit
+(6) The Merchants Strange Spell (125 Dollars)
+(7) Exit
 
 What would you like to buy: '''))
                 print()
@@ -209,7 +212,17 @@ What would you like to buy: '''))
                     player1.user_balance -= 100
                     player1.rocket_launcher = True
                     sleep(1)
-                elif user_item_buy == 6:
+                elif user_item_buy == 6 and player1.user_balance >= 125:
+                    sounds.merchant_purchase_sound()
+                    print_green('The Merchants Strange Spell has been purchased!\n')
+                    sleep(1)
+                    sounds.good_luck()
+                    print_green(
+                        'As the Merchant hands you his own crafted spell, he tells you that you now wield true pain to foes whilst providing restoration to thine self.\n')
+                    player1.user_balance -= 125
+                    player1.spell = True
+                    sleep(2.5)
+                elif user_item_buy == 7:
                     print('The merchant has been skipped but can be brought back later...\n')
                     sleep(1)
                 else:
@@ -236,35 +249,50 @@ def user_attack():
 This function is called whenever the players gets into a fight with zombies or humans. The logic is ordered in a way
 so that the stronger weapon is used first instead of weaker weapons when attacking enemies.
     """
-    if player1.rocket_launcher:
+    if player1.spell:
+        random_number = randint(10, 30)
+        player1.user_health += random_number
+        print_green(
+            f'You have used the Merchants Strange Spell and defeated the zombies without losing any health! Through the power of the Strange Spell, you gain {random_number} health through its restoration casting!\n')
+        sleep(3.5)
+    elif player1.rocket_launcher:
         player1.user_health -= 0
-        print_green('You have used the rocket missile launcher and defeated the zombies without losing any health!\n')
+        print_green('You have used the Rocket Missile Launcher and defeated the zombies without losing any health!\n')
         sleep(2)
     elif player1.barrett_rifle:
-        player1.user_health -= 7
-        print_green('You have used the barrett sniper rifle and defeated the zombies with only losing 7 health!\n')
+        random_number = randint(3, 10)
+        player1.user_health -= random_number
+        print_green(
+            f'You have used the Barrett Sniper Rifle and defeated the zombies with only losing {random_number} health!\n')
         sleep(2)
     elif player1.ak_47_rifle:
-        player1.user_health -= 15
-        print_green('You have used the ak-47 rifle and defeated the zombies with only losing 10 health!\n')
+        random_number = randint(10, 20)
+        player1.user_health -= random_number
+        print_green(
+            f'You have used the AK-47 Rifle and defeated the zombies with only losing {random_number} health!\n')
         sleep(2)
     elif player1.beretta_pistol:
-        player1.user_health -= 25
-        print_green('You have used the beretta pistol and defeated the zombies with only losing 25 health!\n')
+        random_number = randint(20, 30)
+        player1.user_health -= random_number
+        print_green(
+            f'You have used the Beretta Pistol and defeated the zombies with only losing {random_number} health!\n')
         sleep(2)
     elif player1.baseball_bat:
-        player1.user_health -= 35
-        print_yellow('You have used the baseball bat and defeated the zombies with losing 35 health!\n')
+        random_number = randint(30, 40)
+        player1.user_health -= random_number
+        print_yellow(
+            f'You have used the Spiked Baseball Bat and defeated the zombies with losing {random_number} health!\n')
         sleep(2)
     elif player1.starting_knife:
-        player1.user_health -= 45
-        print_red('You have used the starting knife and defeated the zombies with losing 45 health!\n')
+        random_number = randint(40, 45)
+        player1.user_health -= random_number
+        print_red(f'You have used the Starting Knife and defeated the zombies with losing {random_number} health!\n')
         sleep(2)
     else:
         player1.user_health = 0
         print_red(
-            'Due to not having any available weapons or guns on you... You automatically cannot defend\nyourself and you have lost all of your health!\n')
-        sleep(2)
+            'Due to not having any available weapons or guns on you... You automatically cannot defend\nyourself and you have lost all of your health! Game Over!\n')
+        sleep(3)
         bad_ending()
 
 
@@ -609,6 +637,7 @@ def restart():
         player1.rocket_launcher = False
         player1.ak_47_rifle = False
         player1.barrett_rifle = False
+        player1.spell = False
         sounds.set_volume(0.05)
         print_green('Default stats have been loaded/saved and a new game will begin...\n')
         sleep(1)
