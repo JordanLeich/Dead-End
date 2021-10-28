@@ -68,7 +68,7 @@ def unlock_all_cheat():
 
 
 def game():
-    if player1.user_difficulty in [1, 2, 3]:
+    if player1.user_difficulty in ['1', '2', '3']:
         sounds.difficulty_select_sound()
         print_green('Difficulty screen skipped due to saved data already existing...\n', 1)
         choice_options = ['Would you like to start a new game or continue with your saved data (new / continue): ']
@@ -305,7 +305,7 @@ def outside_area():
     user_choice = _player_choice([str(x) for x in range(1, 3)], choice_options)
     
     if user_choice == '1':
-        print('You decide to explore the outside area and along the way, you see a woman bleeding out on the ground '
+        print('You decide to explore the outside area and along the way, you see a woman bleeding out on the ground\n'
               'with the shape of a man figure hovering over her...\n')
         sleep(2)
         sounds.zombie_attack_outside()
@@ -375,7 +375,8 @@ def broken_roads_area():
     if player1.user_health > 0:
         sounds.horror_sound_effects()
         print_green(
-            'You have successfully fought off the zombies surrounding the running vehicle... You then enter the running vehicle... The manage to put the vehicle into drive and you drive away into the sunrise...\n', 4)
+            'You have successfully fought off the zombies surrounding the running vehicle... You then enter the running vehicle... \n'
+            'The manage to put the vehicle into drive and you drive away into the sunrise...\n', 4)
         good_ending()
     else:
         bad_ending()
@@ -536,9 +537,9 @@ def checkpoint_save():
     game_data.save_game(player1)  # Sends player1 info to save file
     print_green(f'Current Health: {player1.user_health}\n', 1)
     print_green(f'Current Balance: {player1.user_balance}\n', 1)
-    if player1.user_difficulty == 1:
+    if player1.user_difficulty == '1':
         print_green('Current Difficulty: Easy\n')
-    elif player1.user_difficulty == 2:
+    elif player1.user_difficulty == '2':
         print_yellow('Current Difficulty: Medium\n')
     else:
         print_red('Current Difficulty: Hard\n', 1)
