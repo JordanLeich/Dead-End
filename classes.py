@@ -39,3 +39,18 @@ If more variables are needed. they can be added here.
         self.rocket_launcher = user_data['rocket_launcher']
         self.spell = user_data['spell']
         self.check_point = user_data['check_point']
+
+    def get_money():
+        random_money = randint(5, 30)
+        self.user_balance += random_money
+        return random_money
+
+    def lose_health(start_int, end_int):
+        random_health = randint(start_int, end_int)
+        self.user_health -= random_health
+        return random_health
+
+    def get_health():
+        random_health = randint(start_int, end_int)
+        self.user_health += random_health
+        return random_health

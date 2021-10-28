@@ -2,18 +2,18 @@
 
 # Created on 5/11/2021
 
-import sys
+from sys import exit
 import webbrowser
 from time import sleep
 from random import randint
-from other.colors import print_green, print_yellow, print_red
+from other.colors import print_green, print_yellow, print_red, print_s
 from classes import Player
 from gamedata import Game_data
 from other.sounds_effects import Game_Sounds
 
-player1 = Player()  # Creates an instance of a player
-game_data = Game_data()  # Creates an instance of load/save functions
-sounds = Game_Sounds()  # Creates and instance of the audio that will be played
+player1 = Player()  # Player Instance
+game_data = Game_data()  # load/save functions Instance
+sounds = Game_Sounds()  # audio that will be played Instance
 
 
 def load_or_save_data():
@@ -22,42 +22,32 @@ def load_or_save_data():
 
 def game_intro_description():
     sounds.intro_sound()
-    print('''This is a zombie survival game where you must make the best decisions possible in order to live.
+    print_s('''This is a zombie survival game where you must make the best decisions possible in order to live.
 As a survivor, you will encounter zombies, weapons, people, and a merchant to buy from with an
 in-game currency. Every decision you make has a cause and effect while some lead you to fortune and others will 
-lead you to death.\n''')
-    sleep(2.5)
+lead you to death.\n''', 2.5)
     game()
 
 
 def basement_area():
-    print('''You have reached the basement area.\n''')
-    sleep(1)
+    print_s('You have reached the basement area.\n', 1)
     sounds.horror_sound_effects()
-    print('''After living at your home for awhile now, you've had many supplies and broken utilities stored up in your basement.
-Trailing behind you leads a lurking stench of odor containing of what smells like mold and rotten flesh.\n''')
-    sleep(1.5)
-    choice = int(input('(1) Search around the basement (2) Forget about the basement and leave: '))
-    print()
-    sleep(1)
+    print_s('''After living at your home for awhile now, you've had many supplies and broken utilities stored up in your basement.
+Trailing behind you leads a lurking stench of odor containing of what smells like mold and rotten flesh.\n''', 1.5)
+    choice_options = ['(1) Search around the basement (2) Forget about the basement and leave: ']
+    choice = _player_choice([str(x) for x in range(1, 3)], choice_options)
+
     if choice == 1:
-        print(
-            'Amongst searching the basement, you stumble upon some spare money you forgot you had saved up in the basement.\n')
-        sleep(1.5)
+        print_s(
+            'Amongst searching the basement, you stumble upon some spare money you forgot you had saved up in the basement.\n', 1.5)
         sounds.good_luck()
-        random_money = randint(5, 30)
-        print_green(f'You found a total of ${random_money} dollars!\n')
-        player1.user_balance += random_money
-        sleep(1)
+        print_green(f'You found a total of ${player1.get_money()} dollars!\n', 1)
         continue_message()
     elif choice == 2:
         sounds.wind_sound()
-        print('''Upon leaving the basement, you head out into the outside area for a breath of fresh air after consuming 
-the moldy and old smells of the basement.\n''')
-        sleep(2)
+        print_s('''Upon leaving the basement, you head out into the outside area for a breath of fresh air after consuming 
+the moldy and old smells of the basement.\n''', 2)
         outside_area()
-    else:
-        error_message()
 
 
 def unlock_all_cheat():
@@ -72,8 +62,7 @@ def unlock_all_cheat():
     player1.ak_47_rifle = True
     player1.barrett_rifle = True
     player1.spell = True
-    print_green('Unlock all cheats have been activated!\n')
-    sleep(2)
+    print_green('Unlock all cheats have been activated!\n', 2)
     checkpoint_save()
     game()
 
@@ -81,13 +70,11 @@ def unlock_all_cheat():
 def game():
     if player1.user_difficulty in [1, 2, 3]:
         sounds.difficulty_select_sound()
-        print_green('Difficulty screen skipped due to saved data already existing...\n')
-        sleep(1)
-        choice = str(input('Would you like to restart the game from scratch or continue with your saved data '
-                           '(restart / continue): '))
-        print()
-        sleep(1)
-        if choice.lower() in ['r', 'restart']:
+        print_green('Difficulty screen skipped due to saved data already existing...\n', 1)
+        choice_options = ['Would you like to start a new game or continue with your saved data (new / continue): ']
+        choice = _player_choice(['n', 'new', 'c', 'continue'], choice_options)
+
+        if choice in ['n', 'new']:
             player1.user_health = 100
             player1.user_balance = 0
             player1.merchant_luck = 0
@@ -100,148 +87,121 @@ def game():
             player1.barrett_rifle = False
             player1.spell = False
             player1.check_point = ''
-            print_green('Default stats have been loaded/saved and a new game will begin...\n')
-            sleep(1)
+            print_green('Default stats have been loaded/saved and a new game will begin...\n', 1)
             checkpoint_save()
             game_intro_description()
-        elif choice.lower() in ['c', 'continue']:
-            print_green('Continuing game...\n')
-            sleep(1)
-        else:
-            error_message()
+        elif choice in ['c', 'continue']:
+            print_green('Continuing game...\n', 1)
     else:
         difficulty()
 
     if player1.user_health <= 0:
-        print_red('You currently have no health left...\n')
-        sleep(1)
+        print_red('You currently have no health left...\n', 1)
         bad_ending()
 
     print('You have ended up in a small local town called Hinesville. This old town contains a population of about\n'
           'only 6000 people and holds only a Gas Station, Diner, and a Park. The current year is 1999 and you\n'
           'cannot wait to finally get on with your life and move somewhere more alive\n')
     sleep(2)
-    user_choice = str(input('While sitting down in the living room of your house, you can either (1) Look around '
-                            '(2) Walk outside (3) Travel down the hidden door in the floor: '))
-    print()
-    sleep(1)
+    choices = [str(x) for x in range(1, 4)]
+    choices.append('unlock_all_cheat')
+    choice_options = ['While sitting down in the living room of your house, you can either (1) Look around (2) Walk outside (3) Travel down the hidden door in the floor: ']
+    choice = _player_choice(choices, choice_options)
 
-    if user_choice == '1':
+    if choice == '1':
         print('You have decided to look around your apartment and decide to grab a concealed knife that you legally\n'
               'are allowed to carry in public areas just in case anything happens...\n')
         sleep(1)
         player1.starting_knife = True
         outside_area()
-    elif user_choice == '2':
+    elif choice == '2':
         sleep(1)
         outside_area()
-    elif user_choice == '3':
+    elif choice == '3':
         sleep(1)
         basement_area()
-    elif user_choice == 'unlock_all_cheat':
+    elif choice == 'unlock_all_cheat':
         unlock_all_cheat()
-    else:
-        error_message()
 
 
 def merchant():  # sourcery no-metrics
 
     if player1.user_health <= 0:
-        print_red('You currently have no health left...\n')
-        sleep(1)
+        print_red('You currently have no health left...\n', 1)
         bad_ending()
 
     player1.merchant_luck = randint(1, 7)
 
     if player1.merchant_luck == 3:
         sounds.good_luck()
-        print_green('Whoosh! The lucky merchant has appeared in-front of you...\n')
-        sleep(1)
+        print_green('Whoosh! The lucky merchant has appeared in-front of you...\n', 1)
 
         if player1.user_balance <= 0:
-            print_yellow('Uh-Oh! You do not have enough money to buy anything... keep playing to acquire more money!\n')
-            sleep(1)
+            print_yellow('Uh-Oh! You do not have enough money to buy anything... keep playing to acquire more money!\n', 1)
         else:
-            user_choice = str(input('Would you like to buy from the merchant or skip past the merchant (buy / skip): '))
-            print()
-            sleep(1)
+            choices = ['b', 'buy', 'y', 'yes', 's', 'skip', 'n', 'no']
+            choice_options = ['Would you like to buy from the merchant or skip past the merchant (buy / skip): ']
+            choice = _player_choice(choices, choice_options)
 
-            if user_choice.lower() in ['b', 'buy', 'y', 'yes']:
-                print_green(f'Balance: {player1.user_balance}\n')
-                sleep(1)
-                user_item_buy = int(input('''--- Merchants inventory ---
-(1) Spiked Baseball Bat (5 Dollars)
-(2) 1997 Beretta Pistol (15 Dollars)
-(3) 1999 AK-47 Assault Rifle (25 Dollars)
-(4) 1999 Semi-automatic Barrett Sniper Rifle (60 Dollars)
-(5) Rocket Missile Launcher (100 Dollars)
-(6) The Merchants Strange Spell (125 Dollars)
-(7) Exit
+            if choice in ['b', 'buy', 'y', 'yes']:
+                print_green(f'Balance: {player1.user_balance}\n', 1)
+                choice_options = ['--- Merchants inventory ---',
+                                  '(1) Spiked Baseball Bat (5 Dollars)',
+                                  '(2) 1997 Beretta Pistol (15 Dollars)',
+                                  '(3) 1999 AK-47 Assault Rifle (25 Dollars)',
+                                  '(4) 1999 Semi-automatic Barrett Sniper Rifle (60 Dollars)',
+                                  '(5) Rocket Missile Launcher (100 Dollars)',
+                                  '(6) The Merchants Strange Spell (125 Dollars)',
+                                  '(7) Exit',
+                                  'What would you like to buy: ',
+                                 ]
+                user_item_buy = _player_choice([str(x) for x in range(1, 8)], choice_options)
 
-What would you like to buy: '''))
-                print()
-                sleep(1)
-
-                if user_item_buy == 1 and player1.user_balance >= 5:
+                if user_item_buy == '1' and player1.user_balance >= 5:
                     sounds.merchant_purchase_sound()
                     player1.user_balance -= 5
-                    print_green('Spiked Baseball Bat has been purchased!\n')
+                    print_green('Spiked Baseball Bat has been purchased!\n', 1)
                     player1.baseball_bat = True
-                    sleep(1)
-                elif user_item_buy == 2 and player1.user_balance >= 15:
+                elif user_item_buy == '2' and player1.user_balance >= 15:
                     sounds.merchant_purchase_sound()
                     player1.user_balance -= 15
-                    print_green('1997 Beretta Pistol has been purchased!\n')
+                    print_green('1997 Beretta Pistol has been purchased!\n', 1)
                     player1.beretta_pistol = True
-                    sleep(1)
-                elif user_item_buy == 3 and player1.user_balance >= 25:
+                elif user_item_buy == '3' and player1.user_balance >= 25:
                     sounds.merchant_purchase_sound()
-                    print_green('1999 AK-47 Assault Rifle has been purchased!\n')
+                    print_green('1999 AK-47 Assault Rifle has been purchased!\n', 1)
                     player1.user_balance -= 25
                     player1.ak_47_rifle = True
-                    sleep(1)
-                elif user_item_buy == 4 and player1.user_balance >= 60:
+                elif user_item_buy == '4' and player1.user_balance >= 60:
                     sounds.merchant_purchase_sound()
-                    print_green('1999 Semi-automatic Barrett Sniper Rifle has been purchased!\n')
+                    print_green('1999 Semi-automatic Barrett Sniper Rifle has been purchased!\n', 1)
                     player1.user_balance -= 60
                     player1.barrett_rifle = True
-                    sleep(1)
-                elif user_item_buy == 5 and player1.user_balance >= 100:
+                elif user_item_buy == '5' and player1.user_balance >= 100:
                     sounds.merchant_purchase_sound()
-                    print_green('Rocket Missile Launcher has been purchased!\n')
+                    print_green('Rocket Missile Launcher has been purchased!\n', 1)
                     player1.user_balance -= 100
                     player1.rocket_launcher = True
-                    sleep(1)
-                elif user_item_buy == 6 and player1.user_balance >= 125:
+                elif user_item_buy == '6' and player1.user_balance >= 125:
                     sounds.merchant_purchase_sound()
-                    print_green('The Merchants Strange Spell has been purchased!\n')
-                    sleep(1)
+                    print_green('The Merchants Strange Spell has been purchased!\n', 1)
                     sounds.good_luck()
                     print_green(
-                        'As the Merchant hands you his own crafted spell, he tells you that you now wield true pain to foes whilst providing restoration to thine self.\n')
+                        'As the Merchant hands you his own crafted spell, he tells you that you now wield true pain to foes whilst providing restoration to thine self.\n', 2.5)
                     player1.user_balance -= 125
                     player1.spell = True
-                    sleep(2.5)
-                elif user_item_buy == 7:
-                    print('The merchant has been skipped but can be brought back later...\n')
-                    sleep(1)
-                else:
-                    error_message()
-
-            elif user_choice.lower() in ['s', 'skip', 'n', 'no']:
-                print('The merchant has been skipped but can be brought back later...\n')
-                sleep(1)
-            else:
-                error_message()
+                elif user_item_buy == '7':
+                    print_s('The merchant has been skipped but can be brought back later...\n', 1)
+            elif choice in ['s', 'skip', 'n', 'no']:
+                print_s('The merchant has been skipped but can be brought back later...\n', 1)
 
 
 def continue_message():
     """
 This is purely only used for development and has no impact on the game
     """
-    print('Continue here...')
-    sleep(3)
-    sys.exit()
+    print_s('Continue here...', 3)
+    exit()
 
 
 def user_attack():
@@ -250,56 +210,34 @@ This function is called whenever the players gets into a fight with zombies or h
 so that the stronger weapon is used first instead of weaker weapons when attacking enemies.
     """
     if player1.spell:
-        random_number = randint(10, 30)
-        player1.user_health += random_number
         print_green(
-            f'You have used the Merchants Strange Spell and defeated the zombies without losing any health! Through the power of the Strange Spell, you gain {random_number} health through its restoration casting!\n')
-        sleep(3.5)
+            f'You have used the Merchants Strange Spell and defeated the zombies without losing any health! Through the power of the Strange Spell, you gain {player1.get_health(10, 30)} health through its restoration casting!\n', 3.5)
     elif player1.rocket_launcher:
-        player1.user_health -= 0
-        print_green('You have used the Rocket Missile Launcher and defeated the zombies without losing any health!\n')
-        sleep(2)
+        print_green('You have used the Rocket Missile Launcher and defeated the zombies without losing any health!\n', 2)
     elif player1.barrett_rifle:
-        random_number = randint(3, 10)
-        player1.user_health -= random_number
         print_green(
-            f'You have used the Barrett Sniper Rifle and defeated the zombies with only losing {random_number} health!\n')
-        sleep(2)
+            f'You have used the Barrett Sniper Rifle and defeated the zombies with only losing {player1.lose_health(3, 10)} health!\n', 2)
     elif player1.ak_47_rifle:
-        random_number = randint(10, 20)
-        player1.user_health -= random_number
         print_green(
-            f'You have used the AK-47 Rifle and defeated the zombies with only losing {random_number} health!\n')
-        sleep(2)
+            f'You have used the AK-47 Rifle and defeated the zombies with only losing {player1.lose_health(10, 20)} health!\n', 2)
     elif player1.beretta_pistol:
-        random_number = randint(20, 30)
-        player1.user_health -= random_number
         print_green(
-            f'You have used the Beretta Pistol and defeated the zombies with only losing {random_number} health!\n')
-        sleep(2)
+            f'You have used the Beretta Pistol and defeated the zombies with only losing {player1.lose_health(20, 30)} health!\n', 2)
     elif player1.baseball_bat:
-        random_number = randint(30, 40)
-        player1.user_health -= random_number
         print_yellow(
-            f'You have used the Spiked Baseball Bat and defeated the zombies with losing {random_number} health!\n')
-        sleep(2)
+            f'You have used the Spiked Baseball Bat and defeated the zombies with losing {player1.lose_health(30, 40)} health!\n', 2)
     elif player1.starting_knife:
-        random_number = randint(40, 45)
-        player1.user_health -= random_number
-        print_red(f'You have used the Starting Knife and defeated the zombies with losing {random_number} health!\n')
-        sleep(2)
+        print_red(f'You have used the Starting Knife and defeated the zombies with losing {player1.lose_health(40, 45)} health!\n', 2)
     else:
         player1.user_health = 0
         print_red(
-            'Due to not having any available weapons or guns on you... You automatically cannot defend\nyourself and you have lost all of your health! Game Over!\n')
-        sleep(3)
+            'Due to not having any available weapons or guns on you... You automatically cannot defend\nyourself and you have lost all of your health! Game Over!\n', 3)
         bad_ending()
 
 
 def gas_station():
     sounds.horror_sound_effects()
-    print('You have entered the local Gas Station...\n')
-    sleep(1)
+    print_s('You have entered the local Gas Station...\n', 1)
 
     checkpoint_save()
 
@@ -308,61 +246,43 @@ def gas_station():
           'what the hell is going on in this city and the man tells you that there has been a bacteria that can \n'
           'contaminated all meat supply chains across the world...\n')
     sleep(6)
-    user_choice = int(input('You have the choice to either (1) Keep talking to the man (2) Ask the man for any '
-                            'supplies along your journey: '))
-    print()
-    sleep(1)
 
-    if user_choice == 1:
+    choice_options = ['You have the choice to either (1) Keep talking to the man (2) Ask the man for any supplies along your journey: ']
+    user_choice = _player_choice([str(x) for x in range(1, 3)], choice_options)
+
+    if user_choice == '1':
         print('As you keep talking to the man, he starts to tell you about his family and how they would always\n'
               'venture out to the park with his young daughter and son...\n')
         sleep(2)
         sounds.zombie_attack_inside()
-        print('Out of nowhere, a group of 3 zombies begin to bang on the glass door from which you entered in from...'
-              '\n')
-        sleep(2.5)
+        print_s('Out of nowhere, a group of 3 zombies begin to bang on the glass door from which you entered in from...\n', 2.5)
         sounds.zombie_attack_inside()
         print('While attempting to save you, the man fights off 2 zombies with his pump shotgun and get eaten alive '
               'while saying, RUN! but more zombies come to arise on you...\n')
         sleep(2.5)
-        print('You decide to fight off the zombies in the will of your hopes for living...\n')
-        sleep(1.5)
+        print_s('You decide to fight off the zombies in the will of your hopes for living...\n', 1.5)
         user_attack()
 
         if player1.user_health > 0:
             print_green('You have successfully defended off the zombies inside the gas station but it was most '
-                        'unfortunate the man you found could not make it...\n')
-            sleep(2)
-            user_choice = int(input('You have the choice to either (1) Search the all the bodies of zombies and the '
-                                    'dead man (2) Head over to the local Diner: '))
-            print()
-            sleep(1)
+                        'unfortunate the man you found could not make it...\n', 2)
+            choice_options = ['You have the choice to either (1) Search the all the bodies of zombies and the dead man (2) Head over to the local Diner: ']
+            user_choice = _player_choice([str(x) for x in range(1, 3)], choice_options)
 
-            if user_choice == 1:
-                random_money = randint(5, 30)
-                print('After search everybody in the gas station, you manage to find a total of', random_money,
-                      'dollars and you then continue your way over to the local Diner...\n')
-                player1.user_balance += random_money
-                sleep(2)
+            if user_choice == '1':
+                print_s(f'After search everybody in the gas station, you manage to find a total of {player1.get_money()} dollars and you then continue your way over to the local Diner...\n', 2)
                 diner_area()
-            elif user_choice == 2:
+            elif user_choice == '2':
                 diner_area()
-            else:
-                error_message()
-
         else:
             bad_ending()
 
-    elif user_choice == 2:
+    elif user_choice == '2':
         sounds.good_luck()
-        random_money = randint(5, 30)
-        print('The man hands over some cash (' + str(random_money),
-              'dollars) and tells you about a mysterious lurking salesman who would wonder around the town quite '
+        print(f'The man hands over some cash ({player1.get_money()} dollars) and tells you about a mysterious lurking salesman who would wonder around the town quite '
               'often... ')
         print('The man says that he has not seen him since the apocalypse has happened but keep the money on '
               'you in-case he shows...\n')
-
-        player1.user_balance += random_money
         sleep(2.5)
         sounds.wind_sound()
         print('You give thanks to the man and exit the local Gas Station and make your way down a tumbled and broken '
@@ -371,80 +291,51 @@ def gas_station():
               'unclear... Deep down inside... you know you must go on further...\n')
         sleep(3.5)
         diner_area()
-    else:
-        error_message()
 
 
 def outside_area():
     checkpoint_save()
-    print('You make your way to the outside area...\n')
-    sleep(1)
+    print_s('You make your way to the outside area...\n', 1)
     sounds.wind_sound()
     print('You instantly notice something is not right... a dark gloomy fog covers all of the town and you do not see\n'
           'a single friendly soul insight... You start to come to a conclusion about where everybody in the small\n'
           'town of Hinesville has went but nothing is making sense...\n')
     sleep(3.5)
-    user_choice = int(input('You have the choice to either (1) Explore the Outside Area (2) Visit the local Gas '
-                            'Station: '))
-    print()
-    sleep(1)
-
-    if user_choice == 1:
+    choice_options = ['You have the choice to either (1) Explore the Outside Area (2) Visit the local Gas Station: ']
+    user_choice = _player_choice([str(x) for x in range(1, 3)], choice_options)
+    
+    if user_choice == '1':
         print('You decide to explore the outside area and along the way, you see a woman bleeding out on the ground '
               'with the shape of a man figure hovering over her...\n')
         sleep(2)
         sounds.zombie_attack_outside()
-        print('Lone behold... the figure is eating the woman alive but you are too late to rescue her!\n')
-        sleep(1.5)
-        user_choice = int(input('(1) Attack the zombie (2) Avoid the zombie and run to the local Gas Station: '))
-        print()
-        sleep(1)
+        print_s('Lone behold... the figure is eating the woman alive but you are too late to rescue her!\n', 1.5)
+        choice_options = ['(1) Attack the zombie (2) Avoid the zombie and run to the local Gas Station: ']
+        user_choice = _player_choice([str(x) for x in range(1, 3)], choice_options)
 
-        if user_choice == 1:
+        if user_choice == '1':
             sounds.zombie_attack_outside()
-            random_money = randint(5, 30)
             user_attack()
-            print('You then search the body of the zombie and decaying woman to find a total of', random_money,
-                  'Dollars...\n')
-            player1.user_balance += random_money
-            sleep(2)
-            print('Finally, you get to make your way over to the local Gas Station...\n')
-            sleep(1.5)
+            print_s(f'You then search the body of the zombie and decaying woman to find a total of {player1.get_money()} Dollars...\n', 2)
+            print_s('Finally, you get to make your way over to the local Gas Station...\n', 1.5)
             gas_station()
-
-        elif user_choice == 2:
+        elif user_choice == '2':
             gas_station()
-        else:
-            error_message()
-
-    elif user_choice == 2:
+    elif user_choice == '2':
         gas_station()
-    else:
-        error_message()
 
 
 def diner_area():
     sounds.horror_sound_effects()
-    print('You have entered the local Diner...\n')
-    sleep(1)
+    print_s('You have entered the local Diner...\n', 1)
     checkpoint_save()
-    user_choice = int(input('You have the choice to either (1) Search inside the Diner Restaurant Area (2) '
-                            'head towards the Parkview Area: '))
-    print()
-    sleep(1)
+    choice_options = ['You have the choice to either (1) Search inside the Diner Restaurant Area (2) head towards the Parkview Area: ']
+    user_choice = _player_choice([str(x) for x in range(1, 3)], choice_options)
 
-    if user_choice == 1:
+    if user_choice == '1':
         sounds.good_luck()
-        random_money = randint(5, 30)
-        random_health = randint(5, 15)
-        print('After finishing up your entire search of the diner, you find a total of', random_money, 'dollars and '
-                                                                                                       'you refresh '
-                                                                                                       'up on some '
-                                                                                                       'food and gain '
-                                                                                                       'a total of',
-              random_health, 'health!\n')
-        player1.user_balance += random_money
-        player1.user_health += random_health
+        print(f'After finishing up your entire search of the diner, you find a total of { player1.get_money()} dollars and ',
+            f'you refresh up on some food and gain a total of {player1.get_health(5, 15)} health!\n')
         sleep(3)
         print('You also manage to find a bloody photograph on the ground and upon looking at the image, you see a '
               'familiar face...')
@@ -457,25 +348,19 @@ def diner_area():
               'parkview area...\n')
         sleep(3.5)
         parkview_area()
-
-    elif user_choice == 2:
+    elif user_choice == '2':
         sounds.zombie_attack_outside()
         print_red(
-            'Upon leaving the diner area, you come across a group of about 5 zombies heading directly towards you!\n')
-        sleep(1.5)
+            'Upon leaving the diner area, you come across a group of about 5 zombies heading directly towards you!\n', 1.5)
         user_attack()
 
         if player1.user_health > 0:
             print_green(
-                'You have successfully defended off the zombies outside the local Diner... You will now head over to the Parkview Area\n')
-            sleep(2)
+                'You have successfully defended off the zombies outside the local Diner... You will now head over to the Parkview Area\n', 2)
             parkview_area()
 
         else:
             bad_ending()
-
-    else:
-        error_message()
 
 
 def broken_roads_area():
@@ -490,8 +375,7 @@ def broken_roads_area():
     if player1.user_health > 0:
         sounds.horror_sound_effects()
         print_green(
-            'You have successfully fought off the zombies surrounding the running vehicle... You then enter the running vehicle... The manage to put the vehicle into drive and you drive away into the sunrise...\n')
-        sleep(4)
+            'You have successfully fought off the zombies surrounding the running vehicle... You then enter the running vehicle... The manage to put the vehicle into drive and you drive away into the sunrise...\n', 4)
         good_ending()
     else:
         bad_ending()
@@ -499,27 +383,22 @@ def broken_roads_area():
 
 def parkview_area():
     sounds.horror_sound_effects()
-    print('You have entered the parkview area...\n')
-    sleep(1)
+    print_s('You have entered the parkview area...\n', 1)
     checkpoint_save()
     sounds.parkview_entrance()
     sleep(2.5)
-    print('Upon arriving to the parkview area, you are still incapable of seeing very much ahead of yourself...\n')
-    sleep(1.5)
-    user_choice = int(input('You have the choice to either (1) Explore the Parkview Area (2) Explore onto the Broken '
-                            'Roads: '))
-    print()
-    sleep(1)
+    print_s('Upon arriving to the parkview area, you are still incapable of seeing very much ahead of yourself...\n', 1.5)
+    choice_options = ['You have the choice to either (1) Explore the Parkview Area (2) Explore onto the Broken Roads: ']
+    user_choice = _player_choice([str(x) for x in range(1, 3)], choice_options)
 
-    if user_choice == 1:
+    if user_choice == '1':
         print('Upon searching the Parkview Area... You come across a deranged man who is killing zombies left and '
               'right...\n')
         sleep(2)
-        user_choice = int(input('You have the choice to either (1) Help the man (2) Kill the man: '))
-        print()
-        sleep(1)
+        choice_options = ['You have the choice to either (1) Help the man (2) Kill the man: ']
+        user_choice = _player_choice([str(x) for x in range(1, 3)], choice_options)
 
-        if user_choice == 1:
+        if user_choice == '1':
             sounds.horror_sound_effects()
             print('In attempts of helping the man, he screams get the hell away from me, I will blow your head off! '
                   'You now prepare to fight him off!\n')
@@ -527,49 +406,34 @@ def parkview_area():
             user_attack()
 
             if player1.user_health > 0:
-                random_money = randint(5, 30)
                 print_green(
-                    f'You have successfully killed the man! Upon searching his body, you find a total of ${random_money}!\n')
-                player1.user_balance += random_money
-                sleep(1)
+                    f'You have successfully killed the man! Upon searching his body, you find a total of ${player1.get_money()}!\n', 1)
                 checkpoint_save()
                 sounds.horror_sound_effects()
-                print('You now decide to leave the parkview area...\n')
-                sleep(1.5)
+                print_s('You now decide to leave the parkview area...\n', 1.5)
                 broken_roads_area()
-
             else:
                 sounds.bad_luck()
-                print_red('The man has killed you and zombies start to feast on your dead decaying flesh...\n')
-                sleep(2)
+                print_red('The man has killed you and zombies start to feast on your dead decaying flesh...\n', 2)
                 bad_ending()
 
-        elif user_choice == 2:
+        elif user_choice == '2':
             sounds.bad_luck()
             user_attack()
 
             if player1.user_health > 0:
-                random_money = randint(5, 30)
                 print_green(
-                    f'You have successfully killed the man! Upon searching his body, you find a total of ${random_money}!\n')
-                player1.user_balance += random_money
-                sleep(1)
+                    f'You have successfully killed the man! Upon searching his body, you find a total of ${player1.get_money()}!\n', 1)
                 checkpoint_save()
                 sounds.horror_sound_effects()
-                print('You now decide to leave the Parkview Area...\n')
-                sleep(1.5)
+                print_s('You now decide to leave the Parkview Area...\n', 1.5)
                 broken_roads_area()
-
             else:
                 sounds.bad_luck()
-                print_red('The man has killed you and zombies start to feast on your dead decaying flesh...\n')
-                sleep(2)
+                print_red('The man has killed you and zombies start to feast on your dead decaying flesh...\n', 2)
                 bad_ending()
-
-    elif user_choice == 2:
+    elif user_choice == '2':
         broken_roads_area()
-    else:
-        error_message()
 
 
 def view_stats():
@@ -577,57 +441,51 @@ def view_stats():
 Prints the users current in game stats based upon a load file
     """
     game_data.load_game(player1)
-    print_green('Your current in game stats will now be displayed below!\n')
-    sleep(1)
+    print_green('Your current in game stats will now be displayed below!\n', 1)
     print(f'Your health is {player1.user_health}\n')
-    print(f'Your balance is ${player1.user_balance}\n')
-    sleep(2)
+    print_s(f'Your balance is ${player1.user_balance}\n', 2)
 
 
 def difficulty():
     print_green('(1) Easy\n')
     print_yellow('(2) Medium\n')
     print_red('(3) Hardcore\n')
-    player1.user_difficulty = str(input('Select a difficulty: '))
-    print()
-    sleep(1)
-    sounds.difficulty_select_sound()
+    choices = [str(x) for x in range(1, 4)]
+    choices.append('unlock_all_cheat')
+    choice_options = ['Select a difficulty: ']
+    player1.user_difficulty = _player_choice(choices, choice_options)
 
+    sounds.difficulty_select_sound()
     if player1.user_difficulty == '1':
-        print_green('Easy mode has been selected, you will begin with 200 health.\n')
+        print_green('Easy mode has been selected, you will begin with 200 health.\n', 1)
         player1.user_health = 200
-        sleep(1)
     elif player1.user_difficulty == '2':
-        print_yellow('Medium mode has been selected, you will begin with 100 health.\n')
+        print_yellow('Medium mode has been selected, you will begin with 100 health.\n', 1)
         player1.user_health = 100
-        sleep(1)
     elif player1.user_difficulty == '3':
-        print_red('Hardcore mode has been selected, you will begin with only 50 health.\n')
+        print_red('Hardcore mode has been selected, you will begin with only 50 health.\n', 1)
         player1.user_health = 50
-        sleep(1)
     elif player1.user_difficulty == 'unlock_all_cheat':
         unlock_all_cheat()
-    else:
-        error_message()
 
 
 def restart():
-    restart_choice = str(input('Would you like to restart the game (yes / no): '))
-    print()
+    choices = ['y', 'yes', 'n', 'no']
+    choice_options = ['Would you like to restart the game (yes / no): ']
+    restart_choice = _player_choice(choices, choice_options)
 
-    if restart_choice.lower() in ['y', 'yes']:
-        if player1.user_difficulty == 1:
+    if restart_choice in ['y', 'yes']:
+        if player1.user_difficulty == '1':
             print_green('You will begin with 200 health.\n')
             player1.user_health = 200
-        elif player1.user_difficulty == 2:
+        elif player1.user_difficulty == '2':
             print_green('You will begin with 100 health.\n')
             player1.user_health = 100
-        elif player1.user_difficulty == 3:
+        elif player1.user_difficulty == '3':
             print_green('You will begin with 50 health.\n')
             player1.user_health = 50
         else:
-            print_yellow('Since a saved difficulty value could not be found... you will start with 100 health...\n')
-            sleep(1)
+            print_yellow('Since a saved difficulty value could not be found... you will start with 100 health...\n', 1)
             player1.user_health = 100
         player1.user_balance = 0
         player1.merchant_luck = 0
@@ -639,32 +497,25 @@ def restart():
         player1.barrett_rifle = False
         player1.spell = False
         sounds.set_volume(0.05)
-        print_green('Default stats have been loaded/saved and a new game will begin...\n')
-        sleep(1)
+        print_green('Default stats have been loaded/saved and a new game will begin...\n', 1)
         checkpoint_save()
         game_intro_description()
-    elif restart_choice.lower() in ['n', 'no']:
-        print('Ending game...')
-        sleep(1)
-        sys.exit()
-    else:
-        error_message()
+    elif restart_choice in ['n', 'no']:
+        print_s('Ending game...', 1)
+        exit()
 
 
 def good_ending():
     sounds.good_luck()
-    print_green('Congratulations, you have survived and reached the end of the horrors...\n')
-    sleep(1)
-    print_green(f'You survived with a total of {player1.user_health} health left!\n')
-    sleep(1)
+    print_green('Congratulations, you have survived and reached the end of the horrors...\n', 1)
+    print_green(f'You survived with a total of {player1.user_health} health left!\n', 1)
     checkpoint_save()
     restart()
 
 
 def bad_ending():
     sounds.bad_ending()
-    print_red('You have died and not reached the end of the horrors...\n')
-    sleep(1)
+    print_red('You have died and not reached the end of the horrors...\n', 1)
     checkpoint_save()
     restart()
 
@@ -672,31 +523,25 @@ def bad_ending():
 def error_message():
     sleep(1)
     sounds.bad_luck()
-    print_red('An error has been found... restarting game...\n')
-    sleep(2)
+    print_red('An error has been found... restarting game...\n', 2)
     game_menu()
 
 
 def checkpoint_save():
     if player1.user_health <= 0:
-        print_red('You have reached a checkpoint and currently have no more health! You have lost the game!\n')
-        sleep(1)
+        print_red('You have reached a checkpoint and currently have no more health! You have lost the game!\n', 1)
         restart()
     merchant()
-    print_green('A checkpoint has been reached...\n')
-    sleep(.5)
+    print_green('A checkpoint has been reached...\n', .5)
     game_data.save_game(player1)  # Sends player1 info to save file
-    print_green(f'Current Health: {player1.user_health}\n')
-    sleep(1)
-    print_green(f'Current Balance: {player1.user_balance}\n')
-    sleep(1)
+    print_green(f'Current Health: {player1.user_health}\n', 1)
+    print_green(f'Current Balance: {player1.user_balance}\n', 1)
     if player1.user_difficulty == 1:
         print_green('Current Difficulty: Easy\n')
     elif player1.user_difficulty == 2:
         print_yellow('Current Difficulty: Medium\n')
     else:
-        print_red('Current Difficulty: Hard\n')
-    sleep(1)
+        print_red('Current Difficulty: Hard\n', 1)
 
 
 def open_github(print_text, website_append=''):
@@ -721,76 +566,75 @@ def options():
     """
 Main hub UI for the user to view additional information or extra parts of this project such as donations and releases
     """
-    while True:
-        print("(1) View Stats")
-        print("(2) Audio Options")
-        print("(3) Project Releases")
-        print("(4) Credits")
-        print("(5) Donate")
-        print("(6) Main Menu")
-        print("(7) Exit\n")
-        choice = input("Which choice would you like to pick:  ")
-        print()
-        sleep(.5)
-
-        if choice == '1':
-            view_stats()
-        elif choice == '2':
-            audio_options()
-        elif choice == '3':
-            open_github("Opening the latest stable release...\n", "/releases")
-        elif choice == '4':
-            open_github("Opening all contributors of this project...\n", "/graphs/contributors")
-        elif choice == '5':
-            donation_opener("https://www.paypal.com/donate/?business=8FGHU8Z4EJPME&no_recurring=0&currency_code=USD")
-        elif choice == '6':
-            return
-        elif choice == '7':
-            sys.exit()
-        else:
-            print_red("Please select a number from 1 - 8.\n")
+    choice_options = ['(1) View Stats',
+                      '(2) Audio Options',
+                      '(3) Project Releases',
+                      '(4) Credits',
+                      '(5) Donate',
+                      '(6) Main Menu',
+                      '(7) Exit\n',
+                      'Which choice would you like to pick:  '
+                     ]
+    choice = _player_choice([str(x) for x in range(1, 8)], choice_options)
+    
+    if choice == '1':
+        view_stats()
+    elif choice == '2':
+        audio_options()
+    elif choice == '3':
+        open_github("Opening the latest stable release...\n", "/releases")
+    elif choice == '4':
+        open_github("Opening all contributors of this project...\n", "/graphs/contributors")
+    elif choice == '5':
+        donation_opener("https://www.paypal.com/donate/?business=8FGHU8Z4EJPME&no_recurring=0&currency_code=USD")
+    elif choice == '6':
+        return
+    elif choice == '7':
+        exit()
 
 
 def game_menu():
-    while True:
-        print_green('Welcome to Zombie Survival Game!\n\nYour choices will allow you to Live or lead to Doom!\n')
-        print('(1) New Game')
-        print('(2) Load Game')
-        print('(3) Options')
-        print('(4) Exit\n')
-        user_input = str(input('Selection: '))
-        print()
-        sleep(1)
+    choice_options = ['(1) New Game', 
+                      '(2) Load Game',
+                      '(3) Options',
+                      '(4) Exit\n',
+                      'Selection: ',
+                     ]
+    choice_dict = {'1': [game_intro_description],
+                   '2': [load_or_save_data, game_intro_description],
+                   '3': [options],
+                   '4': [exit],
+                   'unlock_all_cheat': [unlock_all_cheat]
+                  }
+    print_green('Welcome to Zombie Survival Game!\n\nYour choices will allow you to Live or lead to Doom!\n')
+    for item in choice_dict[_player_choice(choice_dict, choice_options)]:
+        item()
 
-        if user_input == '1':
-            game_intro_description()
-        elif user_input == '2':
-            load_or_save_data()
-            game_intro_description()
-        elif user_input == '3':
-            options()
-        elif user_input == '4':
-            sys.exit()
-        elif user_input == 'unlock_all_cheat':
-            unlock_all_cheat()
-        else:
+# helper function for player choices - handling errors + what paths to take next
+def _player_choice(choices, choice_options: list) -> str:
+    user_input = ' '
+    while user_input.lower() not in choices:
+        user_input = str(input('\n'.join(choice_options)))
+        print_s('', 1)
+        if user_input.lower() not in choices:
             error_message()
+        else:
+            return user_input.lower()
+    ''' # idea to make commands as dictionary that will play through? what benefits over just playing commands? None that I am aware of 
+    for item in choice_dict[_player_choice(choice_dict, choice_options)]:
+        if isinstance(item, list):
+            _print_choice(item)
+        else:
+            item()
+    '''
 
 
 def audio_options():
-    # sourcery skip: merge-duplicate-blocks, remove-redundant-if, remove-unnecessary-else, swap-if-else-branches
-    volume_level = float(input('What would you like to set your volume level to (0.05 is default, 1.0 is the max and '
-                               '0.0 is muted): '))
-    print()
-    sleep(1)
-    if volume_level < 0.0 or volume_level > 1.0:
-        print_red('Please only select a volume level between 0.0 and 1.0!\n')
-        sleep(1)
-        audio_options()
-    else:
-        sounds.set_volume(volume_level)
-        print('Your current volume level is set at', sounds.volume_level, '\n')
-        sleep(1)
+    choice_options = ['What would you like to set your volume level to (100 - 0): ']
+    volume_level = int(_player_choice([str(x) for x in range(0, 101)], choice_options)) / 100
+
+    sounds.set_volume(volume_level)
+    print_s(f'Your current volume level is set at {sounds.volume_level}\n', 1)
 
 
 if __name__ == '__main__':
