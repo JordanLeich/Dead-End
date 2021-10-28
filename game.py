@@ -6,8 +6,8 @@ from sys import exit
 import webbrowser
 from time import sleep
 from random import randint
-from other.colors import print_green, print_yellow, print_red, print_s
-from classes import Player
+from other.colors import print_green, print_yellow, print_red, print_s, print_health
+from classes import Player, Difficulty
 from gamedata import GameData
 from other.sounds_effects import GameSounds
 
@@ -53,9 +53,9 @@ the moldy and old smells of the basement.\n''', 2)
 
 def unlock_all_cheat():
     sounds.good_luck()
-    player1.user_health = 999999
-    player1.user_balance = 999999
-    player1.user_difficulty = 3
+    player1.health = 999999
+    player1.balance = 999999
+    player1.difficulty = Difficulty(0)
     player1.baseball_bat = True
     player1.beretta_pistol = True
     player1.starting_knife = True
@@ -69,17 +69,17 @@ def unlock_all_cheat():
 
 
 def game():
-    if player1.user_difficulty in ['1', '2', '3']:
+    if game_data.file_exists:
         sounds.difficulty_select_sound()
         print_green('Difficulty screen skipped due to saved data already existing...\n', 1)
         choice_options = ['Would you like to start a new game or continue with your saved data (new / continue): ']
         choice = _player_choice(['n', 'new', 'c', 'continue'], choice_options)
 
         if choice in ['n', 'new']:
-            player1.user_health = 100
-            player1.user_balance = 0
+            player1.health = 100
+            player1.balance = 0
             player1.merchant_luck = 0
-            player1.user_difficulty = 0
+            player1.difficulty = Difficulty(2)
             player1.baseball_bat = False
             player1.beretta_pistol = False
             player1.starting_knife = False
@@ -96,7 +96,7 @@ def game():
     else:
         difficulty()
 
-    if player1.user_health <= 0:
+    if player1.health <= 0:
         print_red('You currently have no health left...\n', 1)
         bad_ending()
 
@@ -128,7 +128,7 @@ def game():
 
 def merchant():  # sourcery no-metrics
 
-    if player1.user_health <= 0:
+    if player1.health <= 0:
         print_red('You currently have no health left...\n', 1)
         bad_ending()
 
@@ -138,7 +138,7 @@ def merchant():  # sourcery no-metrics
         sounds.good_luck()
         print_green('Whoosh! The lucky merchant has appeared in-front of you...\n', 1)
 
-        if player1.user_balance <= 0:
+        if player1.balance <= 0:
             print_yellow('Uh-Oh! You do not have enough money to buy anything... keep playing to acquire more money!\n',
                          1)
         else:
@@ -147,7 +147,7 @@ def merchant():  # sourcery no-metrics
             choice = _player_choice(choices, choice_options)
 
             if choice in ['b', 'buy', 'y', 'yes']:
-                print_green(f'Balance: {player1.user_balance}\n', 1)
+                print_green(f'Balance: {player1.balance}\n', 1)
                 choice_options = ['--- Merchants inventory ---',
                                   '(1) Spiked Baseball Bat (5 Dollars)',
                                   '(2) 1997 Beretta Pistol (15 Dollars)',
@@ -160,39 +160,39 @@ def merchant():  # sourcery no-metrics
                                   ]
                 user_item_buy = _player_choice([str(x) for x in range(1, 8)], choice_options)
 
-                if user_item_buy == '1' and player1.user_balance >= 5:
+                if user_item_buy == '1' and player1.balance >= 5:
                     sounds.merchant_purchase_sound()
-                    player1.user_balance -= 5
+                    player1.balance -= 5
                     print_green('Spiked Baseball Bat has been purchased!\n', 1)
                     player1.baseball_bat = True
-                elif user_item_buy == '2' and player1.user_balance >= 15:
+                elif user_item_buy == '2' and player1.balance >= 15:
                     sounds.merchant_purchase_sound()
-                    player1.user_balance -= 15
+                    player1.balance -= 15
                     print_green('1997 Beretta Pistol has been purchased!\n', 1)
                     player1.beretta_pistol = True
-                elif user_item_buy == '3' and player1.user_balance >= 25:
+                elif user_item_buy == '3' and player1.balance >= 25:
                     sounds.merchant_purchase_sound()
                     print_green('1999 AK-47 Assault Rifle has been purchased!\n', 1)
-                    player1.user_balance -= 25
+                    player1.balance -= 25
                     player1.ak_47_rifle = True
-                elif user_item_buy == '4' and player1.user_balance >= 60:
+                elif user_item_buy == '4' and player1.balance >= 60:
                     sounds.merchant_purchase_sound()
                     print_green('1999 Semi-automatic Barrett Sniper Rifle has been purchased!\n', 1)
-                    player1.user_balance -= 60
+                    player1.balance -= 60
                     player1.barrett_rifle = True
-                elif user_item_buy == '5' and player1.user_balance >= 100:
+                elif user_item_buy == '5' and player1.balance >= 100:
                     sounds.merchant_purchase_sound()
                     print_green('Rocket Missile Launcher has been purchased!\n', 1)
-                    player1.user_balance -= 100
+                    player1.balance -= 100
                     player1.rocket_launcher = True
-                elif user_item_buy == '6' and player1.user_balance >= 125:
+                elif user_item_buy == '6' and player1.balance >= 125:
                     sounds.merchant_purchase_sound()
                     print_green('The Merchants Strange Spell has been purchased!\n', 1)
                     sounds.good_luck()
                     print_green(
                         'As the Merchant hands you his own crafted spell, he tells you that you now wield true pain to foes whilst providing restoration to thine self.\n',
                         2.5)
-                    player1.user_balance -= 125
+                    player1.balance -= 125
                     player1.spell = True
                 elif user_item_buy == '7':
                     print_s('The merchant has been skipped but can be brought back later...\n', 1)
@@ -241,7 +241,7 @@ so that the stronger weapon is used first instead of weaker weapons when attacki
             f'You have used the Starting Knife and defeated the zombies with losing {player1.lose_health(40, 45)} health!\n',
             2)
     else:
-        player1.user_health = 0
+        player1.health = 0
         print_red(
             'Due to not having any available weapons or guns on you... You automatically cannot defend\nyourself and you have lost all of your health! Game Over!\n',
             3)
@@ -279,7 +279,7 @@ def gas_station():
         print_s('You decide to fight off the zombies in the will of your hopes for living...\n', 1.5)
         user_attack()
 
-        if player1.user_health > 0:
+        if player1.health > 0:
             print_green('You have successfully defended off the zombies inside the gas station but it was most '
                         'unfortunate the man you found could not make it...\n', 2)
             choice_options = [
@@ -379,7 +379,7 @@ def diner_area():
             1.5)
         user_attack()
 
-        if player1.user_health > 0:
+        if player1.health > 0:
             print_green(
                 'You have successfully defended off the zombies outside the local Diner... You will now head over to the Parkview Area\n',
                 2)
@@ -398,7 +398,7 @@ def broken_roads_area():
     user_attack()
     checkpoint_save()
 
-    if player1.user_health > 0:
+    if player1.health > 0:
         sounds.horror_sound_effects()
         print_green(
             'You have successfully fought off the zombies surrounding the running vehicle... You then enter the running vehicle...\nYou manage to put the vehicle into drive and you drive away into the sunrise...\n',
@@ -433,7 +433,7 @@ def parkview_area():
             sleep(2.5)
             user_attack()
 
-            if player1.user_health > 0:
+            if player1.health > 0:
                 print_green(
                     f'You have successfully killed the man! Upon searching his body, you find a total of ${player1.get_money()}!\n',
                     1)
@@ -450,7 +450,7 @@ def parkview_area():
             sounds.bad_luck()
             user_attack()
 
-            if player1.user_health > 0:
+            if player1.health > 0:
                 print_green(
                     f'You have successfully killed the man! Upon searching his body, you find a total of ${player1.get_money()}!\n',
                     1)
@@ -472,8 +472,8 @@ Prints the users current in game stats based upon a load file
     """
     game_data.load_game(player1)
     print_green('Your current in game stats will now be displayed below!\n', 1)
-    print(f'Your health is {player1.user_health}\n')
-    print_s(f'Your balance is ${player1.user_balance}\n', 2)
+    print(f'Your health is {player1.health}\n')
+    print_s(f'Your balance is ${player1.balance}\n', 2)
 
 
 def difficulty():
@@ -483,20 +483,19 @@ def difficulty():
     choices = [str(x) for x in range(1, 4)]
     choices.append('unlock_all_cheat')
     choice_options = ['Select a difficulty: ']
-    player1.user_difficulty = _player_choice(choices, choice_options)
+    player1.difficulty = Difficulty(int(_player_choice(choices, choice_options)))
 
     sounds.difficulty_select_sound()
-    if player1.user_difficulty == '1':
-        print_green('Easy mode has been selected, you will begin with 200 health.\n', 1)
-        player1.user_health = 200
-    elif player1.user_difficulty == '2':
-        print_yellow('Medium mode has been selected, you will begin with 100 health.\n', 1)
-        player1.user_health = 100
-    elif player1.user_difficulty == '3':
-        print_red('Hardcore mode has been selected, you will begin with only 50 health.\n', 1)
-        player1.user_health = 50
-    elif player1.user_difficulty == 'unlock_all_cheat':
+
+    if player1.difficulty == Difficulty(1):
+        player1.health = 200
+    elif player1.difficulty == Difficulty(2):
+        player1.health = 100
+    elif player1.difficulty == Difficulty(3):
+        player1.health = 50
+    elif player1.difficulty == Difficulty(0):
         unlock_all_cheat()
+    print_health(player1.difficulty, f'{player1.difficulty.name} mode has been selected, you will begin with only {player1.health} health.\n', 1)
 
 
 def restart():
@@ -505,19 +504,17 @@ def restart():
     restart_choice = _player_choice(choices, choice_options)
 
     if restart_choice in ['y', 'yes']:
-        if player1.user_difficulty == '1':
-            print_green('You will begin with 200 health.\n')
-            player1.user_health = 200
-        elif player1.user_difficulty == '2':
-            print_green('You will begin with 100 health.\n')
-            player1.user_health = 100
-        elif player1.user_difficulty == '3':
-            print_green('You will begin with 50 health.\n')
-            player1.user_health = 50
+        if player1.difficulty == Difficulty(1):
+            player1.health = 200
+        elif player1.difficulty == Difficulty(2):
+            player1.health = 100
+        elif player1.difficulty == Difficulty(3):
+            player1.health = 50
         else:
-            print_yellow('Since a saved difficulty value could not be found... you will start with 100 health...\n', 1)
-            player1.user_health = 100
-        player1.user_balance = 0
+            print('Since a saved difficulty value could not be found...')
+            player1.health = 100
+        print_health(player1.difficulty, f'You will begin with {player1.health} health.\n')
+        player1.balance = 0
         player1.merchant_luck = 0
         player1.baseball_bat = False
         player1.beretta_pistol = False
@@ -538,7 +535,7 @@ def restart():
 def good_ending():
     sounds.good_luck()
     print_green('Congratulations, you have survived and reached the end of the horrors...\n', 1)
-    print_green(f'You survived with a total of {player1.user_health} health left!\n', 1)
+    print_green(f'You survived with a total of {player1.health} health left!\n', 1)
     checkpoint_save()
     restart()
 
@@ -558,20 +555,15 @@ def error_message(choices):
 
 
 def checkpoint_save():
-    if player1.user_health <= 0:
+    if player1.health <= 0:
         print_red('You have reached a checkpoint and currently have no more health! You have lost the game!\n', 1)
         restart()
     merchant()
     print_green('A checkpoint has been reached...\n', .5)
     game_data.save_game(player1)  # Sends player1 info to save file
-    print_green(f'Current Health: {player1.user_health}\n', 1)
-    print_green(f'Current Balance: {player1.user_balance}\n', 1)
-    if player1.user_difficulty == '1':
-        print_green('Current Difficulty: Easy\n')
-    elif player1.user_difficulty == '2':
-        print_yellow('Current Difficulty: Medium\n')
-    else:
-        print_red('Current Difficulty: Hard\n', 1)
+    print_green(f'Current Health: {player1.health}\n', 1)
+    print_green(f'Current Balance: {player1.balance}\n', 1)
+    print_health(player1.difficulty, f'Current Difficulty: {player1.difficulty.name}\n', 1)
 
 
 def open_github(print_text, website_append=''):
@@ -651,18 +643,11 @@ def _player_choice(choices, choice_options: list) -> str:
             error_message(choices)
         else:
             return user_input.lower()
-    ''' # idea to make commands as dictionary that will play through? what benefits over just playing commands? None that I am aware of 
-    for item in choice_dict[_player_choice(choice_dict, choice_options)]:
-        if isinstance(item, list):
-            _print_choice(item)
-        else:
-            item()
-    '''
 
 
-def audio_options():  # sourcery skip: remove-zero-from-range
+def audio_options():
     choice_options = ['What would you like to set your volume level to (0 - 100): ']
-    volume_level = int(_player_choice([str(x) for x in range(0, 101)], choice_options)) / 100
+    volume_level = int(_player_choice([str(x) for x in range(101)], choice_options)) / 100
     sounds.set_volume(volume_level)
     print_s(f'Your current volume level is set at {sounds.volume_level}\n', 1)
     options()
