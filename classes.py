@@ -1,3 +1,4 @@
+from random import randint
 class Player:
     """
 This class is to setup the player with all variables needed through out the game.
@@ -40,17 +41,17 @@ If more variables are needed. they can be added here.
         self.spell = user_data['spell']
         self.check_point = user_data['check_point']
 
-    def get_money():
+    def get_money(self):
         random_money = randint(5, 30)
         self.user_balance += random_money
         return random_money
 
-    def lose_health(start_int, end_int):
+    def lose_health(self, start_int, end_int):
         random_health = randint(start_int, end_int)
         self.user_health -= random_health
         return random_health
 
-    def get_health():
+    def get_health(self, start_int, end_int):
         random_health = randint(start_int, end_int)
         self.user_health += random_health
         return random_health
