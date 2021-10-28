@@ -1,5 +1,6 @@
 from random import randint
 from enum import Enum
+from copy import deepcopy
 
 
 class Player:
@@ -27,7 +28,7 @@ If more variables are needed. they can be added here.
         self.check_point = ''
 
     def get_data(self):
-        value_dict = vars(self)
+        value_dict = deepcopy(vars(self))
         value_dict['difficulty'] = self.difficulty.value
         return value_dict
 
@@ -67,4 +68,3 @@ class Difficulty(Enum):
     Easy = 1
     Medium = 2
     Hard = 3
-    
