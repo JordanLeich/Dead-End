@@ -2,7 +2,7 @@ from random import choice
 import pygame
 
 
-class Game_Sounds:
+class GameSounds:
     def __init__(self):
         self.volume_level = 0.05
 

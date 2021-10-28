@@ -1,3 +1,6 @@
+import random
+
+
 class Player:
     """
 This class is to setup the player with all variables needed through out the game.
@@ -21,10 +24,10 @@ If more variables are needed. they can be added here.
         self.spell = spell
         #  check point location
         self.check_point = ''
-    
+
     def get_data(self):
         return vars(self)
-        
+
     def load_data(self, user_data):
         """This function will set player data from previous game"""
         self.user_balance = user_data['user_balance']
@@ -40,17 +43,17 @@ If more variables are needed. they can be added here.
         self.spell = user_data['spell']
         self.check_point = user_data['check_point']
 
-    def get_money():
-        random_money = randint(5, 30)
+    def get_money(self, start_int=5, end_int=30):
+        random_money = random.randint(start_int, end_int)
         self.user_balance += random_money
         return random_money
 
-    def lose_health(start_int, end_int):
-        random_health = randint(start_int, end_int)
+    def lose_health(self, start_int, end_int):
+        random_health = random.randint(start_int, end_int)
         self.user_health -= random_health
         return random_health
 
-    def get_health():
-        random_health = randint(start_int, end_int)
+    def get_health(self, start_int, end_int):
+        random_health = random.randint(start_int, end_int)
         self.user_health += random_health
         return random_health
