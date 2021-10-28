@@ -10,12 +10,13 @@ If more variables are needed. they can be added here.
     """
 
     def __init__(self, balance=0, health=0, luck=0, difficulty=2, knife=False, ak47=False, pistol=False, bat=False,
-                 rpg=False, barrett=False, spell=False):
+                 rpg=False, barrett=False, spell=False, continue_buying=False):
         # user attributes
         self.balance = balance
         self.health = health
         self.merchant_luck = luck
         self.difficulty = Difficulty(difficulty)
+        self.continue_buying = continue_buying
         # user weapons
         self.starting_knife = knife
         self.ak_47_rifle = ak47
@@ -61,6 +62,7 @@ If more variables are needed. they can be added here.
         random_health = randint(start_int, end_int)
         self.health += random_health
         return random_health
+
 
 # Difficulty labeling - easier for referencing + printing
 class Difficulty(Enum):

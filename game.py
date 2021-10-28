@@ -123,18 +123,22 @@ def game():
         unlock_all_cheat()
 
 
-def merchant():  # sourcery no-metrics
+def merchant():  # sourcery no-metrics skip: remove-redundant-if
+    """
+    Handles the merchant who randomly shows up in-game. This function allows the player to purchase weapons.
+    """
 
-    if player1.health <= 0:
+    if player1.health <= 0:  # Basic check to make sure the game is not continuing if the player has no more health left
         print_red('You currently have no health left...\n', 1)
         bad_ending()
 
     player1.merchant_luck = randint(1, 7)
-    if player1.merchant_luck != 3:  # can't interact with merchant
+    if player1.merchant_luck != 3:  # if the merchant_luck integer does not equal 3, then the player can't interact with merchant.
+        # Otherwise, if the merchant_luck integer does equal 3, then the merchant shop can be accessed.
         return
 
     sounds.good_luck()
-    print_green('Whoosh! The lucky merchant has appeared in-front of you...\n', 1) 
+    print_green('Whoosh! The lucky merchant has appeared in-front of you...\n', 1)
     if player1.balance <= 0:
         print_yellow('Uh-Oh! You do not have enough money to buy anything... keep playing to acquire more money!\n', 1)
         return
@@ -144,55 +148,76 @@ def merchant():  # sourcery no-metrics
     choice = _player_choice(choices, choice_options)
 
     if choice in ['b', 'buy', 'y', 'yes']:
-        print_green(f'Balance: {player1.balance}\n', 1)
-        choice_options = ['--- Merchants inventory ---',
-                          '(1) Spiked Baseball Bat (5 Dollars)',
-                          '(2) 1997 Beretta Pistol (15 Dollars)',
-                          '(3) 1999 AK-47 Assault Rifle (25 Dollars)',
-                          '(4) 1999 Semi-automatic Barrett Sniper Rifle (60 Dollars)',
-                          '(5) Rocket Missile Launcher (100 Dollars)',
-                          '(6) The Merchants Strange Spell (125 Dollars)',
-                          '(7) Exit',
-                          'What would you like to buy: ',
-                          ]
-        user_item_buy = _player_choice([str(x) for x in range(1, 8)], choice_options)
+        player1.continue_buying = True
+        while player1.continue_buying:
+            print_green(f'Balance: {player1.balance}\n', 1)
+            choice_options = ['--- Merchants inventory ---',
+                              '(1) Spiked Baseball Bat (5 Dollars)',
+                              '(2) 1997 Beretta Pistol (15 Dollars)',
+                              '(3) 1999 AK-47 Assault Rifle (25 Dollars)',
+                              '(4) 1999 Semi-automatic Barrett Sniper Rifle (60 Dollars)',
+                              '(5) Rocket Missile Launcher (100 Dollars)',
+                              '(6) The Merchants Strange Spell (125 Dollars)',
+                              '(7) Exit The Merchant Shop\n',
+                              'What would you like to buy: ',
+                              ]
+            user_item_buy = _player_choice([str(x) for x in range(1, 8)], choice_options)
 
-        if user_item_buy == '1' and player1.balance >= 5:
-            sounds.merchant_purchase_sound()
-            player1.balance -= 5
-            print_green('Spiked Baseball Bat has been purchased!\n', 1)
-            player1.baseball_bat = True
-        elif user_item_buy == '2' and player1.balance >= 15:
-            sounds.merchant_purchase_sound()
-            player1.balance -= 15
-            print_green('1997 Beretta Pistol has been purchased!\n', 1)
-            player1.beretta_pistol = True
-        elif user_item_buy == '3' and player1.balance >= 25:
-            sounds.merchant_purchase_sound()
-            print_green('1999 AK-47 Assault Rifle has been purchased!\n', 1)
-            player1.balance -= 25
-            player1.ak_47_rifle = True
-        elif user_item_buy == '4' and player1.balance >= 60:
-            sounds.merchant_purchase_sound()
-            print_green('1999 Semi-automatic Barrett Sniper Rifle has been purchased!\n', 1)
-            player1.balance -= 60
-            player1.barrett_rifle = True
-        elif user_item_buy == '5' and player1.balance >= 100:
-            sounds.merchant_purchase_sound()
-            print_green('Rocket Missile Launcher has been purchased!\n', 1)
-            player1.balance -= 100
-            player1.rocket_launcher = True
-        elif user_item_buy == '6' and player1.balance >= 125:
-            sounds.merchant_purchase_sound()
-            print_green('The Merchants Strange Spell has been purchased!\n', 1)
-            sounds.good_luck()
-            print_green(
-                'As the Merchant hands you his own crafted spell, he tells you that you now wield true pain to foes whilst providing restoration to thine self.\n',
-                2.5)
-            player1.balance -= 125
-            player1.spell = True
-        elif user_item_buy == '7':
-            print_s('The merchant has been skipped but can be brought back later...\n', 1)
+            if user_item_buy == '1' and player1.balance >= 5 and player1.baseball_bat:
+                sounds.bad_luck()
+                print_yellow('Spiked Baseball Bat has already been purchased!\n', 1)
+            elif user_item_buy == '1' and player1.balance >= 5 and not player1.baseball_bat:
+                sounds.merchant_purchase_sound()
+                player1.balance -= 5
+                print_green('Spiked Baseball Bat has been purchased!\n', 1)
+                player1.baseball_bat = True
+            elif user_item_buy == '2' and player1.balance >= 15 and player1.beretta_pistol:
+                sounds.bad_luck()
+                print_yellow('1997 Beretta Pistol has already been purchased!\n', 1)
+            elif user_item_buy == '2' and player1.balance >= 15 and not player1.beretta_pistol:
+                sounds.merchant_purchase_sound()
+                player1.balance -= 15
+                print_green('1997 Beretta Pistol has been purchased!\n', 1)
+                player1.beretta_pistol = True
+            elif user_item_buy == '3' and player1.balance >= 25 and player1.ak_47_rifle:
+                sounds.bad_luck()
+                print_yellow('1999 AK-47 Assault Rifle has already been purchased!\n', 1)
+            elif user_item_buy == '3' and player1.balance >= 25 and not player1.ak_47_rifle:
+                sounds.merchant_purchase_sound()
+                print_green('1999 AK-47 Assault Rifle has been purchased!\n', 1)
+                player1.balance -= 25
+                player1.ak_47_rifle = True
+            elif user_item_buy == '4' and player1.balance >= 60 and player1.barrett_rifle:
+                sounds.bad_luck()
+                print_yellow('1999 Semi-automatic Barrett Sniper Rifle has already been purchased!\n', 1)
+            elif user_item_buy == '4' and player1.balance >= 60 and not player1.barrett_rifle:
+                sounds.merchant_purchase_sound()
+                print_green('1999 Semi-automatic Barrett Sniper Rifle has been purchased!\n', 1)
+                player1.balance -= 60
+                player1.barrett_rifle = True
+            elif user_item_buy == '5' and player1.balance >= 100 and player1.rocket_launcher:
+                sounds.bad_luck()
+                print_yellow('Rocket Missile Launcher has already been purchased!\n', 1)
+            elif user_item_buy == '5' and player1.balance >= 100 and not player1.rocket_launcher:
+                sounds.merchant_purchase_sound()
+                print_green('Rocket Missile Launcher has been purchased!\n', 1)
+                player1.balance -= 100
+                player1.rocket_launcher = True
+            elif user_item_buy == '6' and player1.balance >= 125 and player1.spell:
+                sounds.bad_luck()
+                print_yellow('The Merchants Strange Spell has already been purchased!\n', 1)
+            elif user_item_buy == '6' and player1.balance >= 125 and not player1.spell:
+                sounds.merchant_purchase_sound()
+                print_green('The Merchants Strange Spell has been purchased!\n', 2)
+                sounds.good_luck()
+                print_green(
+                    'As the Merchant hands you his own crafted spell, he tells you that you now wield true pain to foes whilst providing restoration to thine self.\n',
+                    2.5)
+                player1.balance -= 125
+                player1.spell = True
+            elif user_item_buy == '7':
+                player1.continue_buying = False
+                print_s('The merchant has been skipped but can be brought back later...\n', 1)
     elif choice in ['s', 'skip', 'n', 'no']:
         print_s('The merchant has been skipped but can be brought back later...\n', 1)
 
@@ -494,7 +519,9 @@ def difficulty():
         player1.health = 50
     elif player1.difficulty == Difficulty(0):
         unlock_all_cheat()
-    print_health(player1.difficulty, f'{player1.difficulty.name} mode has been selected, you will begin with only {player1.health} health.\n', 1)
+    print_health(player1.difficulty,
+                 f'{player1.difficulty.name} mode has been selected, you will begin with only {player1.health} health.\n',
+                 1)
 
 
 def restart():
