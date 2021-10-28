@@ -520,11 +520,11 @@ def bad_ending():
     restart()
 
 
-def error_message():
-    sleep(1)
-    sounds.bad_luck()
-    print_red('An error has been found... restarting game...\n', 2)
-    game_menu()
+def error_message(choices):
+    if choices[-1] == 'unlock_all_cheat': 
+        print(f'Error choice must be one of: {", ".join(choices[:-1])}')
+    else:
+        print(f'Error choice must be one of: {", ".join(choices)}')
 
 
 def checkpoint_save():
@@ -617,7 +617,7 @@ def _player_choice(choices, choice_options: list) -> str:
         user_input = str(input('\n'.join(choice_options)))
         print_s('', 1)
         if user_input.lower() not in choices:
-            error_message()
+            error_message(choices)
         else:
             return user_input.lower()
     ''' # idea to make commands as dictionary that will play through? what benefits over just playing commands? None that I am aware of 
