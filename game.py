@@ -76,10 +76,9 @@ def game():
         choice = _player_choice(['n', 'new', 'c', 'continue'], choice_options)
 
         if choice in ['n', 'new']:
-            player1.health = 100
+            difficulty()
             player1.balance = 0
             player1.merchant_luck = 0
-            player1.difficulty = Difficulty(2)
             player1.baseball_bat = False
             player1.beretta_pistol = False
             player1.starting_knife = False
@@ -88,9 +87,7 @@ def game():
             player1.barrett_rifle = False
             player1.spell = False
             player1.check_point = ''
-            print_green('Default stats have been loaded/saved and a new game will begin...\n', 1)
             checkpoint_save()
-            game_intro_description()
         elif choice in ['c', 'continue']:
             print_green('Continuing game...\n', 1)
     else:
@@ -133,71 +130,71 @@ def merchant():  # sourcery no-metrics
         bad_ending()
 
     player1.merchant_luck = randint(1, 7)
+    if player1.merchant_luck != 3:  # can't interact with merchant
+        return
 
-    if player1.merchant_luck == 3:
-        sounds.good_luck()
-        print_green('Whoosh! The lucky merchant has appeared in-front of you...\n', 1)
+    sounds.good_luck()
+    print_green('Whoosh! The lucky merchant has appeared in-front of you...\n', 1) 
+    if player1.balance <= 0:
+        print_yellow('Uh-Oh! You do not have enough money to buy anything... keep playing to acquire more money!\n', 1)
+        return
 
-        if player1.balance <= 0:
-            print_yellow('Uh-Oh! You do not have enough money to buy anything... keep playing to acquire more money!\n',
-                         1)
-        else:
-            choices = ['b', 'buy', 'y', 'yes', 's', 'skip', 'n', 'no']
-            choice_options = ['Would you like to buy from the merchant or skip past the merchant (buy / skip): ']
-            choice = _player_choice(choices, choice_options)
+    choices = ['b', 'buy', 'y', 'yes', 's', 'skip', 'n', 'no']
+    choice_options = ['Would you like to buy from the merchant or skip past the merchant (buy / skip): ']
+    choice = _player_choice(choices, choice_options)
 
-            if choice in ['b', 'buy', 'y', 'yes']:
-                print_green(f'Balance: {player1.balance}\n', 1)
-                choice_options = ['--- Merchants inventory ---',
-                                  '(1) Spiked Baseball Bat (5 Dollars)',
-                                  '(2) 1997 Beretta Pistol (15 Dollars)',
-                                  '(3) 1999 AK-47 Assault Rifle (25 Dollars)',
-                                  '(4) 1999 Semi-automatic Barrett Sniper Rifle (60 Dollars)',
-                                  '(5) Rocket Missile Launcher (100 Dollars)',
-                                  '(6) The Merchants Strange Spell (125 Dollars)',
-                                  '(7) Exit',
-                                  'What would you like to buy: ',
-                                  ]
-                user_item_buy = _player_choice([str(x) for x in range(1, 8)], choice_options)
+    if choice in ['b', 'buy', 'y', 'yes']:
+        print_green(f'Balance: {player1.balance}\n', 1)
+        choice_options = ['--- Merchants inventory ---',
+                          '(1) Spiked Baseball Bat (5 Dollars)',
+                          '(2) 1997 Beretta Pistol (15 Dollars)',
+                          '(3) 1999 AK-47 Assault Rifle (25 Dollars)',
+                          '(4) 1999 Semi-automatic Barrett Sniper Rifle (60 Dollars)',
+                          '(5) Rocket Missile Launcher (100 Dollars)',
+                          '(6) The Merchants Strange Spell (125 Dollars)',
+                          '(7) Exit',
+                          'What would you like to buy: ',
+                          ]
+        user_item_buy = _player_choice([str(x) for x in range(1, 8)], choice_options)
 
-                if user_item_buy == '1' and player1.balance >= 5:
-                    sounds.merchant_purchase_sound()
-                    player1.balance -= 5
-                    print_green('Spiked Baseball Bat has been purchased!\n', 1)
-                    player1.baseball_bat = True
-                elif user_item_buy == '2' and player1.balance >= 15:
-                    sounds.merchant_purchase_sound()
-                    player1.balance -= 15
-                    print_green('1997 Beretta Pistol has been purchased!\n', 1)
-                    player1.beretta_pistol = True
-                elif user_item_buy == '3' and player1.balance >= 25:
-                    sounds.merchant_purchase_sound()
-                    print_green('1999 AK-47 Assault Rifle has been purchased!\n', 1)
-                    player1.balance -= 25
-                    player1.ak_47_rifle = True
-                elif user_item_buy == '4' and player1.balance >= 60:
-                    sounds.merchant_purchase_sound()
-                    print_green('1999 Semi-automatic Barrett Sniper Rifle has been purchased!\n', 1)
-                    player1.balance -= 60
-                    player1.barrett_rifle = True
-                elif user_item_buy == '5' and player1.balance >= 100:
-                    sounds.merchant_purchase_sound()
-                    print_green('Rocket Missile Launcher has been purchased!\n', 1)
-                    player1.balance -= 100
-                    player1.rocket_launcher = True
-                elif user_item_buy == '6' and player1.balance >= 125:
-                    sounds.merchant_purchase_sound()
-                    print_green('The Merchants Strange Spell has been purchased!\n', 1)
-                    sounds.good_luck()
-                    print_green(
-                        'As the Merchant hands you his own crafted spell, he tells you that you now wield true pain to foes whilst providing restoration to thine self.\n',
-                        2.5)
-                    player1.balance -= 125
-                    player1.spell = True
-                elif user_item_buy == '7':
-                    print_s('The merchant has been skipped but can be brought back later...\n', 1)
-            elif choice in ['s', 'skip', 'n', 'no']:
-                print_s('The merchant has been skipped but can be brought back later...\n', 1)
+        if user_item_buy == '1' and player1.balance >= 5:
+            sounds.merchant_purchase_sound()
+            player1.balance -= 5
+            print_green('Spiked Baseball Bat has been purchased!\n', 1)
+            player1.baseball_bat = True
+        elif user_item_buy == '2' and player1.balance >= 15:
+            sounds.merchant_purchase_sound()
+            player1.balance -= 15
+            print_green('1997 Beretta Pistol has been purchased!\n', 1)
+            player1.beretta_pistol = True
+        elif user_item_buy == '3' and player1.balance >= 25:
+            sounds.merchant_purchase_sound()
+            print_green('1999 AK-47 Assault Rifle has been purchased!\n', 1)
+            player1.balance -= 25
+            player1.ak_47_rifle = True
+        elif user_item_buy == '4' and player1.balance >= 60:
+            sounds.merchant_purchase_sound()
+            print_green('1999 Semi-automatic Barrett Sniper Rifle has been purchased!\n', 1)
+            player1.balance -= 60
+            player1.barrett_rifle = True
+        elif user_item_buy == '5' and player1.balance >= 100:
+            sounds.merchant_purchase_sound()
+            print_green('Rocket Missile Launcher has been purchased!\n', 1)
+            player1.balance -= 100
+            player1.rocket_launcher = True
+        elif user_item_buy == '6' and player1.balance >= 125:
+            sounds.merchant_purchase_sound()
+            print_green('The Merchants Strange Spell has been purchased!\n', 1)
+            sounds.good_luck()
+            print_green(
+                'As the Merchant hands you his own crafted spell, he tells you that you now wield true pain to foes whilst providing restoration to thine self.\n',
+                2.5)
+            player1.balance -= 125
+            player1.spell = True
+        elif user_item_buy == '7':
+            print_s('The merchant has been skipped but can be brought back later...\n', 1)
+    elif choice in ['s', 'skip', 'n', 'no']:
+        print_s('The merchant has been skipped but can be brought back later...\n', 1)
 
 
 def continue_message():
@@ -483,10 +480,12 @@ def difficulty():
     choices = [str(x) for x in range(1, 4)]
     choices.append('unlock_all_cheat')
     choice_options = ['Select a difficulty: ']
-    player1.difficulty = Difficulty(int(_player_choice(choices, choice_options)))
+    try:
+        player1.difficulty = Difficulty(int(_player_choice(choices, choice_options)))
+    except:
+        player1.difficulty = Difficulty(0)  # unlock_all_cheat 
 
     sounds.difficulty_select_sound()
-
     if player1.difficulty == Difficulty(1):
         player1.health = 200
     elif player1.difficulty == Difficulty(2):
@@ -584,35 +583,36 @@ def donation_opener(website):
     sleep(2)
 
 
-def options():
+def options(choice=''):
     """
 Main hub UI for the user to view additional information or extra parts of this project such as donations and releases
     """
-    choice_options = ['(1) View Stats',
-                      '(2) Audio Options',
-                      '(3) Project Releases',
-                      '(4) Credits',
-                      '(5) Donate',
-                      '(6) Main Menu',
-                      '(7) Exit\n',
-                      'Which choice would you like to pick:  '
-                      ]
-    choice = _player_choice([str(x) for x in range(1, 8)], choice_options)
+    while choice != '6' or choice != '7':
+        choice_options = ['(1) View Stats',
+                          '(2) Audio Options',
+                          '(3) Project Releases',
+                          '(4) Credits',
+                          '(5) Donate',
+                          '(6) Main Menu',
+                          '(7) Exit\n',
+                          'Which choice would you like to pick:  '
+                          ]
+        choice = _player_choice([str(x) for x in range(1, 8)], choice_options)
 
-    if choice == '1':
-        view_stats()
-    elif choice == '2':
-        audio_options()
-    elif choice == '3':
-        open_github("Opening the latest stable release...\n", "/releases")
-    elif choice == '4':
-        open_github("Opening all contributors of this project...\n", "/graphs/contributors")
-    elif choice == '5':
-        donation_opener("https://www.paypal.com/donate/?business=8FGHU8Z4EJPME&no_recurring=0&currency_code=USD")
-    elif choice == '6':
-        return
-    elif choice == '7':
-        exit()
+        if choice == '1':
+            view_stats()
+        elif choice == '2':
+            audio_options()
+        elif choice == '3':
+            open_github("Opening the latest stable release...\n", "/releases")
+        elif choice == '4':
+            open_github("Opening all contributors of this project...\n", "/graphs/contributors")
+        elif choice == '5':
+            donation_opener("https://www.paypal.com/donate/?business=8FGHU8Z4EJPME&no_recurring=0&currency_code=USD")
+        elif choice == '6':
+            return
+        elif choice == '7':
+            exit()
 
 
 def game_menu():
@@ -650,7 +650,16 @@ def audio_options():
     volume_level = int(_player_choice([str(x) for x in range(101)], choice_options)) / 100
     sounds.set_volume(volume_level)
     print_s(f'Your current volume level is set at {sounds.volume_level}\n', 1)
-    options()
+
+
+def go_to_checkpoint():  # add checkpoint functionality
+    checkpoints = {'1': outside_area,
+                   '2': basement_area,
+                   '3': diner_area,
+                   '4': parkview_area,
+                   '5': broken_roads_area,
+                   }
+    return checkpoints[player1.check_point]()
 
 
 if __name__ == '__main__':
