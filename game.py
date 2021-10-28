@@ -532,11 +532,11 @@ def view_stats():
     """
 Prints the users current in game stats based upon a load file
     """
+    game_data.load_game(player1)
     print_green('Your current in game stats will now be displayed below!\n')
     sleep(1)
-    print(f'Your health is {player1.user_health}')
-    print(f'Your balance is ${player1.user_balance}')
-    print()
+    print(f'Your health is {player1.user_health}\n')
+    print(f'Your balance is ${player1.user_balance}\n')
     sleep(2)
 
 
@@ -677,7 +677,7 @@ Main hub UI for the user to view additional information or extra parts of this p
     """
     while True:
         print("(1) View Stats")
-        print("(2) Audio")
+        print("(2) Audio Options")
         print("(3) Project Releases")
         print("(4) Credits")
         print("(5) Donate")
