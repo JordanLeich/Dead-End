@@ -4,8 +4,8 @@ This class is to setup the player with all variables needed through out the game
 If more variables are needed. they can be added here.
     """
 
-    def __init__(self, balance=0, health=0, luck=0, difficulty=0, knife=False, rifle=False, pistol=False, bat=False,
-                 rpg=False):
+    def __init__(self, balance=0, health=0, luck=0, difficulty=0, knife=False, ak47=False, pistol=False, bat=False,
+                 rpg=False, barrett=False):
         # user attributes
         self.user_balance = balance
         self.user_health = health
@@ -13,7 +13,8 @@ If more variables are needed. they can be added here.
         self.user_difficulty = difficulty
         # user weapons
         self.starting_knife = knife
-        self.ak_47_rifle = rifle
+        self.ak_47_rifle = ak47
+        self.barrett_rifle = barrett
         self.beretta_pistol = pistol
         self.baseball_bat = bat
         self.rocket_launcher = rpg
@@ -33,5 +34,6 @@ If more variables are needed. they can be added here.
         self.baseball_bat = user_data['baseball_bat']
         self.beretta_pistol = user_data['beretta_pistol']
         self.ak_47_rifle = user_data['ak_47_rifle']
+        self.barrett_rifle = user_data['barrett_rifle']
         self.rocket_launcher = user_data['rocket_launcher']
         self.check_point = user_data['check_point']

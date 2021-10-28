@@ -6,7 +6,6 @@ import sys
 import webbrowser
 from time import sleep
 from random import randint
-# files
 from other.colors import print_green, print_yellow, print_red
 from classes import Player
 from gamedata import Game_data
@@ -71,6 +70,7 @@ def unlock_all_cheat():
     player1.starting_knife = True
     player1.rocket_launcher = True
     player1.ak_47_rifle = True
+    player1.barrett_rifle = True
     print_green('Unlock all cheats have been activated!\n')
     sleep(2)
     checkpoint_save()
@@ -96,6 +96,7 @@ def game():
             player1.starting_knife = False
             player1.rocket_launcher = False
             player1.ak_47_rifle = False
+            player1.barrett_rifle = False
             player1.check_point = ''
             print_green('Default stats have been loaded/saved and a new game will begin...\n')
             sleep(1)
@@ -170,8 +171,9 @@ def merchant():  # sourcery no-metrics
 (1) Spiked Baseball Bat (5 Dollars)
 (2) 1997 Beretta Pistol (15 Dollars)
 (3) 1999 AK-47 Assault Rifle (25 Dollars)
-(4) Rocket Missile Launcher (100 Dollars)
-(5) Exit
+(4) 1999 Semi-automatic Barrett Sniper Rifle (60 Dollars)
+(5) Rocket Missile Launcher (100 Dollars)
+(6) Exit
 
 What would you like to buy: '''))
                 print()
@@ -195,19 +197,25 @@ What would you like to buy: '''))
                     player1.user_balance -= 25
                     player1.ak_47_rifle = True
                     sleep(1)
-                elif user_item_buy == 4 and player1.user_balance >= 100:
+                elif user_item_buy == 4 and player1.user_balance >= 60:
+                    sounds.merchant_purchase_sound()
+                    print_green('1999 Semi-automatic Barrett Sniper Rifle has been purchased!\n')
+                    player1.user_balance -= 60
+                    player1.barrett_rifle = True
+                    sleep(1)
+                elif user_item_buy == 5 and player1.user_balance >= 100:
                     sounds.merchant_purchase_sound()
                     print_green('Rocket Missile Launcher has been purchased!\n')
                     player1.user_balance -= 100
                     player1.rocket_launcher = True
                     sleep(1)
-                elif user_item_buy == 5:
-                    print_green('Purchasing from the merchant has been skipped...\n')
+                elif user_item_buy == 6:
+                    print('The merchant has been skipped but can be brought back later...\n')
                     sleep(1)
                 else:
                     error_message()
 
-            elif user_choice.lower() in ['s', 'sell', 'n', 'no']:
+            elif user_choice.lower() in ['s', 'skip', 'n', 'no']:
                 print('The merchant has been skipped but can be brought back later...\n')
                 sleep(1)
             else:
@@ -224,12 +232,20 @@ This is purely only used for development and has no impact on the game
 
 
 def user_attack():
+    """
+This function is called whenever the players gets into a fight with zombies or humans. The logic is ordered in a way
+so that the stronger weapon is used first instead of weaker weapons when attacking enemies.
+    """
     if player1.rocket_launcher:
         player1.user_health -= 0
         print_green('You have used the rocket missile launcher and defeated the zombies without losing any health!\n')
         sleep(2)
+    elif player1.barrett_rifle:
+        player1.user_health -= 7
+        print_green('You have used the barrett sniper rifle and defeated the zombies with only losing 7 health!\n')
+        sleep(2)
     elif player1.ak_47_rifle:
-        player1.user_health -= 10
+        player1.user_health -= 15
         print_green('You have used the ak-47 rifle and defeated the zombies with only losing 10 health!\n')
         sleep(2)
     elif player1.beretta_pistol:
@@ -592,6 +608,7 @@ def restart():
         player1.starting_knife = False
         player1.rocket_launcher = False
         player1.ak_47_rifle = False
+        player1.barrett_rifle = False
         sounds.set_volume(0.05)
         print_green('Default stats have been loaded/saved and a new game will begin...\n')
         sleep(1)
