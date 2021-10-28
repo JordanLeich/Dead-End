@@ -8,12 +8,12 @@ from time import sleep
 from random import randint
 from other.colors import print_green, print_yellow, print_red, print_s
 from classes import Player
-from gamedata import Game_data
-from other.sounds_effects import Game_Sounds
+from gamedata import GameData
+from other.sounds_effects import GameSounds
 
 player1 = Player()  # Player Instance
-game_data = Game_data()  # load/save functions Instance
-sounds = Game_Sounds()  # audio that will be played Instance
+game_data = GameData()  # load/save functions Instance
+sounds = GameSounds()  # audio that will be played Instance
 
 
 def load_or_save_data():
@@ -37,14 +37,14 @@ Trailing behind you leads a lurking stench of odor containing of what smells lik
     choice_options = ['(1) Search around the basement (2) Forget about the basement and leave: ']
     choice = _player_choice([str(x) for x in range(1, 3)], choice_options)
 
-    if choice == 1:
+    if choice == '1':
         print_s(
             'Amongst searching the basement, you stumble upon some spare money you forgot you had saved up in the basement.\n',
             1.5)
         sounds.good_luck()
         print_green(f'You found a total of ${player1.get_money()} dollars!\n', 1)
         continue_message()
-    elif choice == 2:
+    elif choice == '2':
         sounds.wind_sound()
         print_s('''Upon leaving the basement, you head out into the outside area for a breath of fresh air after consuming 
 the moldy and old smells of the basement.\n''', 2)
@@ -552,9 +552,9 @@ def bad_ending():
 
 def error_message(choices):
     if choices[-1] == 'unlock_all_cheat':
-        print(f'Error choice must be one of: {", ".join(choices[:-1])}')
+        print(f'Error choice must be one of: {", ".join(choices[:-1])}\n')
     else:
-        print(f'Error choice must be one of: {", ".join(choices)}')
+        print(f'Error choice must be one of: {", ".join(choices)}\n')
 
 
 def checkpoint_save():
@@ -665,6 +665,7 @@ def audio_options():  # sourcery skip: remove-zero-from-range
     volume_level = int(_player_choice([str(x) for x in range(0, 101)], choice_options)) / 100
     sounds.set_volume(volume_level)
     print_s(f'Your current volume level is set at {sounds.volume_level}\n', 1)
+    options()
 
 
 if __name__ == '__main__':
