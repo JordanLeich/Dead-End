@@ -15,6 +15,9 @@ player1 = Player()  # Player Instance
 game_data = GameData()  # load/save functions Instance
 sounds = GameSounds()  # audio that will be played Instance
 
+# constants:
+EXIT_MERCHANT_MENU = '7'
+
 
 def load_or_save_data():
     game_data.load_game(player1)
@@ -56,13 +59,8 @@ def unlock_all_cheat():
     player1.health = 999999
     player1.balance = 999999
     player1.difficulty = Difficulty(0)
-    player1.baseball_bat = True
-    player1.beretta_pistol = True
-    player1.starting_knife = True
-    player1.rocket_launcher = True
-    player1.ak_47_rifle = True
-    player1.barrett_rifle = True
-    player1.spell = True
+    for k,v in player1.weapon_dict.items():
+        v[2] = True
     print_green('Unlock all cheats have been activated!\n', 2)
     checkpoint_save()
     game()
@@ -78,14 +76,8 @@ def game():
         if choice in ['n', 'new']:
             difficulty()
             player1.balance = 0
-            player1.merchant_luck = 0
-            player1.baseball_bat = False
-            player1.beretta_pistol = False
-            player1.starting_knife = False
-            player1.rocket_launcher = False
-            player1.ak_47_rifle = False
-            player1.barrett_rifle = False
-            player1.spell = False
+            for k,v in player1.weapon_dict.items():
+                v[2] = False
             player1.check_point = ''
             checkpoint_save()
         elif choice in ['c', 'continue']:
@@ -111,7 +103,7 @@ def game():
         print('You have decided to look around your apartment and decide to grab a concealed knife that you legally\n'
               'are allowed to carry in public areas just in case anything happens...\n')
         sleep(1)
-        player1.starting_knife = True
+        player1.weapon_dict['0'][2] = True
         outside_area()
     elif choice == '2':
         sleep(1)
@@ -132,9 +124,7 @@ def merchant():  # sourcery no-metrics skip: remove-redundant-if
         print_red('You currently have no health left...\n', 1)
         bad_ending()
 
-    player1.merchant_luck = randint(1, 7)
-    if player1.merchant_luck != 3:  # if the merchant_luck integer does not equal 3, then the player can't interact with merchant.
-        # Otherwise, if the merchant_luck integer does equal 3, then the merchant shop can be accessed.
+    if randint(1, 7) != 3:  # random chance for player to interact with merchant
         return
 
     sounds.good_luck()
@@ -148,76 +138,32 @@ def merchant():  # sourcery no-metrics skip: remove-redundant-if
     choice = _player_choice(choices, choice_options)
 
     if choice in ['b', 'buy', 'y', 'yes']:
-        player1.continue_buying = True
-        while player1.continue_buying:
+        buy_item = ''
+        weapon_choices = [f"({k}) {v[0]} ({v[1]} Dollars)" for k,v in player1.weapon_dict.items() if k != '0']
+        while buy_item != EXIT_MERCHANT_MENU:
             print_green(f'Balance: {player1.balance}\n', 1)
-            choice_options = ['--- Merchants inventory ---',
-                              '(1) Spiked Baseball Bat (5 Dollars)',
-                              '(2) 1997 Beretta Pistol (15 Dollars)',
-                              '(3) 1999 AK-47 Assault Rifle (25 Dollars)',
-                              '(4) 1999 Semi-automatic Barrett Sniper Rifle (60 Dollars)',
-                              '(5) Rocket Missile Launcher (100 Dollars)',
-                              '(6) The Merchants Strange Spell (125 Dollars)',
-                              '(7) Exit The Merchant Shop\n',
-                              'What would you like to buy: ',
-                              ]
-            user_item_buy = _player_choice([str(x) for x in range(1, 8)], choice_options)
-
-            if user_item_buy == '1' and player1.balance >= 5 and player1.baseball_bat:
+            choice_options = ['--- Merchants inventory ---']
+            choice_options.extend(weapon_choices)
+            choice_options.extend([f'({EXIT_MERCHANT_MENU}) Exit The Merchant Shop\n',
+                                   'What would you like to buy: ',
+                                  ])
+            buy_item = _player_choice([str(x) for x in range(1, 8)], choice_options)
+            
+            if user_item_buy == EXIT_MERCHANT_MENU:
+                print_s('The merchant bids you a farewell and good luck!\n', 1)
+                break
+            elif player1.weapon_dict[buy_item][2]:
                 sounds.bad_luck()
-                print_yellow('Spiked Baseball Bat has already been purchased!\n', 1)
-            elif user_item_buy == '1' and player1.balance >= 5 and not player1.baseball_bat:
+                print_yellow(f'{player1.weapon_dict[buy_item][0]} has already been purchased!\n', 1)
+            elif player1.balance >= player1.weapon_dict[buy_item][1]:
                 sounds.merchant_purchase_sound()
-                player1.balance -= 5
-                print_green('Spiked Baseball Bat has been purchased!\n', 1)
-                player1.baseball_bat = True
-            elif user_item_buy == '2' and player1.balance >= 15 and player1.beretta_pistol:
-                sounds.bad_luck()
-                print_yellow('1997 Beretta Pistol has already been purchased!\n', 1)
-            elif user_item_buy == '2' and player1.balance >= 15 and not player1.beretta_pistol:
-                sounds.merchant_purchase_sound()
-                player1.balance -= 15
-                print_green('1997 Beretta Pistol has been purchased!\n', 1)
-                player1.beretta_pistol = True
-            elif user_item_buy == '3' and player1.balance >= 25 and player1.ak_47_rifle:
-                sounds.bad_luck()
-                print_yellow('1999 AK-47 Assault Rifle has already been purchased!\n', 1)
-            elif user_item_buy == '3' and player1.balance >= 25 and not player1.ak_47_rifle:
-                sounds.merchant_purchase_sound()
-                print_green('1999 AK-47 Assault Rifle has been purchased!\n', 1)
-                player1.balance -= 25
-                player1.ak_47_rifle = True
-            elif user_item_buy == '4' and player1.balance >= 60 and player1.barrett_rifle:
-                sounds.bad_luck()
-                print_yellow('1999 Semi-automatic Barrett Sniper Rifle has already been purchased!\n', 1)
-            elif user_item_buy == '4' and player1.balance >= 60 and not player1.barrett_rifle:
-                sounds.merchant_purchase_sound()
-                print_green('1999 Semi-automatic Barrett Sniper Rifle has been purchased!\n', 1)
-                player1.balance -= 60
-                player1.barrett_rifle = True
-            elif user_item_buy == '5' and player1.balance >= 100 and player1.rocket_launcher:
-                sounds.bad_luck()
-                print_yellow('Rocket Missile Launcher has already been purchased!\n', 1)
-            elif user_item_buy == '5' and player1.balance >= 100 and not player1.rocket_launcher:
-                sounds.merchant_purchase_sound()
-                print_green('Rocket Missile Launcher has been purchased!\n', 1)
-                player1.balance -= 100
-                player1.rocket_launcher = True
-            elif user_item_buy == '6' and player1.balance >= 125 and player1.spell:
-                sounds.bad_luck()
-                print_yellow('The Merchants Strange Spell has already been purchased!\n', 1)
-            elif user_item_buy == '6' and player1.balance >= 125 and not player1.spell:
-                sounds.merchant_purchase_sound()
-                print_green('The Merchants Strange Spell has been purchased!\n', 2)
-                sounds.good_luck()
-                print_green(
+                player1.balance -= player1.weapon_dict[buy_item][1]
+                player1.weapon_dict[buy_item][2] = True
+                print_green(f'{player1.weapon_dict[buy_item][1]} has been purchased!\n', 1)
+                if buy_item == '6':
+                    print_green(
                     'As the Merchant hands you his own crafted spell, he tells you that you now wield true pain to foes whilst providing restoration to thine self.\n',
                     2.5)
-                player1.balance -= 125
-                player1.spell = True
-            elif user_item_buy == '7':
-                player1.continue_buying = False
-                print_s('The merchant has been skipped but can be brought back later...\n', 1)
     elif choice in ['s', 'skip', 'n', 'no']:
         print_s('The merchant has been skipped but can be brought back later...\n', 1)
 
@@ -235,37 +181,37 @@ def user_attack():
 This function is called whenever the players gets into a fight with zombies or humans. The logic is ordered in a way
 so that the stronger weapon is used first instead of weaker weapons when attacking enemies.
     """
-    if player1.spell:
+    if player1.weapon_dict['6'][2]:
         print_green(
             f'You have used the Merchants Strange Spell and defeated the zombies without losing any health! Through the power of the Strange Spell, you gain {player1.get_health(10, 30)} health through its restoration casting!\n',
             3.5)
-    elif player1.rocket_launcher:
+    elif player1.weapon_dict['5'][2]:
         print_green('You have used the Rocket Missile Launcher and defeated the zombies without losing any health!\n',
                     2)
-    elif player1.barrett_rifle:
+    elif player1.weapon_dict['4'][2]:
         print_green(
             f'You have used the Barrett Sniper Rifle and defeated the zombies with only losing {player1.lose_health(3, 10)} health!\n',
             2)
-    elif player1.ak_47_rifle:
+    elif player1.weapon_dict['3'][2]:
         print_green(
             f'You have used the AK-47 Rifle and defeated the zombies with only losing {player1.lose_health(10, 20)} health!\n',
             2)
-    elif player1.beretta_pistol:
+    elif player1.weapon_dict['2'][2]:
         print_green(
             f'You have used the Beretta Pistol and defeated the zombies with only losing {player1.lose_health(20, 30)} health!\n',
             2)
-    elif player1.baseball_bat:
+    elif player1.weapon_dict['1'][2]:
         print_yellow(
             f'You have used the Spiked Baseball Bat and defeated the zombies with losing {player1.lose_health(30, 40)} health!\n',
             2)
-    elif player1.starting_knife:
+    elif player1.weapon_dict['0'][2]:
         print_red(
             f'You have used the Starting Knife and defeated the zombies with losing {player1.lose_health(40, 45)} health!\n',
             2)
     else:
         player1.health = 0
         print_red(
-            'Due to not having any available weapons or guns on you... You automatically cannot defend\nyourself and you have lost all of your health! Game Over!\n',
+            'Due to not having any available weapons on you... You try to defend yourself...\nThe zombie overpowers you! Game Over!\n',
             3)
         bad_ending()
 
@@ -541,14 +487,8 @@ def restart():
             player1.health = 100
         print_health(player1.difficulty, f'You will begin with {player1.health} health.\n')
         player1.balance = 0
-        player1.merchant_luck = 0
-        player1.baseball_bat = False
-        player1.beretta_pistol = False
-        player1.starting_knife = False
-        player1.rocket_launcher = False
-        player1.ak_47_rifle = False
-        player1.barrett_rifle = False
-        player1.spell = False
+        for k,v in player1.weapon_dict.items():
+            v[2] = False
         sounds.set_volume(0.05)
         print_green('Default stats have been loaded/saved and a new game will begin...\n', 1)
         checkpoint_save()
