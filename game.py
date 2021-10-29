@@ -16,7 +16,7 @@ game_data = GameData()  # load/save functions Instance
 sounds = GameSounds()  # audio that will be played Instance
 
 # constants:
-EXIT_MERCHANT_MENU = '7'
+EXIT_MERCHANT_MENU = str(len(player1.weapon_dict))
 
 
 def load_or_save_data():
@@ -46,12 +46,11 @@ Trailing behind you leads a lurking stench of odor containing of what smells lik
             1.5)
         sounds.good_luck()
         print_green(f'You found a total of ${player1.get_money()} dollars!\n', 1)
-        continue_message()
     elif choice == '2':
         sounds.wind_sound()
         print_s('''Upon leaving the basement, you head out into the outside area for a breath of fresh air after consuming 
 the moldy and old smells of the basement.\n''', 2)
-        outside_area()
+    outside_area()
 
 
 def unlock_all_cheat():
@@ -63,7 +62,6 @@ def unlock_all_cheat():
         v[2] = True
     print_green('Unlock all cheats have been activated!\n', 2)
     checkpoint_save()
-    game()
 
 
 def game():
@@ -82,6 +80,7 @@ def game():
             checkpoint_save()
         elif choice in ['c', 'continue']:
             print_green('Continuing game...\n', 1)
+            go_to_checkpoint()
     else:
         difficulty()
 
@@ -113,9 +112,10 @@ def game():
         basement_area()
     elif choice == 'unlock_all_cheat':
         unlock_all_cheat()
+        outside_area()
 
 
-def merchant():  # sourcery no-metrics skip: remove-redundant-if
+def merchant():
     """
     Handles the merchant who randomly shows up in-game. This function allows the player to purchase weapons.
     """
@@ -176,51 +176,66 @@ This is purely only used for development and has no impact on the game
     exit()
 
 
+# helper function for user_attack
+def deep_index(lst, w):
+    return [i for (i, sub) in enumerate(lst) if w in sub][0]
+
+
 def user_attack():
     """
 This function is called whenever the players gets into a fight with zombies or humans. The logic is ordered in a way
 so that the stronger weapon is used first instead of weaker weapons when attacking enemies.
     """
-    if player1.weapon_dict['6'][2]:
-        print_green(
-            f'You have used the Merchants Strange Spell and defeated the zombies without losing any health! Through the power of the Strange Spell, you gain {player1.get_health(10, 30)} health through its restoration casting!\n',
-            3.5)
-    elif player1.weapon_dict['5'][2]:
-        print_green('You have used the Rocket Missile Launcher and defeated the zombies without losing any health!\n',
-                    2)
-    elif player1.weapon_dict['4'][2]:
-        print_green(
-            f'You have used the Barrett Sniper Rifle and defeated the zombies with only losing {player1.lose_health(3, 10)} health!\n',
-            2)
-    elif player1.weapon_dict['3'][2]:
-        print_green(
-            f'You have used the AK-47 Rifle and defeated the zombies with only losing {player1.lose_health(10, 20)} health!\n',
-            2)
-    elif player1.weapon_dict['2'][2]:
-        print_green(
-            f'You have used the Beretta Pistol and defeated the zombies with only losing {player1.lose_health(20, 30)} health!\n',
-            2)
-    elif player1.weapon_dict['1'][2]:
-        print_yellow(
-            f'You have used the Spiked Baseball Bat and defeated the zombies with losing {player1.lose_health(30, 40)} health!\n',
-            2)
-    elif player1.weapon_dict['0'][2]:
-        print_red(
-            f'You have used the Starting Knife and defeated the zombies with losing {player1.lose_health(40, 45)} health!\n',
-            2)
-    else:
+    choice_names = [v[0] for k,v in player1.weapon_dict.items() if v[2]]
+    if len(choice_names) == 0:  # no choice for them to make
         player1.health = 0
         print_red(
             'Due to not having any available weapons on you... You try to defend yourself...\nThe zombie overpowers you! Game Over!\n',
             3)
         bad_ending()
+        return
+
+    choices = [str(c + 1) for c,_ in enumerate(choice_names)]
+    choice_options = [f'({c + 1}) {v}' for c,v in enumerate(choice_names)]
+    choice_options.extend(['\nWhich item would you like to use: '])
+    choice = _player_choice(choices, choice_options)
+
+    choice_idx = str(deep_index(list(player1.weapon_dict.values()), choice_names[int(choice)]) - 1)
+
+    if choice_idx == '6':
+        print_green(
+            f'You have used the Merchants Strange Spell and defeated the zombies without losing any health! Through the power of the Strange Spell, you gain {player1.get_health(10, 30)} health through its restoration casting!\n',
+            3.5)
+    elif choice_idx == '5':
+        print_green('You have used the Rocket Missile Launcher and defeated the zombies without losing any health!\n',
+                    2)
+    elif choice_idx == '4':
+        print_green(
+            f'You have used the Barrett Sniper Rifle and defeated the zombies with only losing {player1.lose_health(3, 10)} health!\n',
+            2)
+    elif choice_idx == '3':
+        print_green(
+            f'You have used the AK-47 Rifle and defeated the zombies with only losing {player1.lose_health(10, 20)} health!\n',
+            2)
+    elif choice_idx == '2':
+        print_green(
+            f'You have used the Beretta Pistol and defeated the zombies with only losing {player1.lose_health(20, 30)} health!\n',
+            2)
+    elif choice_idx == '1':
+        print_yellow(
+            f'You have used the Spiked Baseball Bat and defeated the zombies with losing {player1.lose_health(30, 40)} health!\n',
+            2)
+    elif choice_idx == '0':
+        print_red(
+            f'You have used the Starting Knife and defeated the zombies with losing {player1.lose_health(40, 45)} health!\n',
+            2)
 
 
 def gas_station():
     sounds.horror_sound_effects()
     print_s('You have entered the local Gas Station...\n', 1)
 
-    checkpoint_save()
+    checkpoint_save('3')
 
     print('From the front counter, you see a man who points his gun at you while you walk in! The man tells you to\n'
           'freeze but then notices that you are a survivor just like him... You both discuss and try to figure out\n'
@@ -258,9 +273,7 @@ def gas_station():
                 print_s(
                     f'After search everybody in the gas station, you manage to find a total of {player1.get_money()} dollars and you then continue your way over to the local Diner...\n',
                     2)
-                diner_area()
-            elif user_choice == '2':
-                diner_area()
+            diner_area()
         else:
             bad_ending()
 
@@ -282,7 +295,7 @@ def gas_station():
 
 
 def outside_area():
-    checkpoint_save()
+    checkpoint_save('1')
     print_s('You make your way to the outside area...\n', 1)
     sounds.wind_sound()
     print('You instantly notice something is not right... a dark gloomy fog covers all of the town and you do not see\n'
@@ -318,7 +331,7 @@ def outside_area():
 def diner_area():
     sounds.horror_sound_effects()
     print_s('You have entered the local Diner...\n', 1)
-    checkpoint_save()
+    checkpoint_save('2')
     choice_options = [
         'You have the choice to either (1) Search inside the Diner Restaurant Area (2) head towards the Parkview Area: ']
     user_choice = _player_choice([str(x) for x in range(1, 3)], choice_options)
@@ -364,7 +377,7 @@ def broken_roads_area():
           'to fight once more...\n')
     sleep(4.5)
     user_attack()
-    checkpoint_save()
+    checkpoint_save('6')
 
     if player1.health > 0:
         sounds.horror_sound_effects()
@@ -379,7 +392,7 @@ def broken_roads_area():
 def parkview_area():
     sounds.horror_sound_effects()
     print_s('You have entered the parkview area...\n', 1)
-    checkpoint_save()
+    checkpoint_save('4')
     sounds.parkview_entrance()
     sleep(2.5)
     print_s('Upon arriving to the parkview area, you are still incapable of seeing very much ahead of yourself...\n',
@@ -399,37 +412,22 @@ def parkview_area():
             print('In attempts of helping the man, he screams get the hell away from me, I will blow your head off! '
                   'You now prepare to fight him off!\n')
             sleep(2.5)
-            user_attack()
-
-            if player1.health > 0:
-                print_green(
-                    f'You have successfully killed the man! Upon searching his body, you find a total of ${player1.get_money()}!\n',
-                    1)
-                checkpoint_save()
-                sounds.horror_sound_effects()
-                print_s('You now decide to leave the parkview area...\n', 1.5)
-                broken_roads_area()
-            else:
-                sounds.bad_luck()
-                print_red('The man has killed you and zombies start to feast on your dead decaying flesh...\n', 2)
-                bad_ending()
-
         elif user_choice == '2':
             sounds.bad_luck()
-            user_attack()
-
-            if player1.health > 0:
-                print_green(
-                    f'You have successfully killed the man! Upon searching his body, you find a total of ${player1.get_money()}!\n',
-                    1)
-                checkpoint_save()
-                sounds.horror_sound_effects()
-                print_s('You now decide to leave the Parkview Area...\n', 1.5)
-                broken_roads_area()
-            else:
-                sounds.bad_luck()
-                print_red('The man has killed you and zombies start to feast on your dead decaying flesh...\n', 2)
-                bad_ending()
+        # attack ensues - same for both options - only difference is the lead up to it
+        user_attack()
+        if player1.health > 0:
+            print_green(
+                f'You have successfully killed the man! Upon searching his body, you find a total of ${player1.get_money()}!\n',
+                1)
+            checkpoint_save('5')
+            sounds.horror_sound_effects()
+            print_s('You now decide to leave the Parkview Area...\n', 1.5)
+            broken_roads_area()
+        else:
+            sounds.bad_luck()
+            print_red('The man has killed you and zombies start to feast on your dead decaying flesh...\n', 2)
+            bad_ending()
     elif user_choice == '2':
         broken_roads_area()
 
@@ -502,14 +500,14 @@ def good_ending():
     sounds.good_luck()
     print_green('Congratulations, you have survived and reached the end of the horrors...\n', 1)
     print_green(f'You survived with a total of {player1.health} health left!\n', 1)
-    checkpoint_save()
+    checkpoint_save('7')
     restart()
 
 
 def bad_ending():
     sounds.bad_ending()
     print_red('You have died and not reached the end of the horrors...\n', 1)
-    checkpoint_save()
+    checkpoint_save('8')
     restart()
 
 
@@ -520,12 +518,13 @@ def error_message(choices):
         print(f'Error choice must be one of: {", ".join(choices)}\n')
 
 
-def checkpoint_save():
+def checkpoint_save(checkpoint_name=''):
     if player1.health <= 0:
         print_red('You have reached a checkpoint and currently have no more health! You have lost the game!\n', 1)
         restart()
     merchant()
     print_green('A checkpoint has been reached...\n', .5)
+    player1.check_point = checkpoint_name
     game_data.save_game(player1)  # Sends player1 info to save file
     print_green(f'Current Health: {player1.health}\n', 1)
     print_green(f'Current Balance: {player1.balance}\n', 1)
@@ -593,7 +592,7 @@ def game_menu():
                    '2': [load_or_save_data, game_intro_description],
                    '3': [options],
                    '4': [exit],
-                   'unlock_all_cheat': [unlock_all_cheat]
+                   'unlock_all_cheat': [unlock_all_cheat, game]
                    }
     print_green('Welcome to Zombie Survival Game!\n\nYour choices will allow you to Live or lead to Doom!\n')
     for item in choice_dict[_player_choice(choice_dict, choice_options)]:
@@ -621,10 +620,13 @@ def audio_options():
 
 def go_to_checkpoint():  # add checkpoint functionality
     checkpoints = {'1': outside_area,
-                   '2': basement_area,
-                   '3': diner_area,
+                   '2': diner_area,
+                   '3': gas_station,
                    '4': parkview_area,
-                   '5': broken_roads_area,
+                   '5': parkview_area, # after showdown
+                   '6': broken_roads_area,
+                   '7': good_ending,
+                   '8': bad_ending,
                    }
     return checkpoints[player1.check_point]()
 
