@@ -4,7 +4,7 @@ from other.colors import print_green, print_yellow
 from classes import Player
 
 
-class Game_data:
+class GameData:
     """
 This class will offer loading and saving of game data for Zombie-Survival-Game.
     """
