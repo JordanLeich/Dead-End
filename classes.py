@@ -9,22 +9,23 @@ This class is to setup the player with all variables needed through out the game
 If more variables are needed. they can be added here.
     """
 
-    def __init__(self, balance=0, health=0, luck=0, difficulty=2, knife=False, ak47=False, pistol=False, bat=False,
-                 rpg=False, barrett=False, spell=False, continue_buying=False):
+    def __init__(self, balance=0, health=0, difficulty=2, knife=False, ak47=False, pistol=False, bat=False,
+                 rpg=False, barrett=False, spell=False):
         # user attributes
         self.balance = balance
         self.health = health
-        self.merchant_luck = luck
         self.difficulty = Difficulty(difficulty)
-        self.continue_buying = continue_buying
         # user weapons
-        self.starting_knife = knife
-        self.ak_47_rifle = ak47
-        self.barrett_rifle = barrett
-        self.beretta_pistol = pistol
-        self.baseball_bat = bat
-        self.rocket_launcher = rpg
-        self.spell = spell
+        self.weapon_dict = {
+        #Data organized: '#': ['name', 'cost', 'purchased'],
+            '0': ['knife', None, knife], # found weapon
+            '1': ['Spiked Baseball Bat', 5, bat],
+            '2': ['1997 Beretta Pistol', 15, pistol],
+            '3': ['1999 AK-47 Assault Rifle', 25, ak47],
+            '4': ['1999 Semi-automatic Barrett Sniper Rifle', 60, barrett],
+            '5': ['Rocket Missile Launcher', 100, rpg],
+            '6': ['The Merchants Strange Spell', 125, spell],
+        }
         #  check point location
         self.check_point = ''
 
@@ -39,13 +40,7 @@ If more variables are needed. they can be added here.
         self.health = user_data['health']
         self.merchant_luck = user_data['merchant_luck']
         self.difficulty = Difficulty(int(user_data['difficulty']))
-        self.starting_knife = user_data['starting_knife']
-        self.baseball_bat = user_data['baseball_bat']
-        self.beretta_pistol = user_data['beretta_pistol']
-        self.ak_47_rifle = user_data['ak_47_rifle']
-        self.barrett_rifle = user_data['barrett_rifle']
-        self.rocket_launcher = user_data['rocket_launcher']
-        self.spell = user_data['spell']
+        self.weapon_dict = user_data['weapon_dict']
         self.check_point = user_data['check_point']
 
     def get_money(self, start_int=5, end_int=30):
