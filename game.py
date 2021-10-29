@@ -536,9 +536,9 @@ def checkpoint_save():
     game_data.save_game(player1)  # Sends player1 info to save file
     print_green(f'Current Health: {player1.user_health}\n', 1)
     print_green(f'Current Balance: {player1.user_balance}\n', 1)
-    if player1.user_difficulty == 1:
+    if player1.user_difficulty == "1":
         print_green('Current Difficulty: Easy\n')
-    elif player1.user_difficulty == 2:
+    elif player1.user_difficulty == "2":
         print_yellow('Current Difficulty: Medium\n')
     else:
         print_red('Current Difficulty: Hard\n', 1)
