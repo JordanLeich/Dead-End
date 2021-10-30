@@ -76,7 +76,6 @@ def game():
             player1.balance = 0
             for k,v in player1.weapon_dict.items():
                 v[2] = False
-            player1.check_point = ''
             checkpoint_save()
         elif choice in ['c', 'continue']:
             print_green('Continuing game...\n', 1)
@@ -181,7 +180,7 @@ def deep_index(lst, w):
     return [i for (i, sub) in enumerate(lst) if w in sub][0]
 
 
-def user_attack():
+def user_attack(enemy='zombies'):
     """
 This function is called whenever the players gets into a fight with zombies or humans. The logic is ordered in a way
 so that the stronger weapon is used first instead of weaker weapons when attacking enemies.
@@ -200,41 +199,26 @@ so that the stronger weapon is used first instead of weaker weapons when attacki
     choice_options.extend(['\nWhich item would you like to use: '])
     choice = _player_choice(choices, choice_options)
 
-    choice_idx = str(deep_index(list(player1.weapon_dict.values()), choice_names[int(choice)]) - 1)
+    key = str(deep_index(list(player1.weapon_dict.values()), choice_names[int(choice)]) - 1)
 
-    if choice_idx == '6':
+    if key == '6':
         print_green(
-            f'You have used the Merchants Strange Spell and defeated the zombies without losing any health! Through the power of the Strange Spell, you gain {player1.get_health(10, 30)} health through its restoration casting!\n',
+            f'You have used the Merchants Strange Spell and defeated the {enemy} without losing any health! Through the power of the Strange Spell, you gain {player1.get_health(10, 30)} health through its restoration casting!\n',
             3.5)
-    elif choice_idx == '5':
-        print_green('You have used the Rocket Missile Launcher and defeated the zombies without losing any health!\n',
-                    2)
-    elif choice_idx == '4':
-        print_green(
-            f'You have used the Barrett Sniper Rifle and defeated the zombies with only losing {player1.lose_health(3, 10)} health!\n',
-            2)
-    elif choice_idx == '3':
-        print_green(
-            f'You have used the AK-47 Rifle and defeated the zombies with only losing {player1.lose_health(10, 20)} health!\n',
-            2)
-    elif choice_idx == '2':
-        print_green(
-            f'You have used the Beretta Pistol and defeated the zombies with only losing {player1.lose_health(20, 30)} health!\n',
-            2)
-    elif choice_idx == '1':
-        print_yellow(
-            f'You have used the Spiked Baseball Bat and defeated the zombies with losing {player1.lose_health(30, 40)} health!\n',
-            2)
-    elif choice_idx == '0':
-        print_red(
-            f'You have used the Starting Knife and defeated the zombies with losing {player1.lose_health(40, 45)} health!\n',
-            2)
+    else:  # print color based on user health
+        lost_health = player1.use_item(key)
+        message = f'You have used the {player1.weapon_dict[key][0]} and defeated the {enemy} losing {lost_health} health!\n'
+        if player1.health < 25:
+            print_red(message, 2)
+        elif player1.health < 50:
+            print_yellow(message, 2)
+        else:
+            print_green(message, 2)
 
 
 def gas_station():
     sounds.horror_sound_effects()
     print_s('You have entered the local Gas Station...\n', 1)
-
     checkpoint_save('3')
 
     print('From the front counter, you see a man who points his gun at you while you walk in! The man tells you to\n'
@@ -326,7 +310,7 @@ def outside_area():
             gas_station()
     elif user_choice == '2':
         gas_station()
-
+    
 
 def diner_area():
     sounds.horror_sound_effects()
@@ -365,7 +349,6 @@ def diner_area():
                 'You have successfully defended off the zombies outside the local Diner... You will now head over to the Parkview Area\n',
                 2)
             parkview_area()
-
         else:
             bad_ending()
 
@@ -414,8 +397,7 @@ def parkview_area():
             sleep(2.5)
         elif user_choice == '2':
             sounds.bad_luck()
-        # attack ensues - same for both options - only difference is the lead up to it
-        user_attack()
+        user_attack('man')  # attack - same for both options - only difference is the lead up to it
         if player1.health > 0:
             print_green(
                 f'You have successfully killed the man! Upon searching his body, you find a total of ${player1.get_money()}!\n',
@@ -442,6 +424,24 @@ Prints the users current in game stats based upon a load file
     print_s(f'Your balance is ${player1.balance}\n', 2)
 
 
+# helper function for player health setting and printing
+def _difficulty_set_health():
+    if player1.difficulty == Difficulty(1):
+        player1.health = 200
+    elif player1.difficulty == Difficulty(2):
+        player1.health = 100
+    elif player1.difficulty == Difficulty(3):
+        player1.health = 50
+    elif player1.difficulty == Difficulty(0):
+        unlock_all_cheat()
+    else:
+        print('Since a saved difficulty value could not be found...')
+        player1.health = 100
+    print_health(player1.difficulty,
+                 f'{player1.difficulty.name} mode has been selected, you will begin with only {player1.health} health.\n',
+                 1)
+
+
 def difficulty():
     print_green('(1) Easy\n')
     print_yellow('(2) Medium\n')
@@ -455,17 +455,7 @@ def difficulty():
         player1.difficulty = Difficulty(0)  # unlock_all_cheat 
 
     sounds.difficulty_select_sound()
-    if player1.difficulty == Difficulty(1):
-        player1.health = 200
-    elif player1.difficulty == Difficulty(2):
-        player1.health = 100
-    elif player1.difficulty == Difficulty(3):
-        player1.health = 50
-    elif player1.difficulty == Difficulty(0):
-        unlock_all_cheat()
-    print_health(player1.difficulty,
-                 f'{player1.difficulty.name} mode has been selected, you will begin with only {player1.health} health.\n',
-                 1)
+    _difficulty_set_health()
 
 
 def restart():
@@ -474,23 +464,13 @@ def restart():
     restart_choice = _player_choice(choices, choice_options)
 
     if restart_choice in ['y', 'yes']:
-        if player1.difficulty == Difficulty(1):
-            player1.health = 200
-        elif player1.difficulty == Difficulty(2):
-            player1.health = 100
-        elif player1.difficulty == Difficulty(3):
-            player1.health = 50
-        else:
-            print('Since a saved difficulty value could not be found...')
-            player1.health = 100
-        print_health(player1.difficulty, f'You will begin with {player1.health} health.\n')
+        _difficulty_set_health()
         player1.balance = 0
         for k,v in player1.weapon_dict.items():
             v[2] = False
         sounds.set_volume(0.05)
         print_green('Default stats have been loaded/saved and a new game will begin...\n', 1)
-        checkpoint_save()
-        game_intro_description()
+        #game_intro_description()
     elif restart_choice in ['n', 'no']:
         print_s('Ending game...', 1)
         exit()
@@ -526,9 +506,8 @@ def checkpoint_save(checkpoint_name=''):
     print_green('A checkpoint has been reached...\n', .5)
     player1.check_point = checkpoint_name
     game_data.save_game(player1)  # Sends player1 info to save file
-    print_green(f'Current Health: {player1.health}\n', 1)
-    print_green(f'Current Balance: {player1.balance}\n', 1)
-    print_health(player1.difficulty, f'Current Difficulty: {player1.difficulty.name}\n', 1)
+    print_green(f'Health: {player1.health}\n', 1)
+    print_green(f'Balance: {player1.balance}\n', 1)
 
 
 def open_github(print_text, website_append=''):
@@ -599,9 +578,8 @@ def game_menu():
         item()
 
 
-# helper function for player choices - handling errors + what paths to take next
-def _player_choice(choices, choice_options: list) -> str:
-    user_input = ' '
+# helper function for player choices - handling errors and what paths to take next
+def _player_choice(choices, choice_options: list, user_input=' ') -> str:
     while user_input.lower() not in choices:
         user_input = str(input('\n'.join(choice_options)))
         print_s('', 1)
