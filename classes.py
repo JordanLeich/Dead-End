@@ -15,9 +15,8 @@ If more variables are needed. they can be added here.
         self.balance = balance
         self.health = health
         self.difficulty = Difficulty(difficulty)
-        # user weapons
         self.weapon_dict = {
-        #Data organized: '#': ['name', 'cost', 'purchased', 'health_rand_1', 'health_rand_2'],
+        #Organized: '#': ['name', 'cost', 'purchased', 'health_rand_1', 'health_rand_2'],
             '0': ['knife', None, knife, 40, 45], # found weapon
             '1': ['Spiked Baseball Bat', 5, bat, 30, 40],
             '2': ['1997 Beretta Pistol', 15, pistol, 20, 30],
@@ -26,21 +25,21 @@ If more variables are needed. they can be added here.
             '5': ['Rocket Missile Launcher', 100, rpg, 0, 0],
             '6': ['The Merchants Strange Spell', 125, spell, -30, -10],
         }
-        #  check point location
         self.check_point = ''
 
     def get_data(self):
-        value_dict = vars(self)
-        value_dict['difficulty'] = self.difficulty
+        value_dict = deepcopy(vars(self))
+        value_dict['difficulty'] = self.difficulty.value
         return value_dict
 
-    def load_data(self, user_data):
+    def load_data(self, user_data=None):
         """This function will set player data from previous game"""
+        if user_data == None:
+            return
         self.balance = user_data['balance']
         self.health = user_data['health']
-        # self.merchant_luck = user_data['merchant_luck']
         self.difficulty = Difficulty(int(user_data['difficulty']))
-        # self.weapon_dict = user_data['weapon_dict']
+        self.weapon_dict = user_data['weapon_dict']
         self.check_point = user_data['check_point']
 
     def get_money(self, start_int=5, end_int=30):

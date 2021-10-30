@@ -20,7 +20,7 @@ EXIT_MERCHANT_MENU = str(len(player1.weapon_dict))
 
 
 def load_or_save_data():
-    game_data.load_game(player1)
+    player1.load_data(game_data.load_game())
 
 
 def game_intro_description():
@@ -101,8 +101,7 @@ def game():
         print('You have decided to look around your apartment and decide to grab a concealed knife that you legally\n'
               'are allowed to carry in public areas just in case anything happens...\n')
         sleep(1)
-        if not player1.weapon_dict['0'][2]:
-            player1.weapon_dict['0'][2] = True
+        player1.weapon_dict['0'][2] = True  # no other way to find 
         outside_area()
     elif choice == '2':
         sleep(1)
@@ -419,7 +418,7 @@ def view_stats():
     """
 Prints the users current in game stats based upon a load file
     """
-    game_data.load_game(player1)
+    player1.load_data(game_data.load_game())
     print_green('Your current in game stats will now be displayed below!\n', 1)
     print(f'Your health is {player1.health}\n')
     print_s(f'Your balance is ${player1.balance}\n', 2)
@@ -439,7 +438,7 @@ def _difficulty_set_health():
         print('Since a saved difficulty value could not be found...')
         player1.health = 100
     print_health(player1.difficulty,
-                 f'{player1.difficulty} mode has been selected, you will begin with only {player1.health} health.\n',
+                 f'{player1.difficulty.name} mode has been selected, you will begin with only {player1.health} health.\n',
                  1)
 
 
@@ -506,7 +505,7 @@ def checkpoint_save(checkpoint_name=''):
     merchant()
     print_green('A checkpoint has been reached...\n', .5)
     player1.check_point = checkpoint_name
-    game_data.save_game(player1)  # Sends player1 info to save file
+    game_data.save_game(player1.get_data())  # Sends player1 info to save file
     print_green(f'Health: {player1.health}\n', 1)
     print_green(f'Balance: {player1.balance}\n', 1)
 
