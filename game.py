@@ -470,7 +470,7 @@ def restart():
             v[2] = False
         sounds.set_volume(0.05)
         print_green('Default stats have been loaded/saved and a new game will begin...\n', 1)
-        #game_intro_description()
+        game_intro_description()
     elif restart_choice in ['n', 'no']:
         print_s('Ending game...', 1)
         exit()
