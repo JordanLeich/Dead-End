@@ -30,17 +30,17 @@ If more variables are needed. they can be added here.
         self.check_point = ''
 
     def get_data(self):
-        value_dict = deepcopy(vars(self))
-        value_dict['difficulty'] = self.difficulty.value
+        value_dict = vars(self)
+        value_dict['difficulty'] = self.difficulty
         return value_dict
 
     def load_data(self, user_data):
         """This function will set player data from previous game"""
         self.balance = user_data['balance']
         self.health = user_data['health']
-        self.merchant_luck = user_data['merchant_luck']
+        # self.merchant_luck = user_data['merchant_luck']
         self.difficulty = Difficulty(int(user_data['difficulty']))
-        self.weapon_dict = user_data['weapon_dict']
+        # self.weapon_dict = user_data['weapon_dict']
         self.check_point = user_data['check_point']
 
     def get_money(self, start_int=5, end_int=30):

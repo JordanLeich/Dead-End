@@ -72,10 +72,10 @@ def game():
         choice = _player_choice(['n', 'new', 'c', 'continue'], choice_options)
 
         if choice in ['n', 'new']:
-            difficulty()
             player1.balance = 0
             for k,v in player1.weapon_dict.items():
                 v[2] = False
+            difficulty()
             checkpoint_save()
         elif choice in ['c', 'continue']:
             print_green('Continuing game...\n', 1)
@@ -101,7 +101,8 @@ def game():
         print('You have decided to look around your apartment and decide to grab a concealed knife that you legally\n'
               'are allowed to carry in public areas just in case anything happens...\n')
         sleep(1)
-        player1.weapon_dict['0'][2] = True
+        if not player1.weapon_dict['0'][2]:
+            player1.weapon_dict['0'][2] = True
         outside_area()
     elif choice == '2':
         sleep(1)
@@ -148,7 +149,7 @@ def merchant():
                                   ])
             buy_item = _player_choice([str(x) for x in range(1, 8)], choice_options)
             
-            if user_item_buy == EXIT_MERCHANT_MENU:
+            if buy_item == EXIT_MERCHANT_MENU:
                 print_s('The merchant bids you a farewell and good luck!\n', 1)
                 break
             elif player1.weapon_dict[buy_item][2]:
@@ -199,7 +200,7 @@ so that the stronger weapon is used first instead of weaker weapons when attacki
     choice_options.extend(['\nWhich item would you like to use: '])
     choice = _player_choice(choices, choice_options)
 
-    key = str(deep_index(list(player1.weapon_dict.values()), choice_names[int(choice)]) - 1)
+    key = str(deep_index(list(player1.weapon_dict.values()), choice_names[int(choice) - 1]))
 
     if key == '6':
         print_green(
@@ -438,7 +439,7 @@ def _difficulty_set_health():
         print('Since a saved difficulty value could not be found...')
         player1.health = 100
     print_health(player1.difficulty,
-                 f'{player1.difficulty.name} mode has been selected, you will begin with only {player1.health} health.\n',
+                 f'{player1.difficulty} mode has been selected, you will begin with only {player1.health} health.\n',
                  1)
 
 
