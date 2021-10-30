@@ -17,14 +17,14 @@ If more variables are needed. they can be added here.
         self.difficulty = Difficulty(difficulty)
         # user weapons
         self.weapon_dict = {
-        #Data organized: '#': ['name', 'cost', 'purchased'],
-            '0': ['knife', None, knife], # found weapon
-            '1': ['Spiked Baseball Bat', 5, bat],
-            '2': ['1997 Beretta Pistol', 15, pistol],
-            '3': ['1999 AK-47 Assault Rifle', 25, ak47],
-            '4': ['1999 Semi-automatic Barrett Sniper Rifle', 60, barrett],
-            '5': ['Rocket Missile Launcher', 100, rpg],
-            '6': ['The Merchants Strange Spell', 125, spell],
+        #Data organized: '#': ['name', 'cost', 'purchased', 'health_rand_1', 'health_rand_2'],
+            '0': ['knife', None, knife, 40, 45], # found weapon
+            '1': ['Spiked Baseball Bat', 5, bat, 30, 40],
+            '2': ['1997 Beretta Pistol', 15, pistol, 20, 30],
+            '3': ['1999 AK-47 Assault Rifle', 25, ak47, 10, 20],
+            '4': ['1999 Semi-automatic Barrett Sniper Rifle', 60, barrett, 3, 10],
+            '5': ['Rocket Missile Launcher', 100, rpg, 0, 0],
+            '6': ['The Merchants Strange Spell', 125, spell, -30, -10],
         }
         #  check point location
         self.check_point = ''
@@ -57,6 +57,9 @@ If more variables are needed. they can be added here.
         random_health = randint(start_int, end_int)
         self.health += random_health
         return random_health
+
+    def use_item(self, key):
+        return self.lose_health(self.weapon_dict[key][-2], self.weapon_dict[key][-1])
 
 
 # Difficulty labeling - easier for referencing + printing
