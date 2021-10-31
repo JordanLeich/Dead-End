@@ -1,2 +1,2 @@
-colored==1.4.2
+colored==1.4.3
 pygame~=2.0.1

@@ -2,6 +2,7 @@ import json
 from os.path import exists as file_exists
 from other.colors import print_green, print_yellow
 
+
 class GameData:
     """
 This class will offer loading and saving of game data for Zombie-Survival-Game.

@@ -58,7 +58,7 @@ def unlock_all_cheat():
     player1.health = 999999
     player1.balance = 999999
     player1.difficulty = Difficulty(0)
-    for k,v in player1.weapon_dict.items():
+    for k, v in player1.weapon_dict.items():
         v[2] = True
     print_green('Unlock all cheats have been activated!\n', 2)
     checkpoint_save()
@@ -73,7 +73,7 @@ def game():
 
         if choice in ['n', 'new']:
             player1.balance = 0
-            for k,v in player1.weapon_dict.items():
+            for k, v in player1.weapon_dict.items():
                 v[2] = False
             difficulty()
             checkpoint_save()
@@ -138,16 +138,16 @@ def merchant():
 
     if choice in ['b', 'buy', 'y', 'yes']:
         buy_item = ''
-        weapon_choices = [f"({k}) {v[0]} ({v[1]} Dollars)" for k,v in player1.weapon_dict.items() if k != '0']
+        weapon_choices = [f"({k}) {v[0]} ({v[1]} Dollars)" for k, v in player1.weapon_dict.items() if k != '0']
         while buy_item != EXIT_MERCHANT_MENU:
             print_green(f'Balance: {player1.balance}\n', 1)
             choice_options = ['--- Merchants inventory ---']
             choice_options.extend(weapon_choices)
             choice_options.extend([f'({EXIT_MERCHANT_MENU}) Exit The Merchant Shop\n',
                                    'What would you like to buy: ',
-                                  ])
+                                   ])
             buy_item = _player_choice([str(x) for x in range(1, 8)], choice_options)
-            
+
             if buy_item == EXIT_MERCHANT_MENU:
                 print_s('The merchant bids you a farewell and good luck!\n', 1)
                 break
@@ -161,8 +161,8 @@ def merchant():
                 print_green(f'{player1.weapon_dict[buy_item][1]} has been purchased!\n', 1)
                 if buy_item == '6':
                     print_green(
-                    'As the Merchant hands you his own crafted spell, he tells you that you now wield true pain to foes whilst providing restoration to thine self.\n',
-                    2.5)
+                        'As the Merchant hands you his own crafted spell, he tells you that you now wield true pain to foes whilst providing restoration to thine self.\n',
+                        2.5)
     elif choice in ['s', 'skip', 'n', 'no']:
         print_s('The merchant has been skipped but can be brought back later...\n', 1)
 
@@ -185,7 +185,7 @@ def user_attack(enemy='zombies'):
 This function is called whenever the players gets into a fight with zombies or humans. The logic is ordered in a way
 so that the stronger weapon is used first instead of weaker weapons when attacking enemies.
     """
-    choice_names = [v[0] for k,v in player1.weapon_dict.items() if v[2]]
+    choice_names = [v[0] for k, v in player1.weapon_dict.items() if v[2]]
     if len(choice_names) == 0:  # no choice for them to make
         player1.health = 0
         print_red(
@@ -194,8 +194,8 @@ so that the stronger weapon is used first instead of weaker weapons when attacki
         bad_ending()
         return
 
-    choices = [str(c + 1) for c,_ in enumerate(choice_names)]
-    choice_options = [f'({c + 1}) {v}' for c,v in enumerate(choice_names)]
+    choices = [str(c + 1) for c, _ in enumerate(choice_names)]
+    choice_options = [f'({c + 1}) {v}' for c, v in enumerate(choice_names)]
     choice_options.extend(['\nWhich item would you like to use: '])
     choice = _player_choice(choices, choice_options)
 
@@ -310,7 +310,7 @@ def outside_area():
             gas_station()
     elif user_choice == '2':
         gas_station()
-    
+
 
 def diner_area():
     sounds.horror_sound_effects()
@@ -466,7 +466,7 @@ def restart():
     if restart_choice in ['y', 'yes']:
         _difficulty_set_health()
         player1.balance = 0
-        for k,v in player1.weapon_dict.items():
+        for k, v in player1.weapon_dict.items():
             v[2] = False
         sounds.set_volume(0.05)
         print_green('Default stats have been loaded/saved and a new game will begin...\n', 1)
@@ -601,7 +601,7 @@ def go_to_checkpoint():  # add checkpoint functionality
                    '2': diner_area,
                    '3': gas_station,
                    '4': parkview_area,
-                   '5': parkview_area, # after showdown
+                   '5': parkview_area,  # after showdown
                    '6': broken_roads_area,
                    '7': good_ending,
                    '8': bad_ending,

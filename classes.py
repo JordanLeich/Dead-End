@@ -16,8 +16,8 @@ If more variables are needed. they can be added here.
         self.health = health
         self.difficulty = Difficulty(difficulty)
         self.weapon_dict = {
-        #Organized: '#': ['name', 'cost', 'purchased', 'health_rand_1', 'health_rand_2'],
-            '0': ['knife', None, knife, 40, 45], # found weapon
+            # Organized: '#': ['name', 'cost', 'purchased', 'health_rand_1', 'health_rand_2'],
+            '0': ['knife', None, knife, 40, 45],  # found weapon
             '1': ['Spiked Baseball Bat', 5, bat, 30, 40],
             '2': ['1997 Beretta Pistol', 15, pistol, 20, 30],
             '3': ['1999 AK-47 Assault Rifle', 25, ak47, 10, 20],
@@ -34,7 +34,7 @@ If more variables are needed. they can be added here.
 
     def load_data(self, user_data=None):
         """This function will set player data from previous game"""
-        if user_data == None:
+        if user_data is None:
             return
         self.balance = user_data['balance']
         self.health = user_data['health']
