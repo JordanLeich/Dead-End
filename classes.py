@@ -10,20 +10,23 @@ If more variables are needed. they can be added here.
     """
 
     def __init__(self, balance=0, health=0, difficulty=2, knife=False, ak47=False, pistol=False, bat=False,
-                 rpg=False, barrett=False, spell=False):
+                 rpg=False, barrett=False, spell=False, apple=False, armor=False):
         # user attributes
         self.balance = balance
         self.health = health
         self.difficulty = Difficulty(difficulty)
         self.weapon_dict = {
             # Organized: '#': ['name', 'cost', 'purchased', 'health_rand_1', 'health_rand_2'],
-            '0': ['knife', None, knife, 40, 45],  # found weapon
+            '0': ['Knife', None, knife, 40, 45],  # Weapon can be found in-game at the start
             '1': ['Spiked Baseball Bat', 5, bat, 30, 40],
             '2': ['1997 Beretta Pistol', 15, pistol, 20, 30],
             '3': ['1999 AK-47 Assault Rifle', 25, ak47, 10, 20],
             '4': ['1999 Semi-automatic Barrett Sniper Rifle', 60, barrett, 3, 10],
             '5': ['Rocket Missile Launcher', 100, rpg, 0, 0],
             '6': ['The Merchants Strange Spell', 125, spell, -30, -10],
+            '7': ['Apple', 10, apple, 200, 500],
+            # If the player chooses a food item during an attack sequence, they will lose all their health and die.
+            '8': ['Body Armor', 50, armor, 200, 500],
         }
         self.check_point = ''
 

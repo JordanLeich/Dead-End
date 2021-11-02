@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 # Created on 5/11/2021
-
+import sys
 from sys import exit
 import webbrowser
 from time import sleep
@@ -104,7 +104,7 @@ def game():
         sleep(1)
     elif choice == '3':
         sleep(1)
-        basement_area() 
+        basement_area()
     elif choice == 'unlock_all_cheat':
         unlock_all_cheat()
     checkpoint_save('1')
@@ -117,7 +117,7 @@ def merchant():
         print_red('You currently have no health left...\n', 1)
         player1.check_point = f'{player1.check_point}bad'
 
-    if randint(1, 7) != 3:  # random chance for player to interact with merchant
+    if randint(1, 7) != 3:  # Random chance for player to interact with merchant
         return
 
     sounds.good_luck()
@@ -134,14 +134,15 @@ def merchant():
         buy_item = ''
         weapon_choices = [f"({k}) {v[0]} ({v[1]} Dollars)" for k, v in player1.weapon_dict.items() if k != '0']
         while buy_item != EXIT_MERCHANT_MENU:
+            print_green(f'Health: {player1.health}\n', 1)
             print_green(f'Balance: {player1.balance}\n', 1)
             choice_options = ['--- Merchants inventory ---']
             choice_options.extend(weapon_choices)
             choice_options.extend([f'({EXIT_MERCHANT_MENU}) Exit The Merchant Shop\n',
                                    'What would you like to buy: ',
-                                  ])
-            buy_item = _player_choice([str(x) for x in range(1, 8)], choice_options)
-            
+                                   ])
+            buy_item = _player_choice([str(x) for x in range(1, 10)], choice_options)
+
             if buy_item == EXIT_MERCHANT_MENU:
                 print_s('The merchant bids you a farewell and good luck!\n', 1)
                 break
@@ -152,11 +153,23 @@ def merchant():
                 sounds.merchant_purchase_sound()
                 player1.balance -= player1.weapon_dict[buy_item][1]
                 player1.weapon_dict[buy_item][2] = True
-                print_green(f'{player1.weapon_dict[buy_item][1]} has been purchased!\n', 1)
+                print_green(f'{player1.weapon_dict[buy_item][0]} has been purchased!\n', 1)
                 if buy_item == '6':
                     print_green(
                         'As the Merchant hands you his own crafted spell, he tells you that you now wield true pain to foes whilst providing restoration to thine self.\n',
                         2.5)
+                elif buy_item == '7':
+                    apple_health = randint(5, 15)
+                    player1.health += apple_health
+                    print_green(
+                        f'You have ate the apple, giving you a bonus of {apple_health} health.\n',
+                        2)
+                elif buy_item == '8':
+                    body_armor_health = randint(40, 60)
+                    player1.health += body_armor_health
+                    print_green(
+                        f'You have equipped the body armor, giving you a bonus of {body_armor_health} health.\n',
+                        2)
     elif choice in ['s', 'skip', 'n', 'no']:
         print_s('The merchant has been skipped but can be brought back later...\n', 1)
 
@@ -210,7 +223,7 @@ so that the stronger weapon is used first instead of weaker weapons when attacki
             print_yellow(message, 2)
         else:
             print_green(message, 2)
-    return True # attack successful
+    return True  # attack successful
 
 
 def gas_station():
@@ -242,7 +255,7 @@ def gas_station():
         print_s('You decide to fight off the zombies in the will of your hopes for living...\n', 1.5)
         if not user_attack():
             return
-        
+
         print_green('You have successfully defended off the zombies inside the gas station but it was most '
                     'unfortunate the man you found could not make it...\n', 2)
         choice_options = [
@@ -303,7 +316,7 @@ def outside_area():
     elif user_choice == '2':
         pass
     checkpoint_save('3')
-    
+
 
 def diner_area():
     sounds.horror_sound_effects()
@@ -320,9 +333,7 @@ def diner_area():
         sleep(3)
         print('You also manage to find a bloody photograph on the ground and upon looking at the image, you see a '
               'familiar face...')
-        print('You see the face of the man you met earlier at the local Gas Station taking a group '
-              'familiar face... \nYou see the face of the man you met earlier at the local Gas Station taking a group '
-              'family picture!\n')
+        print('You see the face of the man you met earlier at the local Gas Station taking a group family picture!\n')
         sleep(3)
         sounds.horror_sound_effects()
         print('Since you are finished exploring and searching the diner area, you proceed on your path to the '
@@ -341,7 +352,7 @@ def diner_area():
             'You have successfully defended off the zombies outside the local Diner... You will now head over to the Parkview Area\n',
             2)
         checkpoint_save('4')
-        
+
 
 def broken_roads_area():
     sounds.zombie_attack_outside()
@@ -383,8 +394,8 @@ def parkview_area():
             sleep(2.5)
         elif user_choice == '2':
             sounds.bad_luck()
-        
-        if not user_attack('man'): # attack same for both options - only difference is lead up to it
+
+        if not user_attack('man'):  # attack same for both options - only difference is lead up to it
             sounds.bad_luck()
             print_red('The man has killed you and zombies start to feast on your dead decaying flesh...\n', 2)
             return
@@ -422,7 +433,7 @@ def _difficulty_set_health():
         print('Since a saved difficulty value could not be found...')
         player1.health = 100
     print_health(player1.difficulty,
-                 f'{player1.difficulty.name} mode has been selected, you will begin with only {player1.health} health.\n',
+                 f'{player1.difficulty.name} mode has been selected, you will begin with {player1.health} health.\n',
                  1)
 
 
@@ -488,18 +499,19 @@ def checkpoint_save(checkpoint_name=''):
     game_data.save_game(player1.get_data())  # Sends player1 info to save file
     if player1.health <= 0:  # shouldn't really get to this point --> TODO
         print_red('Sorry you have no more health! You have lost the game!\n', 1)
-        return #restart()
+        return  # restart()
     if checkpoint_name != '':  # remove checkpoint printing for ending + difficulty selected
         merchant()
         print_green('A checkpoint has been reached...\n', .5)
         print_green(f'Health: {player1.health}\n', 1)
         print_green(f'Balance: {player1.balance}\n', 1)
-        
+
         choices = ['y', 'yes', 'n', 'no']
         choice_options = ['Would you like to exit the game (yes / no): ']
         exit_choice = _player_choice(choices, choice_options)
         if exit_choice in ['y', 'yes']:  # ask player if they would like to quit
             player1.check_point = f'{checkpoint_name}exit'
+            sys.exit()
 
 
 def open_github(print_text, website_append=''):
