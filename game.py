@@ -112,7 +112,7 @@ def game():
     checkpoint_save('1')
 
 
-def merchant():
+def merchant():  # sourcery no-metrics
     """Merchant randomly shows up, allowing the player to purchase weapons."""
 
     if player1.health <= 0:  # end game if no health
@@ -194,7 +194,7 @@ This function is called whenever the players gets into a fight with zombies or h
 so that the stronger weapon is used first instead of weaker weapons when attacking enemies.
     """
     choice_names = [v[0] for k, v in player1.weapon_dict.items() if v[2]]
-    if len(choice_names) == 0:  # no choice for them to make
+    if not choice_names:  # no choice for them to make
         player1.health = 0
         print_red(
             'Due to not having any available weapons on you... You try to defend yourself...\nThe zombie overpowers you! Game Over!\n',
@@ -596,9 +596,10 @@ def audio_options(volume_level=''):  # TODO: fix error message (prints every # b
     exit_choices = ['e', 'exit', 'c', 'close']
     choices.extend(exit_choices)
     while volume_level != 'exit':
-        volume_level = int(_player_choice(choices, choice_options)) / 100
-        if volume_level in exit_choices:
+        choice = _player_choice(choices, choice_options)
+        if choice in exit_choices:
             break
+        volume_level = int(choice) / 100
         sounds.set_volume(volume_level)
         sounds.zombie_attack_outside()
         print_s(f'Your current volume level is set at {sounds.volume_level}\n', 1)
