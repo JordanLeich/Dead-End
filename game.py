@@ -20,38 +20,19 @@ CONSUMABLE_NUMBER = len(player1.consumables)
 TOTAL_ITEMS = ITEM_NUMBER + CONSUMABLE_NUMBER
 EXIT_MERCHANT_MENU = str(TOTAL_ITEMS)
 
+# GAME SETUP, PROCESS, AND RESET HANDLERS
 
 def load_or_save_data():
     player1.load_data(game_data.load_game())
 
 
-def game_intro_description():
-    difficulty()
+def game_intro():
     sounds.intro_sound()
     print_s('''This is a zombie survival game where you must make the best decisions possible in order to live.
 As a survivor, you will encounter zombies, weapons, people, and a merchant to buy from with an
 in-game currency. Every decision you make has a cause and effect while some lead you to fortune and others will 
 lead you to death.\n''', 2.5)
-
-
-def basement_area():
-    print_s('You have reached the basement area.\n', 1)
-    sounds.horror_sound_effects()
-    print_s('''After living at your home for awhile now, you've had many supplies and broken utilities stored up in your basement.
-Trailing behind you leads a lurking stench of odor containing of what smells like mold and rotten flesh.\n''', 1.5)
-    choice_options = ['(1) Search around the basement (2) Forget about the basement and leave: ']
-    choice = _player_choice([str(x) for x in range(1, 3)], choice_options)
-
-    if choice == '1':
-        print_s(
-            'Amongst searching the basement, you stumble upon some spare money you forgot you had saved up in the basement.\n',
-            1.5)
-        sounds.good_luck()
-        print_green(f'You found a total of ${player1.get_money()} dollars!\n', 1)
-    elif choice == '2':
-        sounds.wind_sound()
-        print_s('''Upon leaving the basement, you head out into the outside area for a breath of fresh air after consuming 
-the moldy and old smells of the basement.\n''', 2)
+    difficulty()
 
 
 def unlock_all_cheat():
@@ -65,8 +46,121 @@ def unlock_all_cheat():
     checkpoint_save()
 
 
-def game():
+# helper function for player health setting and printing
+def _difficulty_set_health():
+    if player1.difficulty == Difficulty(1):
+        player1.health = 200
+    elif player1.difficulty == Difficulty(2):
+        player1.health = 100
+    elif player1.difficulty == Difficulty(3):
+        player1.health = 50
+    elif player1.difficulty == Difficulty(0):
+        unlock_all_cheat()
+    else:
+        print('Since a saved difficulty value could not be found...')
+        player1.health = 100
+    print_health(player1.difficulty,
+                 f'{player1.difficulty.name} mode has been selected, you will begin with {player1.health} health.\n',
+                 1)
 
+
+def difficulty():
+    if player1.difficulty.value != -1:
+    # if game_data.file_exists:
+        sounds.difficulty_select_sound()
+        print_green(f'Current difficulty is {player1.difficulty.name}\n')
+        print_green('Difficulty selection was skipped due to saved data already existing...\n', 1)
+        choice_options = ['Would you like to start a new game or continue with your saved data (new / continue): ']
+        choice = _player_choice(['n', 'new', 'c', 'continue'], choice_options)
+
+        if choice in ['n', 'new']:
+            player1.balance = 0
+            for k, v in player1.weapon_dict.items():
+                v[2] = False
+            difficulty_select()
+            checkpoint_save()
+        elif choice in ['c', 'continue']:
+            print_green('Continuing game...\n', 1)
+            go_to_checkpoint()
+    else:
+        difficulty_select()
+
+
+def difficulty_select():
+    print_green('Pleas select a difficulty level\n')
+    print_green('(1) Easy\n')
+    print_yellow('(2) Medium\n')
+    print_red('(3) Hardcore\n')
+    choices = [str(x) for x in range(1, 4)]
+    choices.append('unlock_all_cheat')
+    choice_options = ['Select a difficulty: ']
+    try:
+        player1.difficulty = Difficulty(int(_player_choice(choices, choice_options)))
+    except:
+        player1.difficulty = Difficulty(0)  # unlock_all_cheat 
+
+    sounds.difficulty_select_sound()
+    _difficulty_set_health()
+
+
+def restart():
+    choices = ['y', 'yes', 'n', 'no']
+    choice_options = ['Would you like to restart the game (yes / no): ']
+    restart_choice = _player_choice(choices, choice_options)
+
+    if restart_choice in ['y', 'yes']:
+        player1.balance = 0
+        for k, v in player1.weapon_dict.items():
+            v[2] = False
+        sounds.set_volume(0.05)
+        print_green('Default stats have been loaded/saved and a new game will begin...\n', 1)
+        player1.check_point = player1.check_point.replace('bad', '')  # load game from last checkpoint
+        game_intro()
+        game()
+        go_to_checkpoint()
+    elif restart_choice in ['n', 'no']:
+        print_s('Ending game...', 1)
+        exit()
+
+
+def checkpoint_save(checkpoint_name=''):
+    player1.check_point = checkpoint_name
+    game_data.save_game(player1.get_data())  # Sends player1 info to save file
+    if player1.health <= 0:  # shouldn't really get to this point --> TODO
+        print_red('Sorry you have no more health! You have lost the game!\n', 1)
+        return  # restart()
+    if checkpoint_name != '':  # remove checkpoint printing for ending + difficulty selected
+        merchant()
+        print_green('A checkpoint has been reached...\n', .5)
+        print_green(f'Health: {player1.health}\n', 1)
+        print_green(f'Balance: {player1.balance}\n', 1)
+
+        choices = ['y', 'yes', 'n', 'no']
+        choice_options = ['Would you like to exit the game (yes / no): ']
+        exit_choice = _player_choice(choices, choice_options)
+        if exit_choice in ['y', 'yes']:  # ask player if they would like to quit ~ returns to menu
+            player1.check_point = f'{checkpoint_name}exit'
+
+
+def go_to_checkpoint():  # main program running movement to levels -- checkpoint when leaving area
+    checkpoints = {'1': outside_area,
+                   '2': diner_area,
+                   '3': gas_station,
+                   '4': parkview_area,
+                   '5': broken_roads_area,
+                   '6': good_ending,
+                   '7': bad_ending,
+                   }
+    while 'exit' not in player1.check_point:
+        if 'bad' in player1.check_point:
+            checkpoints['7']()
+        else:
+            checkpoints[player1.check_point]()
+
+
+# STORY BRANCHES
+
+def game():
     if player1.health <= 0:
         print_red('You currently have no health left...\n', 1)
         player1.check_point = f'{player1.check_point}bad'
@@ -96,121 +190,24 @@ def game():
     checkpoint_save('1')
 
 
-def merchant():  # sourcery no-metrics
-    """Merchant randomly shows up, allowing the player to purchase weapons."""
+def basement_area():
+    print_s('You have reached the basement area.\n', 1)
+    sounds.horror_sound_effects()
+    print_s('''After living at your home for awhile now, you've had many supplies and broken utilities stored up in your basement.
+Trailing behind you leads a lurking stench of odor containing of what smells like mold and rotten flesh.\n''', 1.5)
+    choice_options = ['(1) Search around the basement (2) Forget about the basement and leave: ']
+    choice = _player_choice([str(x) for x in range(1, 3)], choice_options)
 
-    if player1.health <= 0:  # end game if no health
-        print_red('You currently have no health left...\n', 1)
-        player1.check_point = f'{player1.check_point}bad'
-
-    if randint(1, 7) != 3:  # Random chance for player to interact with merchant
-        return
-
-    sounds.good_luck()
-    print_green('Whoosh! The lucky merchant has appeared in-front of you...\n', 1)
-    if player1.balance <= 0:
-        print_yellow('Uh-Oh! You do not have enough money to buy anything... keep playing to acquire more money!\n', 1)
-        return
-
-    choices = ['b', 'buy', 'y', 'yes', 's', 'skip', 'n', 'no']
-    choice_options = ['Would you like to buy from the merchant or skip past the merchant (buy / skip): ']
-    choice = _player_choice(choices, choice_options)
-
-    if choice in ['b', 'buy', 'y', 'yes']:
-        buy_item = ''
-        weapon_choices = [f"({k}) {v[0]} ({v[1]} Dollars)" for k, v in player1.weapon_dict.items() if k != '0']
-        consumables = [f"({c + ITEM_NUMBER}) {v[0]} ({v[1]} Dollars)" for c, v in enumerate(player1.consumables)]
-        while buy_item != EXIT_MERCHANT_MENU:
-            print_green(f'Health: {player1.health}\n', 1)
-            print_green(f'Balance: {player1.balance}\n', 1)
-            choice_options = ['--- Merchants inventory ---']
-            choice_options.extend(weapon_choices)
-            choice_options.extend(consumables)
-            choice_options.extend([f'({EXIT_MERCHANT_MENU}) Exit The Merchant Shop\n',
-                                   'What would you like to buy: ',
-                                   ])
-            buy_item = _player_choice([str(x) for x in range(1, TOTAL_ITEMS + 1)], choice_options)
-
-            if buy_item == EXIT_MERCHANT_MENU:
-                print_s('The merchant bids you a farewell and good luck!\n', 1)
-                break
-            elif int(buy_item) >= ITEM_NUMBER:  # consumables
-                consumable_index = int(buy_item) - ITEM_NUMBER
-                if player1.balance > player1.consumables[consumable_index][1]:
-                    player1.balance -= player1.consumables[consumable_index][1]
-                    print_green(
-                        f'You have used the {player1.consumables[consumable_index][0]}, giving you a bonus of {player1.consume(consumable_index)} health.\n',
-                        2)
-                else:
-                    print_yellow('Sorry not enough available funds to purchase that item')
-            elif player1.weapon_dict[buy_item][2]:
-                sounds.bad_luck()
-                print_yellow(f'{player1.weapon_dict[buy_item][0]} has already been purchased!\n', 1)
-            elif player1.balance >= player1.weapon_dict[buy_item][1]:
-                sounds.merchant_purchase_sound()
-                player1.balance -= player1.weapon_dict[buy_item][1]
-                player1.weapon_dict[buy_item][2] = True
-                print_green(f'{player1.weapon_dict[buy_item][0]} has been purchased!\n', 1)
-                if buy_item == '6':
-                    print_green(
-                        'As the Merchant hands you his own crafted spell, he tells you that you now wield true pain to foes whilst providing restoration to thine self.\n',
-                        2.5)
-            else:
-                print_yellow('Sorry not enough available funds to purchase that item')
-    elif choice in ['s', 'skip', 'n', 'no']:
-        print_s('The merchant has been skipped but can be brought back later...\n', 1)
-
-
-def continue_message():
-    """Only for development purposes and has no impact on the game"""
-    print_s('Continue here...', 3)
-    exit()
-
-
-# helper function for user_attack
-def deep_index(lst, w):
-    return [i for (i, sub) in enumerate(lst) if w in sub][0]
-
-
-def user_attack(enemy='zombies'):
-    """
-This function is called whenever the players gets into a fight with zombies or humans. The logic is ordered in a way
-so that the stronger weapon is used first instead of weaker weapons when attacking enemies.
-    """
-    choice_names = [v[0] for k, v in player1.weapon_dict.items() if v[2]]
-    if not choice_names:  # no choice for them to make
-        player1.health = 0
-        print_red(
-            'Due to not having any available weapons on you... You try to defend yourself...\nThe zombie overpowers you! Game Over!\n',
-            3)
-        player1.check_point = f'{player1.check_point}bad'
-        return False
-
-    choices = [str(c + 1) for c, _ in enumerate(choice_names)]
-    choice_options = [f'({c + 1}) {v}' for c, v in enumerate(choice_names)]
-    choice_options.extend(['\nWhich item would you like to use: '])
-    choice = _player_choice(choices, choice_options)
-
-    key = str(deep_index(list(player1.weapon_dict.values()), choice_names[int(choice) - 1]))
-
-    if key == '6':
-        print_green(
-            f'You have used the Merchants Strange Spell and defeated the {enemy} without losing any health! Through the power of the Strange Spell, you gain {player1.get_health(10, 30)} health through its restoration casting!\n',
-            3.5)
-    else:  # print color based on user health
-        lost_health = player1.use_item(key)
-        if lost_health > player1.health:
-            print_red(f'The {enemy} overpowered you. Losing all of your health...\n', 1)
-            player1.check_point = f'{player1.check_point}bad'
-            return False
-        message = f'You have used the {player1.weapon_dict[key][0]} and defeated the {enemy} losing {lost_health} health!\n'
-        if player1.health < 25:
-            print_red(message, 2)
-        elif player1.health < 50:
-            print_yellow(message, 2)
-        else:
-            print_green(message, 2)
-    return True  # attack successful
+    if choice == '1':
+        print_s(
+            'Amongst searching the basement, you stumble upon some spare money you forgot you had saved up in the basement.\n',
+            1.5)
+        sounds.good_luck()
+        print_green(f'You found a total of ${player1.get_money()} dollars!\n', 1)
+    elif choice == '2':
+        sounds.wind_sound()
+        print_s('''Upon leaving the basement, you head out into the outside area for a breath of fresh air after consuming 
+the moldy and old smells of the basement.\n''', 2)
 
 
 def gas_station():
@@ -398,91 +395,6 @@ def parkview_area():
         checkpoint_save('5')
 
 
-def view_stats():
-    """Prints the users current in game stats based upon a load file. Usage in Options"""
-    player1.load_data(game_data.load_game())
-    print_green('Your current in game stats will now be displayed below!\n', 1)
-    print(f'Your health is {player1.health}\n')
-    print_s(f'Your balance is ${player1.balance}\n', 2)
-
-
-# helper function for player health setting and printing
-def _difficulty_set_health():
-    if player1.difficulty == Difficulty(1):
-        player1.health = 200
-    elif player1.difficulty == Difficulty(2):
-        player1.health = 100
-    elif player1.difficulty == Difficulty(3):
-        player1.health = 50
-    elif player1.difficulty == Difficulty(0):
-        unlock_all_cheat()
-    else:
-        print('Since a saved difficulty value could not be found...')
-        player1.health = 100
-    print_health(player1.difficulty,
-                 f'{player1.difficulty.name} mode has been selected, you will begin with {player1.health} health.\n',
-                 1)
-
-
-def difficulty():
-    if player1.difficulty.value != -1:
-    # if game_data.file_exists:
-        sounds.difficulty_select_sound()
-        print_green(f'Current difficulty is {player1.difficulty.name}\n')
-        print_green('Difficulty selection was skipped due to saved data already existing...\n', 1)
-        choice_options = ['Would you like to start a new game or continue with your saved data (new / continue): ']
-        choice = _player_choice(['n', 'new', 'c', 'continue'], choice_options)
-
-        if choice in ['n', 'new']:
-            player1.balance = 0
-            for k, v in player1.weapon_dict.items():
-                v[2] = False
-            difficulty_select()
-            checkpoint_save()
-        elif choice in ['c', 'continue']:
-            print_green('Continuing game...\n', 1)
-            go_to_checkpoint()
-    else:
-        difficulty_select()
-
-def difficulty_select():
-    print_green('Pleas select a difficulty level\n')
-    print_green('(1) Easy\n')
-    print_yellow('(2) Medium\n')
-    print_red('(3) Hardcore\n')
-    choices = [str(x) for x in range(1, 4)]
-    choices.append('unlock_all_cheat')
-    choice_options = ['Select a difficulty: ']
-    try:
-        player1.difficulty = Difficulty(int(_player_choice(choices, choice_options)))
-    except:
-        player1.difficulty = Difficulty(0)  # unlock_all_cheat 
-
-    sounds.difficulty_select_sound()
-    _difficulty_set_health()
-
-
-def restart():
-    choices = ['y', 'yes', 'n', 'no']
-    choice_options = ['Would you like to restart the game (yes / no): ']
-    restart_choice = _player_choice(choices, choice_options)
-
-    if restart_choice in ['y', 'yes']:
-        _difficulty_set_health()
-        player1.balance = 0
-        for k, v in player1.weapon_dict.items():
-            v[2] = False
-        sounds.set_volume(0.05)
-        print_green('Default stats have been loaded/saved and a new game will begin...\n', 1)
-        player1.check_point = player1.check_point.replace('bad', '')  # load game from last checkpoint
-        game_intro_description()
-        game()
-        go_to_checkpoint()
-    elif restart_choice in ['n', 'no']:
-        print_s('Ending game...', 1)
-        exit()
-
-
 def good_ending():
     sounds.good_luck()
     print_green('Congratulations, you have survived and reached the end of the horrors...\n', 1)
@@ -496,30 +408,152 @@ def bad_ending():
     restart()
 
 
-def error_message(choices):  # to remove unlock_all_cheat as an option displayed for users
-    if choices[-1] == 'unlock_all_cheat':
+def continue_message():
+    """Only for development purposes and has no impact on the game"""
+    print_s('Continue here...', 3)
+    exit()
+
+
+# PLAYER ACTIONS --> TODO move to player class
+
+def merchant():
+    """Merchant randomly shows up, allowing the player to purchase weapons."""
+
+    if player1.health <= 0:  # end game if no health
+        print_red('You currently have no health left...\n', 1)
+        player1.check_point = f'{player1.check_point}bad'
+
+    if randint(1, 7) != 3:  # Random chance for player to interact with merchant
+        return
+
+    sounds.good_luck()
+    print_green('Whoosh! The lucky merchant has appeared in-front of you...\n', 1)
+    if player1.balance <= 0:
+        print_yellow('Uh-Oh! You do not have enough money to buy anything... keep playing to acquire more money!\n', 1)
+        return
+
+    choices = ['b', 'buy', 'y', 'yes', 's', 'skip', 'n', 'no']
+    choice_options = ['Would you like to buy from the merchant or skip past the merchant (buy / skip): ']
+    choice = _player_choice(choices, choice_options)
+
+    if choice in ['b', 'buy', 'y', 'yes']:
+        buy_item = ''
+        weapon_choices = [f"({k}) {v[0]} ({v[1]} Dollars)" for k, v in player1.weapon_dict.items() if k != '0']
+        consumables = [f"({c + ITEM_NUMBER}) {v[0]} ({v[1]} Dollars)" for c, v in enumerate(player1.consumables)]
+        choice_options = ['--- Merchants inventory ---']
+        choice_options.extend(weapon_choices)
+        choice_options.extend(consumables)
+        choice_options.extend([f'({EXIT_MERCHANT_MENU}) Exit The Merchant Shop\n',
+                               'What would you like to buy: ',
+                               ])
+        while buy_item != EXIT_MERCHANT_MENU:
+            print_green(f'Health: {player1.health}\n', 1)
+            print_green(f'Balance: {player1.balance}\n', 1)
+            buy_item = _player_choice([str(x) for x in range(1, TOTAL_ITEMS + 1)], choice_options)
+
+            if buy_item == EXIT_MERCHANT_MENU:
+                print_s('The merchant bids you a farewell and good luck!\n', 1)
+                break
+            elif int(buy_item) >= ITEM_NUMBER:  # consumables
+                consumable_index = int(buy_item) - ITEM_NUMBER
+                if player1.balance > player1.consumables[consumable_index][1]:
+                    player1.balance -= player1.consumables[consumable_index][1]
+                    print_green(
+                        f'You have used the {player1.consumables[consumable_index][0]}, giving you a bonus of {player1.consume(consumable_index)} health.\n',
+                        2)
+                else:
+                    print_yellow('Sorry not enough available funds to purchase that item')
+            elif player1.weapon_dict[buy_item][2]:
+                sounds.bad_luck()
+                print_yellow(f'{player1.weapon_dict[buy_item][0]} has already been purchased!\n', 1)
+            elif player1.balance >= player1.weapon_dict[buy_item][1]:
+                sounds.merchant_purchase_sound()
+                player1.balance -= player1.weapon_dict[buy_item][1]
+                player1.weapon_dict[buy_item][2] = True
+                print_green(f'{player1.weapon_dict[buy_item][0]} has been purchased!\n', 1)
+                if buy_item == '6':
+                    print_green(
+                        'As the Merchant hands you his own crafted spell, he tells you that you now wield true pain to foes whilst providing restoration to thine self.\n',
+                        2.5)
+            else:
+                print_yellow('Sorry not enough available funds to purchase that item')
+    elif choice in ['s', 'skip', 'n', 'no']:
+        print_s('The merchant has been skipped but can be brought back later...\n', 1)
+
+
+# helper function for user_attack to find the corresponding item in weapon_dict
+def deep_index(lst, w):
+    return [i for (i, sub) in enumerate(lst) if w in sub][0]
+
+
+def user_attack(enemy='zombies'):
+    """For fights with zombies or humans. User choice of weapon to use"""
+    choice_names = [v[0] for k, v in player1.weapon_dict.items() if v[2]]
+    if not choice_names:  # no choice for them to make
+        player1.health = 0
+        print_red(
+            'Due to not having any available weapons on you... You try to defend yourself...\nThe zombie overpowers you! Game Over!\n',
+            3)
+        player1.check_point = f'{player1.check_point}bad'
+        return False
+
+    choices = [str(c + 1) for c, _ in enumerate(choice_names)]
+    choice_options = [f'({c + 1}) {v}' for c, v in enumerate(choice_names)]
+    choice_options.extend(['\nWhich item would you like to use: '])
+    choice = _player_choice(choices, choice_options)
+
+    key = str(deep_index(list(player1.weapon_dict.values()), choice_names[int(choice) - 1]))
+
+    if key == '6':
+        print_green(
+            f'You have used the Merchants Strange Spell and defeated the {enemy} without losing any health! Through the power of the Strange Spell, you gain {player1.get_health(10, 30)} health through its restoration casting!\n',
+            3.5)
+    else:  # print color based on user health
+        lost_health = player1.use_item(key)
+        if lost_health > player1.health:
+            print_red(f'The {enemy} overpowered you. Losing all of your health...\n', 1)
+            player1.check_point = f'{player1.check_point}bad'
+            return False
+        message = f'You have used the {player1.weapon_dict[key][0]} and defeated the {enemy} losing {lost_health} health!\n'
+        if player1.health < 25:
+            print_red(message, 2)
+        elif player1.health < 50:
+            print_yellow(message, 2)
+        else:
+            print_green(message, 2)
+    return True  # attack successful
+
+
+# MISC
+
+def error_message(choices, audio_opt=0):  # sanitize options displayed for users 
+    if choices[-1] == 'unlock_all_cheat':  # remove cheat code 
         print(f'Error choice must be one of: {", ".join(choices[:-1])}\n')
+    elif audio_opt:  # remove audio large string of choices
+        print(f'Error choice must be: (1-100) or {", ".join(choices[-audio_opt:])}\n')
     else:
         print(f'Error choice must be one of: {", ".join(choices)}\n')
 
 
-def checkpoint_save(checkpoint_name=''):
-    player1.check_point = checkpoint_name
-    game_data.save_game(player1.get_data())  # Sends player1 info to save file
-    if player1.health <= 0:  # shouldn't really get to this point --> TODO
-        print_red('Sorry you have no more health! You have lost the game!\n', 1)
-        return  # restart()
-    if checkpoint_name != '':  # remove checkpoint printing for ending + difficulty selected
-        merchant()
-        print_green('A checkpoint has been reached...\n', .5)
-        print_green(f'Health: {player1.health}\n', 1)
-        print_green(f'Balance: {player1.balance}\n', 1)
+# helper function for player choices - handling errors and what paths to take next
+def _player_choice(choices, choice_options: list, audio_opt=0, user_input=' ') -> str:
+    while user_input.lower() not in choices:
+        user_input = str(input('\n'.join(choice_options)))
+        print_s('', 1)
+        if user_input.lower() not in choices:
+            error_message(choices, audio_opt)
+        else:
+            return user_input.lower()
 
-        choices = ['y', 'yes', 'n', 'no']
-        choice_options = ['Would you like to exit the game (yes / no): ']
-        exit_choice = _player_choice(choices, choice_options)
-        if exit_choice in ['y', 'yes']:  # ask player if they would like to quit ~ returns to menu
-            player1.check_point = f'{checkpoint_name}exit'
+
+# MENUS
+
+def view_stats():
+    """Prints the users current in game stats based upon a load file. Usage in Options"""
+    player1.load_data(game_data.load_game())
+    print_green('Your current in game stats will now be displayed below!\n', 1)
+    print(f'Your health is {player1.health}\n')
+    print_s(f'Your balance is ${player1.balance}\n', 2)
 
 
 def open_github(print_text, website_append=''):
@@ -538,16 +572,16 @@ def donation_opener(website):
 
 def options(choice=''):
     """UI for the user to view additional info or extra parts of this project"""
+    choice_options = ['(1) View Stats',
+                      '(2) Audio Options',
+                      '(3) Project Releases',
+                      '(4) Credits',
+                      '(5) Donate',
+                      '(6) Main Menu',
+                      '(7) Exit\n',
+                      'Which choice would you like to pick:  '
+                      ]
     while choice != '6' or choice != '7':
-        choice_options = ['(1) View Stats',
-                          '(2) Audio Options',
-                          '(3) Project Releases',
-                          '(4) Credits',
-                          '(5) Donate',
-                          '(6) Main Menu',
-                          '(7) Exit\n',
-                          'Which choice would you like to pick:  '
-                          ]
         choice = _player_choice([str(x) for x in range(1, 8)], choice_options)
 
         if choice == '1':
@@ -573,8 +607,8 @@ def game_menu():
                       '(4) Exit\n',
                       'Selection: ',
                       ]
-    choice_dict = {'1': [game_intro_description, game, go_to_checkpoint],
-                   '2': [load_or_save_data, game_intro_description, game, go_to_checkpoint],
+    choice_dict = {'1': [game_intro, game, go_to_checkpoint],
+                   '2': [load_or_save_data, game_intro, go_to_checkpoint],
                    '3': [options],
                    '4': [exit],
                    'unlock_all_cheat': [unlock_all_cheat, game]
@@ -585,46 +619,19 @@ def game_menu():
             item()
 
 
-# helper function for player choices - handling errors and what paths to take next
-def _player_choice(choices, choice_options: list, user_input=' ') -> str:
-    while user_input.lower() not in choices:
-        user_input = str(input('\n'.join(choice_options)))
-        print_s('', 1)
-        if user_input.lower() not in choices:
-            error_message(choices)
-        else:
-            return user_input.lower()
-
-
-def audio_options(volume_level=''):  # TODO: fix error message (prints every # between 1-100)
+def audio_options():
     choice_options = ['What would you like to set your volume level to (0 - 100) or exit: ']
     choices = [str(x) for x in range(101)]
     exit_choices = ['e', 'exit', 'c', 'close']
     choices.extend(exit_choices)
-    while volume_level != 'exit':
-        choice = _player_choice(choices, choice_options)
+    while True:
+        choice = _player_choice(choices, choice_options, len(exit_choices))
         if choice in exit_choices:
             break
         volume_level = int(choice) / 100
         sounds.set_volume(volume_level)
         sounds.zombie_attack_outside()
-        print_s(f'Your current volume level is set at {sounds.volume_level}\n', 1)
-
-
-def go_to_checkpoint():  # main program running movement to levels -- checkpoint when leaving area
-    checkpoints = {'1': outside_area,
-                   '2': diner_area,
-                   '3': gas_station,
-                   '4': parkview_area,
-                   '5': broken_roads_area,
-                   '6': good_ending,
-                   '7': bad_ending,
-                   }
-    while 'exit' not in player1.check_point:
-        if 'bad' in player1.check_point:
-            checkpoints['7']()
-        else:
-            checkpoints[player1.check_point]()
+        print_s(f'Your current volume level is set at {choice}%\n', 1)
 
 
 if __name__ == '__main__':
