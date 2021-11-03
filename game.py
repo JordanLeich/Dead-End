@@ -26,6 +26,7 @@ def load_or_save_data():
 
 
 def game_intro_description():
+    difficulty()
     sounds.intro_sound()
     print_s('''This is a zombie survival game where you must make the best decisions possible in order to live.
 As a survivor, you will encounter zombies, weapons, people, and a merchant to buy from with an
@@ -65,23 +66,6 @@ def unlock_all_cheat():
 
 
 def game():
-    if game_data.file_exists:
-        sounds.difficulty_select_sound()
-        print_green('Difficulty screen skipped due to saved data already existing...\n', 1)
-        choice_options = ['Would you like to start a new game or continue with your saved data (new / continue): ']
-        choice = _player_choice(['n', 'new', 'c', 'continue'], choice_options)
-
-        if choice in ['n', 'new']:
-            player1.balance = 0
-            for k, v in player1.weapon_dict.items():
-                v[2] = False
-            difficulty()
-            checkpoint_save()
-        elif choice in ['c', 'continue']:
-            print_green('Continuing game...\n', 1)
-            go_to_checkpoint()
-    else:
-        difficulty()
 
     if player1.health <= 0:
         print_red('You currently have no health left...\n', 1)
@@ -441,6 +425,28 @@ def _difficulty_set_health():
 
 
 def difficulty():
+    if player1.difficulty.value != -1:
+    # if game_data.file_exists:
+        sounds.difficulty_select_sound()
+        print_green(f'Current difficulty is {player1.difficulty.name}\n')
+        print_green('Difficulty selection was skipped due to saved data already existing...\n', 1)
+        choice_options = ['Would you like to start a new game or continue with your saved data (new / continue): ']
+        choice = _player_choice(['n', 'new', 'c', 'continue'], choice_options)
+
+        if choice in ['n', 'new']:
+            player1.balance = 0
+            for k, v in player1.weapon_dict.items():
+                v[2] = False
+            difficulty_select()
+            checkpoint_save()
+        elif choice in ['c', 'continue']:
+            print_green('Continuing game...\n', 1)
+            go_to_checkpoint()
+    else:
+        difficulty_select()
+
+def difficulty_select():
+    print_green('Pleas select a difficulty level\n')
     print_green('(1) Easy\n')
     print_yellow('(2) Medium\n')
     print_red('(3) Hardcore\n')

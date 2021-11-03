@@ -9,7 +9,7 @@ This class is to setup the player with all variables needed through out the game
 If more variables are needed. they can be added here.
     """
 
-    def __init__(self, balance=0, health=0, difficulty=2, knife=False, ak47=False, pistol=False, bat=False,
+    def __init__(self, balance=0, health=0, difficulty=-1, knife=False, ak47=False, pistol=False, bat=False,
                  rpg=False, barrett=False, spell=False, apple=False, armor=False):
         # user attributes
         self.balance = balance
@@ -67,9 +67,12 @@ If more variables are needed. they can be added here.
     def consume(self, index):
         return self.get_health(self.consumables[index][-2], self.consumables[index][-1])
 
+    def set_difficulty(self, difficulty):
+        self.difficulty = Difficulty(difficulty)
 
 # Difficulty labeling - easier for referencing + printing
 class Difficulty(Enum):
+    Notset = -1
     God = 0
     Easy = 1
     Medium = 2
