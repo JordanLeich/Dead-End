@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 # Created on 5/11/2021
-import sys
 from sys import exit
 import webbrowser
 from time import sleep
@@ -16,7 +15,10 @@ game_data = GameData()  # load/save functions Instance
 sounds = GameSounds()  # audio that will be played Instance
 
 # constants:
-EXIT_MERCHANT_MENU = str(len(player1.weapon_dict))
+ITEM_NUMBER = len(player1.weapon_dict)
+CONSUMABLE_NUMBER = len(player1.consumables)
+TOTAL_ITEMS = ITEM_NUMBER + CONSUMABLE_NUMBER
+EXIT_MERCHANT_MENU = str(TOTAL_ITEMS)
 
 
 def load_or_save_data():
@@ -133,19 +135,30 @@ def merchant():
     if choice in ['b', 'buy', 'y', 'yes']:
         buy_item = ''
         weapon_choices = [f"({k}) {v[0]} ({v[1]} Dollars)" for k, v in player1.weapon_dict.items() if k != '0']
+        consumables = [f"({c+ITEM_NUMBER}) {v[0]} ({v[1]} Dollars)" for c, v in enumerate(player1.consumables)]
         while buy_item != EXIT_MERCHANT_MENU:
             print_green(f'Health: {player1.health}\n', 1)
             print_green(f'Balance: {player1.balance}\n', 1)
             choice_options = ['--- Merchants inventory ---']
             choice_options.extend(weapon_choices)
+            choice_options.extend(consumables)
             choice_options.extend([f'({EXIT_MERCHANT_MENU}) Exit The Merchant Shop\n',
                                    'What would you like to buy: ',
                                    ])
-            buy_item = _player_choice([str(x) for x in range(1, 10)], choice_options)
+            buy_item = _player_choice([str(x) for x in range(1, TOTAL_ITEMS + 1)], choice_options)
 
             if buy_item == EXIT_MERCHANT_MENU:
                 print_s('The merchant bids you a farewell and good luck!\n', 1)
                 break
+            elif int(buy_item) => ITEM_NUMBER: # consumables
+                consumable_index = int(buy_item) - ITEM_NUMBER
+                if player1.balance > player1.consumables[consumable_index][1]:
+                    player1.balance -= player1.consumables[consumable_index][1]
+                    print_green(
+                        f'You have used the {player1.consumables[consumable_index][0]}, giving you a bonus of {player1.consume(consumable_index)} health.\n',
+                        2)
+                else:
+                    print_yellow('Sorry not enough available funds to purchase that item')
             elif player1.weapon_dict[buy_item][2]:
                 sounds.bad_luck()
                 print_yellow(f'{player1.weapon_dict[buy_item][0]} has already been purchased!\n', 1)
@@ -158,18 +171,8 @@ def merchant():
                     print_green(
                         'As the Merchant hands you his own crafted spell, he tells you that you now wield true pain to foes whilst providing restoration to thine self.\n',
                         2.5)
-                elif buy_item == '7':
-                    apple_health = randint(5, 15)
-                    player1.health += apple_health
-                    print_green(
-                        f'You have ate the apple, giving you a bonus of {apple_health} health.\n',
-                        2)
-                elif buy_item == '8':
-                    body_armor_health = randint(40, 60)
-                    player1.health += body_armor_health
-                    print_green(
-                        f'You have equipped the body armor, giving you a bonus of {body_armor_health} health.\n',
-                        2)
+            else: 
+                print_yellow('Sorry not enough available funds to purchase that item')
     elif choice in ['s', 'skip', 'n', 'no']:
         print_s('The merchant has been skipped but can be brought back later...\n', 1)
 
@@ -509,9 +512,8 @@ def checkpoint_save(checkpoint_name=''):
         choices = ['y', 'yes', 'n', 'no']
         choice_options = ['Would you like to exit the game (yes / no): ']
         exit_choice = _player_choice(choices, choice_options)
-        if exit_choice in ['y', 'yes']:  # ask player if they would like to quit
+        if exit_choice in ['y', 'yes']:  # ask player if they would like to quit ~ returns to menu
             player1.check_point = f'{checkpoint_name}exit'
-            sys.exit()
 
 
 def open_github(print_text, website_append=''):
@@ -588,11 +590,18 @@ def _player_choice(choices, choice_options: list, user_input=' ') -> str:
             return user_input.lower()
 
 
-def audio_options():  # while loop + play some audio for player to check volume --> TODO
-    choice_options = ['What would you like to set your volume level to (0 - 100): ']
-    volume_level = int(_player_choice([str(x) for x in range(101)], choice_options)) / 100
-    sounds.set_volume(volume_level)
-    print_s(f'Your current volume level is set at {sounds.volume_level}\n', 1)
+def audio_options(volume_level=''):  # TODO: fix error message (prints every # between 1-100)
+    choice_options = ['What would you like to set your volume level to (0 - 100) or exit: ']
+    choices = [str(x) for x in range(101)]
+    exit_choices = ['e', 'exit', 'c', 'close']
+    choices.extend(exit_choices)
+    while volume_level != 'exit':
+        volume_level = int(_player_choice(choices, choice_options)) / 100
+        if volume_level in exit_choices:
+            break
+        sounds.set_volume(volume_level)
+        sounds.zombie_attack_outside()
+        print_s(f'Your current volume level is set at {sounds.volume_level}\n', 1)
 
 
 def go_to_checkpoint():  # main program running movement to levels -- checkpoint when leaving area
