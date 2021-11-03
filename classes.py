@@ -24,10 +24,11 @@ If more variables are needed. they can be added here.
             '4': ['1999 Semi-automatic Barrett Sniper Rifle', 60, barrett, 3, 10],
             '5': ['Rocket Missile Launcher', 100, rpg, 0, 0],
             '6': ['The Merchants Strange Spell', 125, spell, -30, -10],
-            '7': ['Apple', 10, apple, 200, 500],
-            # If the player chooses a food item during an attack sequence, they will lose all their health and die.
-            '8': ['Body Armor', 50, armor, 200, 500],
         }
+        self.consumables = [  # only usable during purchase
+            ['Apple', 10, apple, 5, 15],
+            ['Body Armor', 50, armor, 40, 60],
+        ]
         self.check_point = ''
 
     def get_data(self):
@@ -62,6 +63,9 @@ If more variables are needed. they can be added here.
 
     def use_item(self, key):
         return self.lose_health(self.weapon_dict[key][-2], self.weapon_dict[key][-1])
+
+    def consume(self, index):
+        return self.get_health(self.consumables[index][-2], self.consumables[index][-1])
 
 
 # Difficulty labeling - easier for referencing + printing
