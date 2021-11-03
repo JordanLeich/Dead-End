@@ -135,7 +135,7 @@ def merchant():
     if choice in ['b', 'buy', 'y', 'yes']:
         buy_item = ''
         weapon_choices = [f"({k}) {v[0]} ({v[1]} Dollars)" for k, v in player1.weapon_dict.items() if k != '0']
-        consumables = [f"({c+ITEM_NUMBER}) {v[0]} ({v[1]} Dollars)" for c, v in enumerate(player1.consumables)]
+        consumables = [f"({c + ITEM_NUMBER}) {v[0]} ({v[1]} Dollars)" for c, v in enumerate(player1.consumables)]
         while buy_item != EXIT_MERCHANT_MENU:
             print_green(f'Health: {player1.health}\n', 1)
             print_green(f'Balance: {player1.balance}\n', 1)
@@ -150,7 +150,7 @@ def merchant():
             if buy_item == EXIT_MERCHANT_MENU:
                 print_s('The merchant bids you a farewell and good luck!\n', 1)
                 break
-            elif int(buy_item) => ITEM_NUMBER: # consumables
+            elif int(buy_item) >= ITEM_NUMBER:  # consumables
                 consumable_index = int(buy_item) - ITEM_NUMBER
                 if player1.balance > player1.consumables[consumable_index][1]:
                     player1.balance -= player1.consumables[consumable_index][1]
@@ -171,7 +171,7 @@ def merchant():
                     print_green(
                         'As the Merchant hands you his own crafted spell, he tells you that you now wield true pain to foes whilst providing restoration to thine self.\n',
                         2.5)
-            else: 
+            else:
                 print_yellow('Sorry not enough available funds to purchase that item')
     elif choice in ['s', 'skip', 'n', 'no']:
         print_s('The merchant has been skipped but can be brought back later...\n', 1)
