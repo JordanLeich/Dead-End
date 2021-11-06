@@ -26,8 +26,8 @@ If more variables are needed. they can be added here.
             '6': ['The Merchants Strange Spell', 125, spell, -30, -10],
         }
         self.consumables = [  # only usable during purchase
-            ['Apple', 10, apple, 5, 15],
-            ['Body Armor', 50, armor, 40, 60],
+            ['Apple', 10, apple, 5, 15, 0],
+            ['Body Armor', 50, armor, 40, 60, 0],
         ]
         self.check_point = ''
 
@@ -44,6 +44,7 @@ If more variables are needed. they can be added here.
         self.health = user_data['health']
         self.difficulty = Difficulty(int(user_data['difficulty']))
         self.weapon_dict = user_data['weapon_dict']
+        self.consumables = user_data['consumables']
         self.check_point = user_data['check_point']
 
     def get_money(self, start_int=5, end_int=30):

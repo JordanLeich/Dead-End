@@ -9,6 +9,7 @@ from other.colors import print_green, print_yellow, print_red, print_s, print_he
 from classes import Player, Difficulty
 from gamedata import GameData
 from other.sounds_effects import GameSounds
+from prettytable import PrettyTable
 
 player1 = Player()  # Player Instance
 game_data = GameData()  # load/save functions Instance
@@ -42,6 +43,9 @@ def unlock_all_cheat():
     player1.difficulty = Difficulty(0)
     for k, v in player1.weapon_dict.items():
         v[2] = True
+    for z in player1.consumables:
+        z[2] = True
+        z[5] = 999999
     print_green('Unlock all cheats have been activated!\n', 2)
     checkpoint_save()
 
@@ -438,7 +442,7 @@ def merchant():
 
     if choice in ['b', 'buy', 'y', 'yes']:
         buy_item = ''
-        weapon_choices = [f"({k}) {v[0]} ({v[1]} Dollars)" for k, v in player1.weapon_dict.items() if k != '0']
+        weapon_choices = [f"({k}) {v[0]} ({v[1]} Dollars)" for k, v in player1.weapon_dict.items() if k != '0' and not v[2]]
         consumables = [f"({c + ITEM_NUMBER}) {v[0]} ({v[1]} Dollars)" for c, v in enumerate(player1.consumables)]
         choice_options = ['--- Merchants inventory ---']
         choice_options.extend(weapon_choices)
@@ -550,11 +554,30 @@ def _player_choice(choices, choice_options: list, audio_opt=0, user_input=' ') -
 
 def view_stats():
     """Prints the users current in game stats based upon a load file. Usage in Options"""
+    temp_info = player1.get_data()
     player1.load_data(game_data.load_game())
     print_green('Your current in game stats will now be displayed below!\n', 1)
-    print(f'Your health is {player1.health}\n')
-    print_s(f'Your balance is ${player1.balance}\n', 2)
+    print('')
 
+    myTable1 = PrettyTable(['Personal', 'Amount'])
+    myTable1.add_row(['Health', player1.health])
+    myTable1.add_row(['Balance', player1.balance])
+    print(myTable1)
+    myTable2 = PrettyTable(['Weapons Owned'])
+    for k, v in player1.weapon_dict.items():
+        if v[2]:
+            myTable2.add_row([v[0]])
+    print(myTable2)
+    myTable3 = PrettyTable(['Consumables', 'qty'])
+    for z in player1.consumables:
+        if z[2]:
+            if len(z) < 6:
+                myTable3.add_row([z[0], '0'])
+            else:
+                myTable3.add_row([z[0], z[5]])
+    print(myTable3)
+    print('')
+    player1.load_data(temp_info)
 
 def open_github(print_text, website_append=''):
     """Open github in the users default web browser"""
