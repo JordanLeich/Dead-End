@@ -71,6 +71,7 @@ If more variables are needed. they can be added here.
     def set_difficulty(self, difficulty):
         self.difficulty = Difficulty(difficulty)
 
+
 # Difficulty labeling - easier for referencing + printing
 class Difficulty(Enum):
     Notset = -1

@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 # Created on 5/11/2021
+import sys
 from sys import exit
 import webbrowser
 from time import sleep
@@ -20,6 +21,7 @@ ITEM_NUMBER = len(player1.weapon_dict)
 CONSUMABLE_NUMBER = len(player1.consumables)
 TOTAL_ITEMS = ITEM_NUMBER + CONSUMABLE_NUMBER
 EXIT_MERCHANT_MENU = str(TOTAL_ITEMS)
+
 
 # GAME SETUP, PROCESS, AND RESET HANDLERS
 
@@ -70,7 +72,7 @@ def _difficulty_set_health():
 
 def difficulty():
     if player1.difficulty.value != -1:
-    # if game_data.file_exists:
+        # if game_data.file_exists:
         sounds.difficulty_select_sound()
         print_green(f'Current difficulty is {player1.difficulty.name}\n')
         print_green('Difficulty selection was skipped due to saved data already existing...\n', 1)
@@ -124,7 +126,7 @@ def restart():
         go_to_checkpoint()
     elif restart_choice in ['n', 'no']:
         print_s('Ending game...', 1)
-        exit()
+        sys.exit()
 
 
 def checkpoint_save(checkpoint_name=''):
@@ -168,6 +170,9 @@ def game():
     if player1.health <= 0:
         print_red('You currently have no health left...\n', 1)
         player1.check_point = f'{player1.check_point}bad'
+    elif player1.health >= 500:
+        print_green(
+            'Rare Achievement Unlocked! Unstoppable Juggernaut - You have obtained a total of 500 Health or more!\n', 2)
 
     print('You have ended up in a small local town called Hinesville. This old town contains a population of about\n'
           'only 6000 people and holds only a Gas Station, Diner, and a Park. The current year is 1999 and you\n'
@@ -183,7 +188,8 @@ def game():
         print('You have decided to look around your apartment and decide to grab a concealed knife that you legally\n'
               'are allowed to carry in public areas just in case anything happens...\n')
         sleep(1)
-        player1.weapon_dict['0'][2] = True  # no other way to find 
+        player1.weapon_dict['0'][2] = True  # no other way to find
+        print_green('Common Achievement Found! Slice & Dice - You found and obtained the apartment knife!\n', 2)
     elif choice == '2':
         sleep(1)
     elif choice == '3':
@@ -323,6 +329,8 @@ def diner_area():
               'familiar face...')
         print('You see the face of the man you met earlier at the local Gas Station taking a group family picture!\n')
         sleep(3)
+        print_green(
+            'Uncommon Achievement Unlocked! Family Memories - You found a family picture of a man you met prior!\n', 2)
         sounds.horror_sound_effects()
         print('Since you are finished exploring and searching the diner area, you proceed on your path to the '
               'parkview area...\n')
@@ -400,13 +408,29 @@ def parkview_area():
 
 
 def good_ending():
+    """
+Used for when the player successfully reaches the end of the game without dying.
+    """
     sounds.good_luck()
     print_green('Congratulations, you have survived and reached the end of the horrors...\n', 1)
     print_green(f'You survived with a total of {player1.health} health left!\n', 1)
+
+    if player1.difficulty == 1:
+        sounds.good_luck()
+        print_green('Common Achievement Unlocked! Survivor - Beat the game on Easy Mode.\n', 2.5)
+    elif player1.difficulty == 2:
+        sounds.good_luck()
+        print_green('Uncommon Achievement Unlocked! Battle Hardened - Beat the game on Medium Mode.\n', 2.5)
+    elif player1.difficulty == 3:
+        sounds.good_luck()
+        print_green('Rare Achievement Unlocked! Ruthless Maniac - Beat the game on Hard Mode.\n', 2.5)
     restart()
 
 
 def bad_ending():
+    """
+Used for when the player dies at any point.
+    """
     sounds.bad_ending()
     print_red('You have died and not reached the end of the horrors...\n', 1)
     restart()
@@ -415,14 +439,15 @@ def bad_ending():
 def continue_message():
     """Only for development purposes and has no impact on the game"""
     print_s('Continue here...', 3)
-    exit()
+    sys.exit()
 
 
 # PLAYER ACTIONS --> TODO move to player class
 
 def merchant():
-    """Merchant randomly shows up, allowing the player to purchase weapons."""
-
+    """
+Merchant randomly shows up, allowing the player to purchase weapons and consumables.
+    """
     if player1.health <= 0:  # end game if no health
         print_red('You currently have no health left...\n', 1)
         player1.check_point = f'{player1.check_point}bad'
@@ -442,7 +467,8 @@ def merchant():
 
     if choice in ['b', 'buy', 'y', 'yes']:
         buy_item = ''
-        weapon_choices = [f"({k}) {v[0]} ({v[1]} Dollars)" for k, v in player1.weapon_dict.items() if k != '0' and not v[2]]
+        weapon_choices = [f"({k}) {v[0]} ({v[1]} Dollars)" for k, v in player1.weapon_dict.items() if
+                          k != '0' and not v[2]]
         consumables = [f"({c + ITEM_NUMBER}) {v[0]} ({v[1]} Dollars)" for c, v in enumerate(player1.consumables)]
         choice_options = ['--- Merchants inventory ---']
         choice_options.extend(weapon_choices)
@@ -477,10 +503,12 @@ def merchant():
                 print_green(f'{player1.weapon_dict[buy_item][0]} has been purchased!\n', 1)
                 if buy_item == '6':
                     print_green(
+                        'Rare Achievement Unlocked! Wicked Happenings - You purchased the merchants secret spell!\n', 2)
+                    print_green(
                         'As the Merchant hands you his own crafted spell, he tells you that you now wield true pain to foes whilst providing restoration to thine self.\n',
                         2.5)
             else:
-                print_yellow('Sorry not enough available funds to purchase that item')
+                print_yellow('Sorry, not enough available funds to purchase that item!\n', 2)
     elif choice in ['s', 'skip', 'n', 'no']:
         print_s('The merchant has been skipped but can be brought back later...\n', 1)
 
@@ -579,6 +607,7 @@ def view_stats():
     print('')
     player1.load_data(temp_info)
 
+
 def open_github(print_text, website_append=''):
     """Open github in the users default web browser"""
     print_green(print_text)
@@ -593,34 +622,56 @@ def donation_opener(website):
     sleep(2)
 
 
+def achievements_list():
+    print('''All Common Achievements
+1. Slice & Dice - Find a hidden knife.
+2. Survivor - Beat the game on Easy Mode.
+
+All Uncommon Achievements
+1. Family Memories - You found a family picture of a man you met prior.
+2. Battle Hardened - Beat the game on Medium Mode.
+
+All Rare Achievements
+1. Unstoppable Juggernaut - You have obtained a total of 500 Health or more.
+2. Ruthless Maniac - Beat the game on Hard Mode.
+3. Wicked Happenings - You purchased the merchants secret spell.
+
+Ultra Rare Achievement
+1. Perfection Indeed - Obtain all achievements.\n''')
+    sleep(5)
+
+
 def options(choice=''):
     """UI for the user to view additional info or extra parts of this project"""
     choice_options = ['(1) View Stats',
                       '(2) Audio Options',
-                      '(3) Project Releases',
-                      '(4) Credits',
-                      '(5) Donate',
-                      '(6) Main Menu',
-                      '(7) Exit\n',
+                      '(3) Achievements List',
+                      '(4) Project Releases',
+                      '(5) Credits',
+                      '(6) Donate',
+                      '(7) Main Menu',
+                      '(8) Exit\n',
                       'Which choice would you like to pick:  '
                       ]
-    while choice != '6' or choice != '7':
-        choice = _player_choice([str(x) for x in range(1, 8)], choice_options)
+    while choice != '7' or choice != '8':
+        choice = _player_choice([str(x) for x in range(1, 9)], choice_options)
 
         if choice == '1':
             view_stats()
         elif choice == '2':
             audio_options()
         elif choice == '3':
-            open_github("Opening the latest stable release...\n", "/releases")
+            achievements_list()
         elif choice == '4':
-            open_github("Opening all contributors of this project...\n", "/graphs/contributors")
+            open_github("Opening the latest stable release...\n", "/releases")
         elif choice == '5':
-            donation_opener("https://www.paypal.com/donate/?business=8FGHU8Z4EJPME&no_recurring=0&currency_code=USD")
+            open_github("Opening all contributors of this project...\n", "/graphs/contributors")
         elif choice == '6':
-            return
+            donation_opener("https://www.paypal.com/donate/?business=8FGHU8Z4EJPME&no_recurring=0&currency_code=USD")
         elif choice == '7':
-            exit()
+            return
+        elif choice == '8':
+            sys.exit()
 
 
 def game_menu():
