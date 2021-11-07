@@ -32,7 +32,7 @@ If more variables are needed. they can be added here.
         self.check_point = ''
         self.achievement_list = {
             ('1', 'Common'): {'name': 'Slice & Dice',
-                              'desc': 'Find a hidden knife.', 
+                              'desc': 'Find a hidden knife.',
                               'unlocked': False,
                               },
             ('2', 'Common'): {'name': 'Survivor',
@@ -40,31 +40,30 @@ If more variables are needed. they can be added here.
                               'unlocked': False,
                               },
             ('1', 'Uncommon'): {'name': 'Family Memories',
-                                'desc': 'You found a family picture of a man you met prior.', 
+                                'desc': 'You found a family picture of a man you met prior.',
                                 'unlocked': False,
                                 },
             ('2', 'Uncommon'): {'name': 'Battle Hardened',
-                                'desc': 'Beat the game on Medium Mode.', 
+                                'desc': 'Beat the game on Medium Mode.',
                                 'unlocked': False,
                                 },
             ('1', 'Rare'): {'name': 'Unstoppable Juggernaut',
-                            'desc': 'You have obtained a total of 500 Health or more.', 
+                            'desc': 'You have obtained a total of 500 Health or more.',
                             'unlocked': False,
                             },
             ('2', 'Rare'): {'name': 'Ruthless Maniac',
-                            'desc': 'Beat the game on Hard Mode.', 
+                            'desc': 'Beat the game on Hard Mode.',
                             'unlocked': False,
                             },
             ('3', 'Rare'): {'name': 'Wicked Happenings',
-                            'desc': 'You purchased the merchants secret spell.', 
+                            'desc': 'You purchased the merchants secret spell.',
                             'unlocked': False,
                             },
             ('1', 'Ultra Rare'): {'name': 'Perfection Indeed',
-                                  'desc': 'Obtain all achievements.', 
+                                  'desc': 'Obtain all achievements.',
                                   'unlocked': False,
                                   },
         }
-
 
     def get_data(self) -> dict:
         value_dict = deepcopy(vars(self))
@@ -111,13 +110,13 @@ If more variables are needed. they can be added here.
         self.balance = balance
         self.health = health
         for k, v in self.weapon_dict.items():
-                v[2] = default_value
+            v[2] = default_value
         for v in self.consumables:
             v[2] = default_value
 
     def print_achievement(self, achievement: tuple) -> str:
         item = self.achievement_list(achievement)
-        if item['unlocked']: # achievement already unlocked
+        if item['unlocked']:  # achievement already unlocked
             return
         item['unlocked'] = True
         return f'{achievement[1]} Achievement Unlocked! {item["name"]} - {item["des"]}\n'

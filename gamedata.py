@@ -7,7 +7,6 @@ class GameData:
     """
 This class will offer loading and saving of game data for Zombie-Survival-Game.
     """
-
     def __init__(self):
         self.file = 'data.json'
         self.file_exists = bool(file_exists(self.file))
@@ -24,7 +23,7 @@ This class will offer loading and saving of game data for Zombie-Survival-Game.
 
     def save_game(self, player_data: dict):
         if not self.file_exists:
-            print_yellow("No previous save! Creating new save...\n")
+            print_yellow("No previous save! Creating a new save...\n")
 
         with open(self.file, 'w') as user_data_file:
             json.dump(player_data, user_data_file)
