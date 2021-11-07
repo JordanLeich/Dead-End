@@ -115,12 +115,11 @@ If more variables are needed. they can be added here.
             v[2] = default_value
 
     def print_achievement(self, achievement: tuple) -> str:
-        item = self.achievement_list(achievement)
+        item = self.achievement_list(achievement)  # TODO Fix dict object not callable error
         if item['unlocked']:  # achievement already unlocked
             return
         item['unlocked'] = True
         return f'{achievement[1]} Achievement Unlocked! {item["name"]} - {item["des"]}\n'
-
 
 
 # Difficulty labeling - easier for referencing + printing

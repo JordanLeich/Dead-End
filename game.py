@@ -649,7 +649,7 @@ def audio_options():
     choices = [str(x) for x in range(101)]
     choices.extend(['e', 'exit', 'c', 'close'])
     while True:
-        choice = _player_choice(choices, choice_options, len(exit_choices))  # TODO Fix unresolved references
+        choice = _player_choice(choices, choice_options, len(exit_choices))  # TODO Fix unresolved references error
         if choice in exit_choices:
             break
         volume_level = int(choice) / 100
