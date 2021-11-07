@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 # Created on 5/11/2021
-import sys
 from sys import exit
 import webbrowser
 from time import sleep
@@ -15,13 +14,6 @@ from prettytable import PrettyTable
 player1 = Player()  # Player Instance
 game_data = GameData()  # load/save functions Instance
 sounds = GameSounds()  # audio that will be played Instance
-
-# constants:
-ITEM_NUMBER = len(player1.weapon_dict)
-CONSUMABLE_NUMBER = len(player1.consumables)
-TOTAL_ITEMS = ITEM_NUMBER + CONSUMABLE_NUMBER
-EXIT_MERCHANT_MENU = str(TOTAL_ITEMS)
-
 
 # GAME SETUP, PROCESS, AND RESET HANDLERS
 
@@ -40,15 +32,9 @@ lead you to death.\n''', 2.5)
 
 def unlock_all_cheat():
     sounds.good_luck()
-    player1.health = 999999
-    player1.balance = 999999
+    player1.reset_values(999999, 999999, True)
     player1.difficulty = Difficulty(0)
-    for k, v in player1.weapon_dict.items():
-        v[2] = True
-    for z in player1.consumables:
-        z[2] = True
-        z[5] = 999999
-    print_green('Unlock all cheats have been activated!\n', 2)
+    print_green('All cheats have been activated!\n', 2)
     checkpoint_save()
 
 
@@ -72,7 +58,6 @@ def _difficulty_set_health():
 
 def difficulty():
     if player1.difficulty.value != -1:
-        # if game_data.file_exists:
         sounds.difficulty_select_sound()
         print_green(f'Current difficulty is {player1.difficulty.name}\n')
         print_green('Difficulty selection was skipped due to saved data already existing...\n', 1)
@@ -80,9 +65,7 @@ def difficulty():
         choice = _player_choice(['n', 'new', 'c', 'continue'], choice_options)
 
         if choice in ['n', 'new']:
-            player1.balance = 0
-            for k, v in player1.weapon_dict.items():
-                v[2] = False
+            player1.reset_values(0, 100, False)
             difficulty_select()
             checkpoint_save()
         elif choice in ['c', 'continue']:
@@ -115,9 +98,7 @@ def restart():
     restart_choice = _player_choice(choices, choice_options)
 
     if restart_choice in ['y', 'yes']:
-        player1.balance = 0
-        for k, v in player1.weapon_dict.items():
-            v[2] = False
+        player1.reset_values(0, 100, False)
         sounds.set_volume(0.05)
         print_green('Default stats have been loaded/saved and a new game will begin...\n', 1)
         player1.check_point = player1.check_point.replace('bad', '')  # load game from last checkpoint
@@ -126,7 +107,7 @@ def restart():
         go_to_checkpoint()
     elif restart_choice in ['n', 'no']:
         print_s('Ending game...', 1)
-        sys.exit()
+        exit()
 
 
 def checkpoint_save(checkpoint_name=''):
@@ -171,8 +152,7 @@ def game():
         print_red('You currently have no health left...\n', 1)
         player1.check_point = f'{player1.check_point}bad'
     elif player1.health >= 500:
-        print_green(
-            'Rare Achievement Unlocked! Unstoppable Juggernaut - You have obtained a total of 500 Health or more!\n', 2)
+        print_green(player1.print_achievement(('1', 'Rare')), 2)
 
     print('You have ended up in a small local town called Hinesville. This old town contains a population of about\n'
           'only 6000 people and holds only a Gas Station, Diner, and a Park. The current year is 1999 and you\n'
@@ -189,7 +169,7 @@ def game():
               'are allowed to carry in public areas just in case anything happens...\n')
         sleep(1)
         player1.weapon_dict['0'][2] = True  # no other way to find
-        print_green('Common Achievement Found! Slice & Dice - You found and obtained the apartment knife!\n', 2)
+        print_green(player1.print_achievement(('1', 'Common')), 2)
     elif choice == '2':
         sleep(1)
     elif choice == '3':
@@ -329,8 +309,7 @@ def diner_area():
               'familiar face...')
         print('You see the face of the man you met earlier at the local Gas Station taking a group family picture!\n')
         sleep(3)
-        print_green(
-            'Uncommon Achievement Unlocked! Family Memories - You found a family picture of a man you met prior!\n', 2)
+        print_green(player1.print_achievement(('1', 'Uncommon')), 2)
         sounds.horror_sound_effects()
         print('Since you are finished exploring and searching the diner area, you proceed on your path to the '
               'parkview area...\n')
@@ -415,22 +394,18 @@ Used for when the player successfully reaches the end of the game without dying.
     print_green('Congratulations, you have survived and reached the end of the horrors...\n', 1)
     print_green(f'You survived with a total of {player1.health} health left!\n', 1)
 
-    if player1.difficulty == 1:
-        sounds.good_luck()
-        print_green('Common Achievement Unlocked! Survivor - Beat the game on Easy Mode.\n', 2.5)
-    elif player1.difficulty == 2:
-        sounds.good_luck()
-        print_green('Uncommon Achievement Unlocked! Battle Hardened - Beat the game on Medium Mode.\n', 2.5)
-    elif player1.difficulty == 3:
-        sounds.good_luck()
-        print_green('Rare Achievement Unlocked! Ruthless Maniac - Beat the game on Hard Mode.\n', 2.5)
+    if player1.difficulty == Difficulty(1):
+        print_green(player1.print_achievement(('2', 'Common')), 2)
+    elif player1.difficulty == Difficulty(2):
+        print_green(player1.print_achievement(('2', 'Uncommon')), 2)
+    elif player1.difficulty == Difficulty(3):
+        print_green(player1.print_achievement(('2', 'Rare')), 2)
+    sounds.good_luck()
     restart()
 
 
 def bad_ending():
-    """
-Used for when the player dies at any point.
-    """
+    """When the player dies at any point."""
     sounds.bad_ending()
     print_red('You have died and not reached the end of the horrors...\n', 1)
     restart()
@@ -439,7 +414,7 @@ Used for when the player dies at any point.
 def continue_message():
     """Only for development purposes and has no impact on the game"""
     print_s('Continue here...', 3)
-    sys.exit()
+    exit()
 
 
 # PLAYER ACTIONS --> TODO move to player class
@@ -467,43 +442,40 @@ Merchant randomly shows up, allowing the player to purchase weapons and consumab
 
     if choice in ['b', 'buy', 'y', 'yes']:
         buy_item = ''
+        num_item = len(player1.weapon_dict)
+        total_items = num_item + len(player1.consumables)
+        exit_merchant_menu = str(total_items)
+
         weapon_choices = [f"({k}) {v[0]} ({v[1]} Dollars)" for k, v in player1.weapon_dict.items() if
                           k != '0' and not v[2]]
-        consumables = [f"({c + ITEM_NUMBER}) {v[0]} ({v[1]} Dollars)" for c, v in enumerate(player1.consumables)]
+        consumables = [f"({c + num_item}) {v[0]} ({v[1]} Dollars)" for c, v in enumerate(player1.consumables)]
         choice_options = ['--- Merchants inventory ---']
         choice_options.extend(weapon_choices)
         choice_options.extend(consumables)
-        choice_options.extend([f'({EXIT_MERCHANT_MENU}) Exit The Merchant Shop\n',
+        choice_options.extend([f'({exit_merchant_menu}) Exit The Merchant Shop\n',
                                'What would you like to buy: ',
                                ])
-        while buy_item != EXIT_MERCHANT_MENU:
+        while buy_item != exit_merchant_menu:
             print_green(f'Health: {player1.health}\n', 1)
             print_green(f'Balance: {player1.balance}\n', 1)
-            buy_item = _player_choice([str(x) for x in range(1, TOTAL_ITEMS + 1)], choice_options)
+            buy_item = _player_choice([str(x) for x in range(1, total_items + 1)], choice_options)
+            consumable_index = int(buy_item) - num_item
 
-            if buy_item == EXIT_MERCHANT_MENU:
+            if buy_item == exit_merchant_menu:
                 print_s('The merchant bids you a farewell and good luck!\n', 1)
                 break
-            elif int(buy_item) >= ITEM_NUMBER:  # consumables
-                consumable_index = int(buy_item) - ITEM_NUMBER
-                if player1.balance > player1.consumables[consumable_index][1]:
-                    player1.balance -= player1.consumables[consumable_index][1]
-                    print_green(
-                        f'You have used the {player1.consumables[consumable_index][0]}, giving you a bonus of {player1.consume(consumable_index)} health.\n',
-                        2)
-                else:
-                    print_yellow('Sorry not enough available funds to purchase that item')
-            elif player1.weapon_dict[buy_item][2]:
-                sounds.bad_luck()
-                print_yellow(f'{player1.weapon_dict[buy_item][0]} has already been purchased!\n', 1)
+            elif consumable_idx >= 0 and player1.balance > player1.consumables[consumable_idx][1]:
+                player1.balance -= player1.consumables[consumable_index][1]
+                print_green(
+                    f'You have used the {player1.consumables[consumable_index][0]}, giving you a bonus of {player1.consume(consumable_index)} health.\n',
+                    2)
             elif player1.balance >= player1.weapon_dict[buy_item][1]:
                 sounds.merchant_purchase_sound()
                 player1.balance -= player1.weapon_dict[buy_item][1]
                 player1.weapon_dict[buy_item][2] = True
                 print_green(f'{player1.weapon_dict[buy_item][0]} has been purchased!\n', 1)
                 if buy_item == '6':
-                    print_green(
-                        'Rare Achievement Unlocked! Wicked Happenings - You purchased the merchants secret spell!\n', 2)
+                    print_green(player1.print_achievement(('3', 'Rare')),2)
                     print_green(
                         'As the Merchant hands you his own crafted spell, he tells you that you now wield true pain to foes whilst providing restoration to thine self.\n',
                         2.5)
@@ -582,30 +554,19 @@ def _player_choice(choices, choice_options: list, audio_opt=0, user_input=' ') -
 
 def view_stats():
     """Prints the users current in game stats based upon a load file. Usage in Options"""
-    temp_info = player1.get_data()
     player1.load_data(game_data.load_game())
-    print_green('Your current in game stats will now be displayed below!\n', 1)
-    print('')
+    print_green('Your current in game stats will now be displayed below!\n\n', 1)
 
-    myTable1 = PrettyTable(['Personal', 'Amount'])
+    myTable1 = PrettyTable(['Stat', 'Amount'])
     myTable1.add_row(['Health', player1.health])
     myTable1.add_row(['Balance', player1.balance])
     print(myTable1)
-    myTable2 = PrettyTable(['Weapons Owned'])
-    for k, v in player1.weapon_dict.items():
-        if v[2]:
-            myTable2.add_row([v[0]])
-    print(myTable2)
-    myTable3 = PrettyTable(['Consumables', 'qty'])
-    for z in player1.consumables:
-        if z[2]:
-            if len(z) < 6:
-                myTable3.add_row([z[0], '0'])
-            else:
-                myTable3.add_row([z[0], z[5]])
-    print(myTable3)
-    print('')
-    player1.load_data(temp_info)
+    weapons_owned = PrettyTable(['Weapons Owned'])
+    weapons_owned.add_rows([[v[0]] for k, v in player1.weapon_dict.items() if v[2]])
+    print(weapons_owned)
+    myTable3 = PrettyTable(['Items Used'])
+    myTable3.add_rows([[v[0]] for k, v in player1.consumables if v[2]])
+    print(myTable3, '\n')
 
 
 def open_github(print_text, website_append=''):
@@ -622,22 +583,11 @@ def donation_opener(website):
     sleep(2)
 
 
-def achievements_list():
-    print('''All Common Achievements
-1. Slice & Dice - Find a hidden knife.
-2. Survivor - Beat the game on Easy Mode.
-
-All Uncommon Achievements
-1. Family Memories - You found a family picture of a man you met prior.
-2. Battle Hardened - Beat the game on Medium Mode.
-
-All Rare Achievements
-1. Unstoppable Juggernaut - You have obtained a total of 500 Health or more.
-2. Ruthless Maniac - Beat the game on Hard Mode.
-3. Wicked Happenings - You purchased the merchants secret spell.
-
-Ultra Rare Achievement
-1. Perfection Indeed - Obtain all achievements.\n''')
+def list_achievements():
+    for k, v in player1.achievement_list.items():
+        if k[0] == '1':
+            print(f'\nAll {k[1]} Achievements')
+        print(f'{k[0]}. {v["name"]} - {v["desc"]}')
     sleep(5)
 
 
@@ -661,7 +611,7 @@ def options(choice=''):
         elif choice == '2':
             audio_options()
         elif choice == '3':
-            achievements_list()
+            list_achievements()
         elif choice == '4':
             open_github("Opening the latest stable release...\n", "/releases")
         elif choice == '5':
@@ -671,7 +621,7 @@ def options(choice=''):
         elif choice == '7':
             return
         elif choice == '8':
-            sys.exit()
+            exit()
 
 
 def game_menu():
@@ -696,8 +646,7 @@ def game_menu():
 def audio_options():
     choice_options = ['What would you like to set your volume level to (0 - 100) or exit: ']
     choices = [str(x) for x in range(101)]
-    exit_choices = ['e', 'exit', 'c', 'close']
-    choices.extend(exit_choices)
+    choices.extend(['e', 'exit', 'c', 'close'])
     while True:
         choice = _player_choice(choices, choice_options, len(exit_choices))
         if choice in exit_choices:
