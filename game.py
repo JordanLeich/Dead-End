@@ -15,6 +15,7 @@ player1 = Player()  # Player Instance
 game_data = GameData()  # load/save functions Instance
 sounds = GameSounds()  # audio that will be played Instance
 
+
 # GAME SETUP, PROCESS, AND RESET HANDLERS
 
 def load_or_save_data():
@@ -464,7 +465,7 @@ Merchant randomly shows up, allowing the player to purchase weapons and consumab
             if buy_item == exit_merchant_menu:
                 print_s('The merchant bids you a farewell and good luck!\n', 1)
                 break
-            elif consumable_idx >= 0 and player1.balance > player1.consumables[consumable_idx][1]:
+            elif consumable_index >= 0 and player1.balance > player1.consumables[consumable_index][1]:
                 player1.balance -= player1.consumables[consumable_index][1]
                 print_green(
                     f'You have used the {player1.consumables[consumable_index][0]}, giving you a bonus of {player1.consume(consumable_index)} health.\n',
@@ -475,7 +476,7 @@ Merchant randomly shows up, allowing the player to purchase weapons and consumab
                 player1.weapon_dict[buy_item][2] = True
                 print_green(f'{player1.weapon_dict[buy_item][0]} has been purchased!\n', 1)
                 if buy_item == '6':
-                    print_green(player1.print_achievement(('3', 'Rare')),2)
+                    print_green(player1.print_achievement(('3', 'Rare')), 2)
                     print_green(
                         'As the Merchant hands you his own crafted spell, he tells you that you now wield true pain to foes whilst providing restoration to thine self.\n',
                         2.5)
@@ -648,7 +649,7 @@ def audio_options():
     choices = [str(x) for x in range(101)]
     choices.extend(['e', 'exit', 'c', 'close'])
     while True:
-        choice = _player_choice(choices, choice_options, len(exit_choices))
+        choice = _player_choice(choices, choice_options, len(exit_choices))  # TODO Fix unresolved references
         if choice in exit_choices:
             break
         volume_level = int(choice) / 100
