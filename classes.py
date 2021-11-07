@@ -81,6 +81,7 @@ If more variables are needed. they can be added here.
         self.weapon_dict = user_data['weapon_dict']
         self.consumables = user_data['consumables']
         self.check_point = user_data['check_point']
+        self.achievement_list = user_data['achievement_list']
 
     def get_money(self, start_int=5, end_int=30) -> int:
         random_money = randint(start_int, end_int)
@@ -120,6 +121,7 @@ If more variables are needed. they can be added here.
             return
         item['unlocked'] = True
         return f'{achievement[1]} Achievement Unlocked! {item["name"]} - {item["des"]}\n'
+
 
 
 # Difficulty labeling - easier for referencing + printing
