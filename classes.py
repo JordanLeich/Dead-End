@@ -68,10 +68,16 @@ If more variables are needed. they can be added here.
     def get_data(self) -> dict:
         value_dict = deepcopy(vars(self))
         value_dict['difficulty'] = self.difficulty.value
+        value_dict['achievement_list'] = {}
+        for k, v in self.achievement_list.items():
+            value_dict['achievement_list'][' '.join(k)] = v
         return value_dict
 
     def load_data(self, user_data=None) -> None:
         """This function will set player data from previous game"""
+        value_dict = deepcopy(vars(self))
+        value_dict['difficulty'] = self.difficulty.value
+        value_dict['achievement_list'] = {}
         if user_data is None:
             return
         self.balance = user_data['balance']
@@ -80,7 +86,8 @@ If more variables are needed. they can be added here.
         self.weapon_dict = user_data['weapon_dict']
         self.consumables = user_data['consumables']
         self.check_point = user_data['check_point']
-        self.achievement_list = user_data['achievement_list']
+        for k, v in value_dict['achievement_list'].items():
+            self.achievement_list[(k.split(' ', 1))] = v
 
     def get_money(self, start_int=5, end_int=30) -> int:
         random_money = randint(start_int, end_int)
