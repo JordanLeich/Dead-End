@@ -252,6 +252,7 @@ def good_ending():
     difficulty_achivevement = {Difficulty(1): ('2', 'Common'),
                                Difficulty(2): ('2', 'Uncommon'),
                                Difficulty(3): ('2', 'Rare'),
+                               Difficulty(0): ('0', 'Cheater'),
                                } # TODO add achievement for unlock_all_cheat
     print_green(player1.print_achievement(difficulty_achivevement[player1.difficulty]), 2)
     sounds.good_luck()

@@ -68,6 +68,10 @@ If more variables are needed. they can be added here.
                                   'desc': 'Obtain all achievements.',
                                   'unlocked': False,
                                   },
+            ('0', 'Cheater'): {'name': 'Cheater',
+                               'desc': 'Obtained all achievements the wrong way',
+                               'unlocked': False,
+                               }
         }
 
 
@@ -223,7 +227,7 @@ If more variables are needed. they can be added here.
 
         if key == '6':
             print_green(
-                f'You have used the Merchants Strange Spell and defeated the {enemy} without losing any health! Through the power of the Strange Spell, you gain {self.get_health(10, 30)} health through its restoration casting!\n',
+                f'You have used the Merchants Strange Spell and defeated the {enemy} without losing any health! \nThrough the power of the Strange Spell, you gain {self.get_health(10, 30)} health through its restoration casting!\n',
                 3.5)
         else:  # print color based on user health
             lost_health = self.use_item(key)
@@ -254,9 +258,9 @@ If more variables are needed. they can be added here.
             print_green(f'Balance: {self.balance}\n', 1)
 
             choices = ['y', 'yes', 'n', 'no']
-            choice_options = ['Would you like to exit the game (yes / no): ']
+            choice_options = ['Would you like to continue the game (yes / no): ']
             exit_choice = _player_choice(choices, choice_options)
-            if exit_choice in ['y', 'yes']:  # ask player if they would like to quit ~ returns to menu
+            if exit_choice in ['n', 'no']:  # ask player if they would like to quit ~ returns to menu
                 self.check_point = f'{checkpoint_name}exit'
 
 
