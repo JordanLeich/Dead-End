@@ -60,9 +60,9 @@ If more variables are needed. they can be added here.
                             'unlocked': False,
                             },
             ('1', 'Ultra Rare'): {'name': 'Perfection Indeed',
-                                  'desc': 'Obtain all achievements.',
-                                  'unlocked': False,
-                                  },
+                                  'desc': 'Obtain all achievements.\n',
+                                  'unlocked': False
+                                  }
         }
 
     def get_data(self) -> dict:
@@ -115,11 +115,11 @@ If more variables are needed. they can be added here.
             v[2] = default_value
 
     def print_achievement(self, achievement: tuple) -> str:
-        item = self.achievement_list(achievement)  # TODO Fix dict object not callable error
+        item = self.achievement_list[achievement]
         if item['unlocked']:  # achievement already unlocked
             return
         item['unlocked'] = True
-        return f'{achievement[1]} Achievement Unlocked! {item["name"]} - {item["des"]}\n'
+        return f'{achievement[1]} Achievement Unlocked! {item["name"]} - {item["desc"]}\n'
 
 
 # Difficulty labeling - easier for referencing + printing
