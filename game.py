@@ -566,7 +566,7 @@ def view_stats():
     weapons_owned.add_rows([[v[0]] for k, v in player1.weapon_dict.items() if v[2]])
     print(weapons_owned)
     myTable3 = PrettyTable(['Items Used'])
-    myTable3.add_rows([[v[0]] for k, v in player1.consumables if v[2]])
+    myTable3.add_rows([[v[0]] for v in player1.consumables if v[2]])
     print(myTable3, '\n')
 
 
