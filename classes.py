@@ -8,6 +8,7 @@ from choices import _player_choice, error_message
 
 game_data = GameData()  # load/save functions Instance
 
+
 class Player:
     """
 This class is to setup the player with all variables needed through out the game.
@@ -74,12 +75,11 @@ If more variables are needed. they can be added here.
                                }
         }
 
-
     def get_data(self) -> dict:
         value_dict = deepcopy(vars(self))
         value_dict['difficulty'] = self.difficulty.value
         value_dict['achievement_list'] = {}
-        for k,v in self.achievement_list.items():
+        for k, v in self.achievement_list.items():
             value_dict['achievement_list'][' '.join(k)] = v
         return value_dict
 
@@ -133,15 +133,18 @@ If more variables are needed. they can be added here.
         if item['unlocked']:  # achievement already unlocked
             return
         # specific achievement checks
-        if achievement == ('1', 'Ultra Rare'):  # all othr achievements unlocked
-            item = all([v['unlocked'] for k,v in self.achievement_list.items() if k != achievement])
+        if achievement == ('1', 'Ultra Rare'):  # all other achievements unlocked
+            item = all(
+                v['unlocked']
+                for k, v in self.achievement_list.items()
+                if k != achievement
+            )
+
             if not item:  # not all achievements are unlocked
                 return
 
         item['unlocked'] = True
         return f'{achievement[1]} Achievement Unlocked! {item["name"]} - {item["desc"]}\n'
-
-
 
     def merchant(self):
         """
@@ -159,7 +162,8 @@ If more variables are needed. they can be added here.
         sounds.good_luck()
         print_green('Whoosh! The lucky merchant has appeared in-front of you...\n', 1)
         if self.balance <= 0:
-            print_yellow('Uh-Oh! You do not have enough money to buy anything... keep playing to acquire more money!\n', 1)
+            print_yellow('Uh-Oh! You do not have enough money to buy anything... keep playing to acquire more money!\n',
+                         1)
             return
 
         choices = ['b', 'buy', 'y', 'yes', 's', 'skip', 'n', 'no']
@@ -210,7 +214,6 @@ If more variables are needed. they can be added here.
         elif choice in ['s', 'skip', 'n', 'no']:
             print_s('The merchant has been skipped but can be brought back later...\n', 1)
 
-
     def user_attack(self, enemy='zombies'):
         from game import sounds
 
@@ -250,7 +253,6 @@ If more variables are needed. they can be added here.
                 print_green(message, 2)
         return True  # attack successful
 
-
     def checkpoint_save(self, checkpoint_name=''):
         self.check_point = checkpoint_name
         game_data.save_game(self.get_data())  # Sends self info to save file
@@ -268,7 +270,6 @@ If more variables are needed. they can be added here.
             exit_choice = _player_choice(choices, choice_options)
             if exit_choice in ['n', 'no']:  # ask player if they would like to quit ~ returns to menu
                 self.check_point = f'{checkpoint_name}exit'
-
 
 
 # helper function for user_attack to find the corresponding item in weapon_dict

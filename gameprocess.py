@@ -1,5 +1,5 @@
 from sys import exit
-#from classes import Player, Difficulty
+# from classes import Player, Difficulty
 from gamedata import GameData
 from other.sounds_effects import GameSounds
 from game import player1, sounds, game_data, Difficulty

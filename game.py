@@ -19,7 +19,6 @@ sounds = GameSounds()  # audio that will be played Instance
 from gameprocess import *
 
 
-
 # MENUS
 
 def view_stats():

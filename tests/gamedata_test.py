@@ -2,8 +2,10 @@
 from unittest import mock
 from unittest import TestCase
 import sys
-sys.path.insert(0,'..')
+
+sys.path.insert(0, '..')
 import gamedata
+
 
 class DictCreateTests(TestCase):
     @mock.patch('gamedata.input', create=True)

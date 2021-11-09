@@ -1,6 +1,6 @@
 from sys import exit
 from time import sleep
-#from classes import Player, Difficulty
+# from classes import Player, Difficulty
 from other.sounds_effects import GameSounds
 from game import player1, sounds, Difficulty
 from choices import _player_choice, error_message
@@ -249,12 +249,12 @@ def good_ending():
     print_green('Congratulations, you have survived and reached the end of the horrors...\n', 1)
     print_green(f'You survived with a total of {player1.health} health left!\n', 1)
 
-    difficulty_achivevement = {Difficulty(1): ('2', 'Common'),
-                               Difficulty(2): ('2', 'Uncommon'),
-                               Difficulty(3): ('2', 'Rare'),
-                               Difficulty(0): ('0', 'Cheater'),
-                               } # TODO add achievement for unlock_all_cheat
-    print_green(player1.print_achievement(difficulty_achivevement[player1.difficulty]), 2)
+    difficulty_achievement = {Difficulty(1): ('2', 'Common'),
+                              Difficulty(2): ('2', 'Uncommon'),
+                              Difficulty(3): ('2', 'Rare'),
+                              Difficulty(0): ('0', 'Cheater'),
+                              }
+    print_green(player1.print_achievement(difficulty_achievement[player1.difficulty]), 2)
     # check if all other achievements are unlocked
     all_achievements = player1.print_achievement(('1', 'Ultra Rare'))
     if all_achievements:

@@ -2,7 +2,8 @@
 from unittest import mock
 from unittest import TestCase
 import sys
-sys.path.insert(0,'..')
+
+sys.path.insert(0, '..')
 import gameprocess
 
 
