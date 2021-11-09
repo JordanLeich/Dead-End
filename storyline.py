@@ -252,7 +252,7 @@ def good_ending():
     difficulty_achievement = {Difficulty(1): ('2', 'Common'),
                               Difficulty(2): ('2', 'Uncommon'),
                               Difficulty(3): ('2', 'Rare'),
-                              Difficulty(0): ('0', 'Cheater'),
+                              Difficulty(0): ('1', 'Cheater'),
                               }
     print_green(player1.print_achievement(difficulty_achievement[player1.difficulty]), 2)
     # check if all other achievements are unlocked

@@ -11,12 +11,11 @@ from gamedata import GameData
 from other.sounds_effects import GameSounds
 from prettytable import PrettyTable
 from choices import _player_choice, error_message
+from gameprocess import *
 
 player1 = Player()  # Player Instance
 game_data = GameData()  # load/save functions Instance
 sounds = GameSounds()  # audio that will be played Instance
-
-from gameprocess import *
 
 
 # MENUS

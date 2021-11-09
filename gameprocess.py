@@ -1,5 +1,6 @@
 from sys import exit
 # from classes import Player, Difficulty
+import game
 from gamedata import GameData
 from other.sounds_effects import GameSounds
 from game import player1, sounds, game_data, Difficulty
@@ -54,16 +55,21 @@ def difficulty():
         sounds.difficulty_select_sound()
         print_green(f'Current difficulty is {player1.difficulty.name}\n')
         print_green('Difficulty selection was skipped due to saved data already existing...\n', 1)
-        choice_options = ['Would you like to start a new game or continue with your saved data (new / continue): ']
-        choice = _player_choice(['n', 'new', 'c', 'continue'], choice_options)
 
-        if choice in ['n', 'new']:
-            player1.reset_values(0, 100, False)
-            difficulty_select()
-            player1.checkpoint_save()
-        elif choice in ['c', 'continue']:
-            print_green('Continuing game...\n', 1)
-            go_to_checkpoint()
+        if player1.check_point == "6":
+            print_yellow('Due to having the end of the game checkpoint, you will now start a new game+ playthrough.\n', 2)
+            game()
+        else:
+            choice_options = ['Would you like to start a new game or continue with your saved data (new / continue): ']
+            choice = _player_choice(['n', 'new', 'c', 'continue'], choice_options)
+
+            if choice in ['n', 'new']:
+                player1.reset_values(0, 100, False)
+                difficulty_select()
+                player1.checkpoint_save()
+            elif choice in ['c', 'continue']:
+                print_green('Continuing game...\n', 1)
+                go_to_checkpoint()
     else:
         difficulty_select()
 
