@@ -68,8 +68,8 @@ If more variables are needed. they can be added here.
                                   'desc': 'Obtain all achievements.',
                                   'unlocked': False,
                                   },
-            ('0', 'Cheater'): {'name': 'Cheater',
-                               'desc': 'Obtained all achievements the wrong way',
+            ('1', 'Cheater'): {'name': 'Cheater',
+                               'desc': 'Complete the game the wrong way',
                                'unlocked': False,
                                }
         }
@@ -132,6 +132,12 @@ If more variables are needed. they can be added here.
         item = self.achievement_list[achievement]
         if item['unlocked']:  # achievement already unlocked
             return
+        # specific achievement checks
+        if achievement == ('1', 'Ultra Rare'):  # all othr achievements unlocked
+            item = all([v['unlocked'] for k,v in self.achievement_list.items() if k != achievement])
+            if not item:  # not all achievements are unlocked
+                return
+
         item['unlocked'] = True
         return f'{achievement[1]} Achievement Unlocked! {item["name"]} - {item["desc"]}\n'
 
