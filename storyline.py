@@ -255,6 +255,10 @@ def good_ending():
                                Difficulty(0): ('0', 'Cheater'),
                                } # TODO add achievement for unlock_all_cheat
     print_green(player1.print_achievement(difficulty_achivevement[player1.difficulty]), 2)
+    # check if all other achievements are unlocked
+    all_achievements = player1.print_achievement(('1', 'Ultra Rare'))
+    if all_achievements:
+        print_green(all_achievements)
     sounds.good_luck()
     restart()
 
