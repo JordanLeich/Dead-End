@@ -135,9 +135,9 @@ If more variables are needed. they can be added here.
         # specific achievement checks
         if achievement == ('1', 'Ultra Rare'):  # all other achievements unlocked
             item = all(
-                v['unlocked']
+                [v['unlocked']
                 for k, v in self.achievement_list.items()
-                if k != achievement
+                if k != achievement]
             )
 
             if not item:  # not all achievements are unlocked
