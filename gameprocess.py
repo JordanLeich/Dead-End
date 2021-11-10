@@ -1,12 +1,9 @@
-from sys import exit
 # from classes import Player, Difficulty
+import chapters.chapter2
 import game
-from gamedata import GameData
-from other.sounds_effects import GameSounds
 from game import player1, sounds, game_data, Difficulty
-from choices import _player_choice, error_message
-from other.colors import print_green, print_yellow, print_red, print_s
-from storyline import *
+from choices import _player_choice
+from chapters.chapter1 import *
 
 
 # GAME SETUP, PROCESS, AND RESET HANDLERS
@@ -57,8 +54,8 @@ def difficulty():
         print_green('Difficulty selection was skipped due to saved data already existing...\n', 1)
 
         if player1.check_point == "6":
-            print_yellow('Due to having the end of the game checkpoint, you will now start a new game+ playthrough.\n', 2)
-            game()
+            print_yellow('Due to having the end of the Chapter 1 checkpoint, you will now begin Chapter 2.\n', 2)
+            chapters.chapter2.start()
         else:
             choice_options = ['Would you like to start a new game or continue with your saved data (new / continue): ']
             choice = _player_choice(['n', 'new', 'c', 'continue'], choice_options)
@@ -75,7 +72,7 @@ def difficulty():
 
 
 def difficulty_select():
-    print_green('Pleas select a difficulty level\n')
+    print_green('Please select a difficulty level\n')
     print_green('(1) Easy\n')
     print_yellow('(2) Medium\n')
     print_red('(3) Hardcore\n')
@@ -97,8 +94,8 @@ def go_to_checkpoint():  # main program running movement to levels -- checkpoint
                    '3': gas_station,
                    '4': parkview_area,
                    '5': broken_roads_area,
-                   '6': good_ending,
-                   '7': bad_ending,
+                   '6': ch1_good_ending,
+                   '7': ch1_bad_ending,
                    }
     while 'exit' not in player1.check_point:
         if 'bad' in player1.check_point:

@@ -1,6 +1,7 @@
 from sys import exit
 from time import sleep
 # from classes import Player, Difficulty
+import chapters.chapter2
 from other.sounds_effects import GameSounds
 from game import player1, sounds, Difficulty
 from choices import _player_choice, error_message
@@ -8,6 +9,7 @@ from other.colors import print_green, print_yellow, print_red, print_s
 
 
 def game():
+    """Intro section of the game that begins in the apartment room"""
     if player1.health <= 0:
         print_red('You currently have no health left...\n', 1)
         player1.check_point = f'{player1.check_point}bad'
@@ -38,6 +40,7 @@ def game():
 
 
 def basement_area():
+    """not given a checkpoint, one of the first areas of chapter 1"""
     print_s('You have reached the basement area.\n', 1)
     sounds.horror_sound_effects()
     print_s('''After living at your home for awhile now, you've had many supplies and broken utilities stored up in your basement.
@@ -58,6 +61,7 @@ the moldy and old smells of the basement.\n''', 2)
 
 
 def gas_station():
+    """checkpoint area # 3"""
     sounds.horror_sound_effects()
     print_s('You have entered the local Gas Station...\n', 1)
 
@@ -116,6 +120,7 @@ def gas_station():
 
 
 def outside_area():
+    """checkpoint area # 1"""
     print_s('You make your way to the outside area...\n', 1)
     sounds.wind_sound()
     print('You instantly notice something is not right... a dark gloomy fog covers all of the town and you do not see\n'
@@ -150,6 +155,7 @@ def outside_area():
 
 
 def diner_area():
+    """checkpoint area # 2"""
     sounds.horror_sound_effects()
     print_s('You have entered the local Diner...\n', 1)
     choice_options = [
@@ -187,6 +193,7 @@ def diner_area():
 
 
 def broken_roads_area():
+    """checkpoint area # 5"""
     sounds.zombie_attack_outside()
     print('You have reached the broken roads area and managed to find a running vehicle but there are a group of '
           'about 3 zombies surrounding the vehicle... \nThe zombies begin to head directly towards you and you prepare '
@@ -203,6 +210,7 @@ def broken_roads_area():
 
 
 def parkview_area():
+    """checkpoint area # 4"""
     sounds.horror_sound_effects()
     print_s('You have entered the parkview area...\n', 1)
     sounds.parkview_entrance()
@@ -243,10 +251,10 @@ def parkview_area():
         player1.checkpoint_save('5')
 
 
-def good_ending():
+def ch1_good_ending(checkpoint_name=''):
     """When the player has successfully reached the end of the game."""
     sounds.good_luck()
-    print_green('Congratulations, you have survived and reached the end of the horrors...\n', 1)
+    print_green('Congratulations, you have survived Chapter 1...\n', 1)
     print_green(f'You survived with a total of {player1.health} health left!\n', 1)
 
     difficulty_achievement = {Difficulty(1): ('2', 'Common'),
@@ -260,17 +268,24 @@ def good_ending():
     if all_achievements:
         print_green(all_achievements)
     sounds.good_luck()
-    restart()
+
+    choices = ['y', 'yes', 'n', 'no']
+    choice_options = ['Would you like to continue the game (yes / no): ']
+    exit_choice = _player_choice(choices, choice_options)
+    if exit_choice in ['n', 'no']:  # ask player if they would like to quit ~ returns to menu
+        player1.check_point = f'{checkpoint_name}exit'
+    chapters.chapter2.start()
 
 
-def bad_ending():
+def ch1_bad_ending():
     """When the player dies at any point."""
-    sounds.bad_ending()
+    sounds.ch1_bad_ending()
     print_red('You have died and not reached the end of the horrors...\n', 1)
     restart()
 
 
 def restart():
+    """Allows the players to restart their game and reset their saved data values"""
     from gameprocess import game_intro, game, go_to_checkpoint
     choices = ['y', 'yes', 'n', 'no']
     choice_options = ['Would you like to restart the game (yes / no): ']
