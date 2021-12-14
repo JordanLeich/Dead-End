@@ -1,5 +1,5 @@
 <h1 align="center">
-    Zombie Survival Game 🧟
+    Dead End 🧟
 </h1>
 <hr>
 <p align="center">
