@@ -27,6 +27,8 @@ def view_stats():
     myTable1 = PrettyTable(['Stat', 'Amount'])
     myTable1.add_row(['Health', player1.health])
     myTable1.add_row(['Balance', player1.balance])
+    myTable1.add_row(['XP Amount', player1.xp_amount])
+    myTable1.add_row(['XP Level', player1.user_level])
     print(myTable1)
     weapons_owned = PrettyTable(['Weapons Owned'])
     weapons_owned.add_rows([[v[0]] for k, v in player1.weapon_dict.items() if v[2]])

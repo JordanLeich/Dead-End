@@ -9,7 +9,27 @@ from other.colors import print_green, print_yellow, print_red, print_s
 
 def start():
     print_green('Welcome to Chapter 2!\n', 1)
-    continue_message()
+    print_green('Upon driving the car through the broken roads area, the sun is certainly dwindling and time in the car'
+                'says 2:35 AM. You continue to grow yourself tired and restless from everything that had led to this '
+                'point\n', 2.5)
+    choices = [str(x) for x in range(1, 3)]
+    choice_options = [
+        'Due to the car getting low on gas, you have the choice to either (1) Drive back to the local gas station in '
+        'town (2) Turn off the car and set up a camp fire in the woods: ']
+    choice = _player_choice(choices, choice_options)
+
+    if choice == '1':
+        sounds.zombie_attack_inside()
+        print_red('While attempting to put the car in reverse and head backwards to the local gas station in town, '
+              'a swarm of zombies arise on the car while the car gets stuck into gear!\n', 2.5)
+        if not player1.user_attack():
+            return
+        print_green('You have successfully killed off the heaping swarm of zombies surrounding the car!\n', 1)
+        continue_message()
+    elif choice == '2':
+        print_s('You have parked the car near the closet woods area and now need to gather up some supplies for a camp '
+              'fire.\n', 1)
+        continue_message()
 
 
 def ch2_good_ending():

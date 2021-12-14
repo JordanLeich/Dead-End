@@ -14,12 +14,13 @@ class Player:
 This class is to setup the player with all variables needed through out the game.
 If more variables are needed. they can be added here.
     """
-
-    def __init__(self, balance=0, health=0, difficulty=-1):
+    def __init__(self, balance=0, health=0, difficulty=-1, xp_amount=0, user_level=0):
         # user attributes
         self.balance = balance
         self.health = health
         self.difficulty = Difficulty(difficulty)
+        self.xp_amount = xp_amount
+        self.user_level = user_level
         self.weapon_dict = {
             # Organized: '#': ['name', 'cost', 'purchased', 'health_rand_1', 'health_rand_2'],
             '0': ['Knife', None, False, 40, 45],  # Weapon can be found in-game at the start
@@ -70,7 +71,7 @@ If more variables are needed. they can be added here.
                                   'unlocked': False,
                                   },
             ('1', 'Cheater'): {'name': 'Cheater',
-                               'desc': 'Complete the game the wrong way',
+                               'desc': 'Complete a chapter the wrong way',
                                'unlocked': False,
                                }
         }
@@ -270,6 +271,36 @@ If more variables are needed. they can be added here.
             exit_choice = _player_choice(choices, choice_options)
             if exit_choice in ['n', 'no']:  # ask player if they would like to quit ~ returns to menu
                 self.check_point = f'{checkpoint_name}exit'
+
+    def xp_level_system(self, xp_amount=0, user_level=0):
+        self.xp_amount = xp_amount
+        self.user_level = user_level
+
+        if xp_amount >= 400 and xp_amount <= 499:
+            user_level = 4
+            print_green('Current XP Level - 4\n', 1)
+        elif xp_amount >= 300 and xp_amount <= 399:
+            user_level = 3
+            print_green('Current XP Level - 3\n', 1)
+        elif xp_amount >= 200 and xp_amount <= 299:
+            user_level = 2
+            print_green('Current XP Level - 2\n', 1)
+        elif xp_amount <= 199:
+            user_level = 1
+            print_green('Current XP Level - 1\n', 1)
+        else:
+            print_green('Reached Maximum XP Level - 5\n', 1)
+            user_level = 5
+
+    def award_xp_to_player(self):
+        if Difficulty == 1:
+            self.xp_amount += randint(15, 75)
+        elif Difficulty == 2:
+            self.xp_amount += randint(30, 75)
+        elif Difficulty == 3:
+            self.xp_amount += randint(75, 100)
+        else:
+            self.xp_amount += randint(1, 100)
 
 
 # helper function for user_attack to find the corresponding item in weapon_dict

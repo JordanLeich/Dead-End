@@ -73,9 +73,9 @@ def difficulty():
 
 def difficulty_select():
     print_green('Please select a difficulty level\n')
-    print_green('(1) Easy\n')
-    print_yellow('(2) Medium\n')
-    print_red('(3) Hardcore\n')
+    print_green('(1) Easy - Lowest amount of XP awarded\n')
+    print_yellow('(2) Medium - Average amount of XP awarded\n')
+    print_red('(3) Hardcore - Largest amount of XP awarded\n')
     choices = [str(x) for x in range(1, 4)]
     choices.append('unlock_all_cheat')
     choice_options = ['Select a difficulty: ']
