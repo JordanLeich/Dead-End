@@ -24,7 +24,7 @@
   survivor, you will encounter zombies, weapons, people, and a merchant to buy from with an in-game currency. Every
   decision you make has a cause and effect while some lead you to fortune and others lead you to death.
   
-  ![Screenshot](images/screenshot.PNG "Screenshot")
+![Screenshot](images/screenshot.PNG "Screenshot")
 
 # [Requirements](https://github.com/JordanLeich/Zombie-Survival-Game/blob/main/requirements.txt) ⚡
 

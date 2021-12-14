@@ -24,7 +24,6 @@ def view_stats():
     """Prints the users current in game stats based upon a load file. Usage in Options"""
     player1.load_data(game_data.load_game())
     print_green('Your current in game stats will now be displayed below!\n\n', 1)
-
     myTable1 = PrettyTable(['Stat', 'Amount'])
     myTable1.add_row(['Health', player1.health])
     myTable1.add_row(['Balance', player1.balance])
@@ -106,7 +105,10 @@ def game_menu():
                    'unlock_all_cheat': [unlock_all_cheat, game]
                    }
     while True:
-        print_green('Welcome to Zombie Survival Game!\n\nYour choices will allow you to Live or lead to Doom!\n')
+        print_green('Welcome to Dead End!\n\nThis is a zombie survival game where you must make the best choices and '
+                    'decisions possible in order to live.\nAs a survivor, you will encounter zombies, weapons, people, '
+                    'and a merchant to buy from with an in-game currency.\nEvery decision you make has a cause and '
+                    'effect while some lead you to fortune and others lead you to death.\n')
         for item in choice_dict[_player_choice(list(choice_dict.keys()), choice_options)]:
             item()
 

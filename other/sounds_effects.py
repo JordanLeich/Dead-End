@@ -54,6 +54,9 @@ class GameSounds:
     def wind_sound(self):
         self._play_sound('sounds/heavy_wind.wav')
 
+    def menu_button_sound(self):
+        self._play_sound('sounds/menubutton.mp3')
+
     def zombie_attack_inside(self):
         zombie_inside_path = ['sounds/zombieattack1inside.mp3',
                               'sounds/zombieattack2inside.mp3',
