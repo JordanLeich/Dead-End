@@ -98,6 +98,8 @@ If more variables are needed. they can be added here.
         self.check_point = user_data['check_point']
         for k, v in user_data['achievement_list'].items():
             self.achievement_list[(k.split(' ', 1)[0], k.split(' ', 1)[1])] = v
+        self.xp_amount = user_data['xp_amount']
+        self.user_level = user_data['user_level']
 
     def get_money(self, start_int=5, end_int=30) -> int:
         random_money = randint(start_int, end_int)
