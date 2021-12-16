@@ -275,7 +275,19 @@ If more variables are needed. they can be added here.
                 self.check_point = f'{checkpoint_name}exit'
 
     def xp_level_system(self) -> None:
-        if self.xp_amount > 500:
+        if self.xp_amount < 500:
+            if self.difficulty == 1:
+                self.xp_amount += randint(15, 75)
+            elif self.difficulty == 2:
+                self.xp_amount += randint(30, 75)
+            elif self.difficulty == 3:
+                self.xp_amount += randint(75, 100)
+            elif self.difficulty == 0:
+                self.xp_amount = 500
+            else:
+                self.xp_amount += randint(1, 100)
+
+        if self.xp_amount > 499:
             print_green('Reached Maximum XP level - 5\n', 1)
             self.user_level = 5
             return
@@ -293,16 +305,6 @@ If more variables are needed. they can be added here.
             return
         print_green(f'Current XP Level - {self.user_level}\n', 1)
         return
-
-    def award_xp_to_player(self):
-        if self.difficulty == 1:
-            self.xp_amount += randint(15, 75)
-        elif self.difficulty == 2:
-            self.xp_amount += randint(30, 75)
-        elif self.difficulty == 3:
-            self.xp_amount += randint(75, 100)
-        else:
-            self.xp_amount += randint(1, 100)
 
 
 # helper function for user_attack to find the corresponding item in weapon_dict
