@@ -1,4 +1,4 @@
-from other.colors import print_s
+from other.colors import print_sleep
 
 
 def error_message(choices, audio_opt=0):  # sanitize options displayed for users
@@ -16,7 +16,7 @@ def _player_choice(choices, choice_options: list, audio_opt=0, user_input=' ') -
         user_input = str(input('\n'.join(choice_options)))
         from game import sounds
         sounds.menu_button_sound()
-        print_s('', 1)
+        print_sleep('', 1)
         if user_input.lower() not in choices:
             error_message(choices, audio_opt)
         else:

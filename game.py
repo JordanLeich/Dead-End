@@ -5,7 +5,7 @@ from sys import exit
 import webbrowser
 from time import sleep
 from random import randint
-from other.colors import print_green, print_s
+from other.colors import print_green, print_sleep
 from classes import Player, Difficulty
 from gamedata import GameData
 from other.sounds_effects import GameSounds
@@ -57,6 +57,7 @@ def list_achievements():
         if k[0] == '1':
             print(f'\nAll {k[1]} Achievements')
         print(f'{k[0]}. {v["name"]} - {v["desc"]}')
+    print()
     sleep(5)
 
 
@@ -107,10 +108,11 @@ def game_menu():
                    'unlock_all_cheat': [unlock_all_cheat, game]
                    }
     while True:
-        print_green('Welcome to Dead End!\n\nThis is a zombie survival game where you must make the best choices and '
+        print_green('Welcome to Dead End!\n', 0)
+        print_sleep('This is a zombie survival game where you must make the best choices and '
                     'decisions possible in order to live.\nAs a survivor, you will encounter zombies, weapons, people, '
                     'and a merchant to buy from with an in-game currency.\nEvery decision you make has a cause and '
-                    'effect while some lead you to fortune and others lead you to death.\n')
+                    'effect while some lead you to fortune and others lead you to death.\n', 0)
         for item in choice_dict[_player_choice(list(choice_dict.keys()), choice_options)]:
             item()
 
@@ -127,7 +129,7 @@ def audio_options():
         volume_level = int(choice) / 100
         sounds.set_volume(volume_level)
         sounds.zombie_attack_outside()
-        print_s(f'Your current volume level is set at {choice}%\n', 1)
+        print_sleep(f'Your current volume level is set at {choice}%\n', 1)
 
 
 if __name__ == '__main__':

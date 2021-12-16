@@ -4,7 +4,7 @@ from time import sleep
 from other.sounds_effects import GameSounds
 from game import player1, sounds, Difficulty
 from choices import _player_choice, error_message
-from other.colors import print_green, print_yellow, print_red, print_s
+from other.colors import print_green, print_yellow, print_red, print_sleep
 
 
 def start():
@@ -27,8 +27,9 @@ def start():
         print_green('You have successfully killed off the heaping swarm of zombies surrounding the car!\n', 1)
         continue_message()
     elif choice == '2':
-        print_s('You have parked the car near the closet woods area and now need to gather up some supplies for a camp '
-              'fire.\n', 1)
+        print_sleep(
+            'You have parked the car near the closet woods area and now need to gather up some supplies for a camp '
+            'fire.\n', 1)
         continue_message()
 
 
@@ -75,11 +76,11 @@ def restart():
         game()
         go_to_checkpoint()
     elif restart_choice in ['n', 'no']:
-        print_s('Ending game...', 1)
+        print_sleep('Ending game...', 1)
         exit()
 
 
 def continue_message():
     """Only for development purposes and has no impact on the game"""
-    print_s('Continue here...', 3)
+    print_sleep('Continue here...', 3)
     exit(1)

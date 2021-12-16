@@ -36,6 +36,6 @@ def user_error(message_text, sleep_duration=0):
 
 
 # print and sleep
-def print_s(message_text, sleep_duration=0):
+def print_sleep(message_text, sleep_duration=0):
     print(message_text)
     sleep(sleep_duration)

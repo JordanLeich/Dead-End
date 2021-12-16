@@ -1,10 +1,10 @@
 from setuptools import setup
 
 setup(
-    name='Zombie Survival Game',
+    name='Dead End',
     version='v5.0',
     packages=[''],
-    url='https://github.com/JordanLeich/Zombie-Survival-Game',
+    url='https://github.com/JordanLeich/Dead-End',
     license='MIT',
     author='Jordan Leich',
     author_email='jordanleich@gmail.com',

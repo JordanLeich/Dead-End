@@ -5,7 +5,7 @@ import chapters.chapter2
 from other.sounds_effects import GameSounds
 from game import player1, sounds, Difficulty
 from choices import _player_choice, error_message
-from other.colors import print_green, print_yellow, print_red, print_s
+from other.colors import print_green, print_yellow, print_red, print_sleep
 
 
 def game():
@@ -41,29 +41,29 @@ def game():
 
 def basement_area():
     """not given a checkpoint, one of the first areas of chapter 1"""
-    print_s('You have reached the basement area.\n', 1)
+    print_sleep('You have reached the basement area.\n', 1)
     sounds.horror_sound_effects()
-    print_s('''After living at your home for awhile now, you've had many supplies and broken utilities stored up in your basement.
+    print_sleep('''After living at your home for awhile now, you've had many supplies and broken utilities stored up in your basement.
 Trailing behind you leads a lurking stench of odor containing of what smells like mold and rotten flesh.\n''', 1.5)
     choice_options = ['(1) Search around the basement (2) Forget about the basement and leave: ']
     choice = _player_choice([str(x) for x in range(1, 3)], choice_options)
 
     if choice == '1':
-        print_s(
+        print_sleep(
             'Amongst searching the basement, you stumble upon some spare money you forgot you had saved up in the basement.\n',
             1.5)
         sounds.good_luck()
         print_green(f'You found a total of ${player1.get_money()} dollars!\n', 1)
     elif choice == '2':
         sounds.wind_sound()
-        print_s('''Upon leaving the basement, you head out into the outside area for a breath of fresh air after consuming 
+        print_sleep('''Upon leaving the basement, you head out into the outside area for a breath of fresh air after consuming 
 the moldy and old smells of the basement.\n''', 2)
 
 
 def gas_station():
     """checkpoint area # 3"""
     sounds.horror_sound_effects()
-    print_s('You have entered the local Gas Station...\n', 1)
+    print_sleep('You have entered the local Gas Station...\n', 1)
 
     print('From the front counter, you see a man who points his gun at you while you walk in! The man tells you to\n'
           'freeze but then notices that you are a survivor just like him... You both discuss and try to figure out\n'
@@ -80,14 +80,14 @@ def gas_station():
               'venture out to the park with his young daughter and son...\n')
         sleep(2)
         sounds.zombie_attack_inside()
-        print_s(
+        print_sleep(
             'Out of nowhere, a group of 3 zombies begin to bang on the glass door from which you entered in from...\n',
             2.5)
         sounds.zombie_attack_inside()
         print('While attempting to save you, the man fights off 2 zombies with his pump shotgun and get eaten alive '
               'while saying, RUN! but more zombies come to arise on you...\n')
         sleep(2.5)
-        print_s('You decide to fight off the zombies in the will of your hopes for living...\n', 1.5)
+        print_sleep('You decide to fight off the zombies in the will of your hopes for living...\n', 1.5)
         if not player1.user_attack():
             return
 
@@ -98,7 +98,7 @@ def gas_station():
         user_choice = _player_choice([str(x) for x in range(1, 3)], choice_options)
 
         if user_choice == '1':
-            print_s(
+            print_sleep(
                 f'After search everybody in the gas station, you manage to find a total of {player1.get_money()} dollars and you then continue your way over to the local Diner...\n',
                 2)
         player1.checkpoint_save('2')
@@ -121,7 +121,7 @@ def gas_station():
 
 def outside_area():
     """checkpoint area # 1"""
-    print_s('You make your way to the outside area...\n', 1)
+    print_sleep('You make your way to the outside area...\n', 1)
     sounds.wind_sound()
     print('You instantly notice something is not right... a dark gloomy fog covers all of the town and you do not see\n'
           'a single friendly soul insight... You start to come to a conclusion about where everybody in the small\n'
@@ -135,7 +135,7 @@ def outside_area():
               'with the shape of a man figure hovering over her...\n')
         sleep(2)
         sounds.zombie_attack_outside()
-        print_s('Lone behold... the figure is eating the woman alive but you are too late to rescue her!\n', 1.5)
+        print_sleep('Lone behold... the figure is eating the woman alive but you are too late to rescue her!\n', 1.5)
         choice_options = ['(1) Attack the zombie (2) Avoid the zombie and run to the local Gas Station: ']
         user_choice = _player_choice([str(x) for x in range(1, 3)], choice_options)
 
@@ -143,10 +143,10 @@ def outside_area():
             sounds.zombie_attack_outside()
             if not player1.user_attack():
                 return
-            print_s(
+            print_sleep(
                 f'You then search the body of the zombie and decaying woman to find a total of {player1.get_money()} Dollars...\n',
                 2)
-            print_s('Finally, you get to make your way over to the local Gas Station...\n', 1.5)
+            print_sleep('Finally, you get to make your way over to the local Gas Station...\n', 1.5)
         elif user_choice == '2':
             pass
     elif user_choice == '2':
@@ -157,7 +157,7 @@ def outside_area():
 def diner_area():
     """checkpoint area # 2"""
     sounds.horror_sound_effects()
-    print_s('You have entered the local Diner...\n', 1)
+    print_sleep('You have entered the local Diner...\n', 1)
     choice_options = [
         'You have the choice to either (1) Search inside the Diner Restaurant Area (2) head towards the Parkview Area: ']
     user_choice = _player_choice([str(x) for x in range(1, 3)], choice_options)
@@ -212,11 +212,11 @@ def broken_roads_area():
 def parkview_area():
     """checkpoint area # 4"""
     sounds.horror_sound_effects()
-    print_s('You have entered the parkview area...\n', 1)
+    print_sleep('You have entered the parkview area...\n', 1)
     sounds.parkview_entrance()
     sleep(2.5)
-    print_s('Upon arriving to the parkview area, you are still incapable of seeing very much ahead of yourself...\n',
-            1.5)
+    print_sleep(
+        'Upon arriving to the parkview area, you are still incapable of seeing very much ahead of yourself...\n', 1.5)
     choice_options = ['You have the choice to either (1) Explore the Parkview Area (2) Explore onto the Broken Roads: ']
     user_choice = _player_choice([str(x) for x in range(1, 3)], choice_options)
 
@@ -240,12 +240,10 @@ def parkview_area():
             print_red('The man has killed you and zombies start to feast on your dead decaying flesh...\n', 2)
             return
 
-        print_green(
-            f'You have successfully killed the man! Upon searching his body, you find a total of ${player1.get_money()}!\n',
-            1)
-        player1.checkpoint_save('5')
+        print_green(f'You have successfully killed the man! Upon searching his body, you find a total '
+                    f'of ${player1.get_money()}!\n', 1)
         sounds.horror_sound_effects()
-        print_s('You now decide to leave the Parkview Area...\n', 1.5)
+        print_sleep('You now decide to leave the Parkview Area...\n', 1.5)
         player1.checkpoint_save('5')
     elif user_choice == '2':
         player1.checkpoint_save('5')
@@ -300,11 +298,11 @@ def restart():
         game()
         go_to_checkpoint()
     elif restart_choice in ['n', 'no']:
-        print_s('Ending game...', 1)
+        print_sleep('Ending game...', 1)
         exit()
 
 
 def continue_message():
     """Only for development purposes and has no impact on the game"""
-    print_s('Continue here...', 3)
+    print_sleep('Continue here...', 3)
     exit(1)

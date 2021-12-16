@@ -2,7 +2,7 @@ from random import randint
 from enum import Enum
 from copy import deepcopy
 # new imports to fix
-from other.colors import print_green, print_yellow, print_red, print_s
+from other.colors import print_green, print_yellow, print_red, print_sleep, print_blue
 from gamedata import GameData
 from choices import _player_choice, error_message
 
@@ -64,6 +64,10 @@ If more variables are needed. they can be added here.
                             },
             ('3', 'Rare'): {'name': 'Wicked Happenings',
                             'desc': 'You purchased the merchants secret spell.',
+                            'unlocked': False,
+                            },
+            ('4', 'Rare'): {'name': 'Maximum Potential',
+                            'desc': 'Reached the maximum in-game XP level.',
                             'unlocked': False,
                             },
             ('1', 'Ultra Rare'): {'name': 'Perfection Indeed',
@@ -149,7 +153,8 @@ If more variables are needed. they can be added here.
                 return
 
         item['unlocked'] = True
-        return f'{achievement[1]} Achievement Unlocked! {item["name"]} - {item["desc"]}\n'
+        message = f'{achievement[1]} Achievement Unlocked! {item["name"]} - {item["desc"]}\n'
+        print_blue(message, 2)
 
     def merchant(self):
         """
@@ -197,7 +202,7 @@ If more variables are needed. they can be added here.
                 consumable_index = int(buy_item) - num_item
 
                 if buy_item == exit_merchant_menu:
-                    print_s('The merchant bids you a farewell and good luck!\n', 1)
+                    print_sleep('The merchant bids you a farewell and good luck!\n', 1)
                     break
                 elif consumable_index >= 0 and self.balance > self.consumables[consumable_index][1]:
                     self.balance -= self.consumables[consumable_index][1]
@@ -217,7 +222,7 @@ If more variables are needed. they can be added here.
                 else:
                     print_yellow('Sorry, not enough available funds to purchase that item!\n', 2)
         elif choice in ['s', 'skip', 'n', 'no']:
-            print_s('The merchant has been skipped but can be brought back later...\n', 1)
+            print_sleep('The merchant has been skipped but can be brought back later...\n', 1)
 
     def user_attack(self, enemy='zombies'):
         from game import sounds
@@ -232,6 +237,7 @@ If more variables are needed. they can be added here.
             self.check_point = f'{self.check_point}bad'
             return False
 
+        print('--- All owned items ---\n')
         choices = [str(c + 1) for c, _ in enumerate(choice_names)]
         choice_options = [f'({c + 1}) {v}' for c, v in enumerate(choice_names)]
         choice_options.extend(['\nWhich item would you like to use: '])
@@ -256,6 +262,8 @@ If more variables are needed. they can be added here.
                 print_yellow(message, 2)
             else:
                 print_green(message, 2)
+            from gameprocess import xp_level_system
+            xp_level_system()
         return True  # attack successful
 
     def checkpoint_save(self, checkpoint_name=''):
@@ -266,9 +274,11 @@ If more variables are needed. they can be added here.
             return  # restart()
         if checkpoint_name != '':  # remove checkpoint printing for ending + difficulty selected
             self.merchant()
-            print_green('A checkpoint has been reached...\n', .5)
-            print_green(f'Health: {self.health}\n', 1)
-            print_green(f'Balance: {self.balance}\n', 1)
+            print_green('A checkpoint has been reached...\n', 1)
+            print_green(f'Health: {self.health}\n', 0)
+            print_green(f'Balance: {self.balance}\n', 0)
+            print_green(f'XP Amount: {self.xp_amount}\n', 0)
+            print_green(f'XP Level: {self.user_level}\n', 2)
 
             choices = ['y', 'yes', 'n', 'no']
             choice_options = ['Would you like to continue the game (yes / no): ']
@@ -276,37 +286,8 @@ If more variables are needed. they can be added here.
             if exit_choice in ['n', 'no']:  # ask player if they would like to quit ~ returns to menu
                 self.check_point = f'{checkpoint_name}exit'
 
-    def xp_level_system(self) -> None:
-        if self.xp_amount < 500:
-            if self.difficulty == 1:
-                self.xp_amount += randint(15, 75)
-            elif self.difficulty == 2:
-                self.xp_amount += randint(30, 75)
-            elif self.difficulty == 3:
-                self.xp_amount += randint(75, 100)
-            elif self.difficulty == 0:
-                self.xp_amount = 500
-            else:
-                self.xp_amount += randint(1, 100)
 
-        if self.xp_amount > 499:
-            print_green('Reached Maximum XP level - 5\n', 1)
-            self.user_level = 5
-            return
-        elif 399 < self.xp_amount <= 499:
-            self.user_level = 4
-        elif 299 < self.xp_amount <= 399:
-            self.user_level = 3
-        elif 199 < self.xp_amount <= 299:
-            self.user_level = 2
-        elif 0 < self.xp_amount <= 199:
-            self.user_level = 1
-        else:
-            print_green('You currently do not have any XP Level - 0\n', 1)
-            self.user_level = 0
-            return
-        print_green(f'Current XP Level - {self.user_level}\n', 1)
-        return
+
 
 
 # helper function for user_attack to find the corresponding item in weapon_dict
