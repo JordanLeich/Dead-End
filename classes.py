@@ -75,6 +75,8 @@ If more variables are needed. they can be added here.
                                'unlocked': False,
                                }
         }
+        self.xp_amount = 0
+        self.user_level = 0
 
     def get_data(self) -> dict:
         value_dict = deepcopy(vars(self))
@@ -96,6 +98,8 @@ If more variables are needed. they can be added here.
         self.check_point = user_data['check_point']
         for k, v in user_data['achievement_list'].items():
             self.achievement_list[(k.split(' ', 1)[0], k.split(' ', 1)[1])] = v
+        self.xp_amount = user_data['xp_amount']
+        self.user_level = user_data['user_level']
 
     def get_money(self, start_int=5, end_int=30) -> int:
         random_money = randint(start_int, end_int)
@@ -272,35 +276,37 @@ If more variables are needed. they can be added here.
             if exit_choice in ['n', 'no']:  # ask player if they would like to quit ~ returns to menu
                 self.check_point = f'{checkpoint_name}exit'
 
-    def xp_level_system(self, xp_amount=0, user_level=0):
-        self.xp_amount = xp_amount
-        self.user_level = user_level
+    def xp_level_system(self) -> None:
+        if self.xp_amount < 500:
+            if self.difficulty == 1:
+                self.xp_amount += randint(15, 75)
+            elif self.difficulty == 2:
+                self.xp_amount += randint(30, 75)
+            elif self.difficulty == 3:
+                self.xp_amount += randint(75, 100)
+            elif self.difficulty == 0:
+                self.xp_amount = 500
+            else:
+                self.xp_amount += randint(1, 100)
 
-        if xp_amount >= 400 and xp_amount <= 499:
-            user_level = 4
-            print_green('Current XP Level - 4\n', 1)
-        elif xp_amount >= 300 and xp_amount <= 399:
-            user_level = 3
-            print_green('Current XP Level - 3\n', 1)
-        elif xp_amount >= 200 and xp_amount <= 299:
-            user_level = 2
-            print_green('Current XP Level - 2\n', 1)
-        elif xp_amount <= 199:
-            user_level = 1
-            print_green('Current XP Level - 1\n', 1)
+        if self.xp_amount > 499:
+            print_green('Reached Maximum XP level - 5\n', 1)
+            self.user_level = 5
+            return
+        elif 399 < self.xp_amount <= 499:
+            self.user_level = 4
+        elif 299 < self.xp_amount <= 399:
+            self.user_level = 3
+        elif 199 < self.xp_amount <= 299:
+            self.user_level = 2
+        elif 0 < self.xp_amount <= 199:
+            self.user_level = 1
         else:
-            print_green('Reached Maximum XP Level - 5\n', 1)
-            user_level = 5
-
-    def award_xp_to_player(self):
-        if Difficulty == 1:
-            self.xp_amount += randint(15, 75)
-        elif Difficulty == 2:
-            self.xp_amount += randint(30, 75)
-        elif Difficulty == 3:
-            self.xp_amount += randint(75, 100)
-        else:
-            self.xp_amount += randint(1, 100)
+            print_green('You currently do not have any XP Level - 0\n', 1)
+            self.user_level = 0
+            return
+        print_green(f'Current XP Level - {self.user_level}\n', 1)
+        return
 
 
 # helper function for user_attack to find the corresponding item in weapon_dict
