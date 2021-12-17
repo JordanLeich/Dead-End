@@ -60,30 +60,30 @@ def xp_level_system():  # sourcery no-metrics
         print_green(f'XP gained - {random_xp_amount}\n', 1)
     # End of code where the player is awarded XP.
     # Start of code where the player is leveled up.
-    if player1.xp_amount > 1001:
+    if player1.xp_amount >= 1000:
         print_green('Reached Maximum XP level - 10\n', 1.5)
         player1.user_level = 10
         print_green(player1.print_achievement(('4', 'Rare')), 2)
         return
-    elif 901 < player1.xp_amount <= 1000:
+    elif 900 <= player1.xp_amount <= 999:
         player1.user_level = 9
-    elif 801 < player1.xp_amount <= 900:
+    elif 800 <= player1.xp_amount <= 899:
         player1.user_level = 8
-    elif 701 < player1.xp_amount <= 800:
+    elif 700 <= player1.xp_amount <= 799:
         player1.user_level = 7
-    elif 601 < player1.xp_amount <= 700:
+    elif 600 <= player1.xp_amount <= 699:
         player1.user_level = 6
-    elif 501 < player1.xp_amount <= 600:
+    elif 500 <= player1.xp_amount <= 599:
         player1.user_level = 5
-    elif 401 < player1.xp_amount <= 500:
+    elif 400 <= player1.xp_amount <= 499:
         player1.user_level = 4
-    elif 301 < player1.xp_amount <= 400:
+    elif 300 <= player1.xp_amount <= 399:
         player1.user_level = 3
-    elif 201 < player1.xp_amount <= 300:
+    elif 200 <= player1.xp_amount <= 299:
         player1.user_level = 2
-    elif 101 < player1.xp_amount <= 200:
+    elif 100 <= player1.xp_amount <= 199:
         player1.user_level = 1
-    elif 0 < player1.xp_amount <= 100:
+    elif 0 <= player1.xp_amount <= 99:
         player1.user_level = 0
     else:
         print_yellow('You currently do not have any XP Level - 0\n', 1)
