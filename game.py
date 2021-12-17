@@ -1,9 +1,12 @@
 #!/usr/bin/python3
 
 # Created on 5/11/2021
+import sys
 import webbrowser
+from PIL import Image
 from classes import Player, Difficulty
 from gamedata import GameData
+from other.colors import print_blue
 from other.sounds_effects import GameSounds
 from prettytable import PrettyTable
 from choices import _player_choice, error_message
@@ -60,11 +63,123 @@ def list_achievements():
 
 def list_cheat_codes():
     """Simply prints an entire list of all the cheat codes"""
-    print_yellow('--- Cheat codes must be entered at the main menu screen of the game ---\n', 2)
+    print_yellow('--- Please keep in mind these cheat codes contain heavy spoilers ---\n', 1)
+    print_yellow('--- Cheat codes must be entered at the main menu screen of the game ---\n', 1)
     print('''unlock_all_cheat
 infinite_health_cheat
 infinite_money_cheat\n''')
     sleep(3)
+
+
+def concept_art():  # sourcery no-metrics
+    """contains options and image openings for all concept art pieces"""
+    print_yellow('--- Please keep in mind these images contain heavy spoilers ---\n', 1)
+    choice_options = ['(1) Ch1 gas station',
+                      '(2) Ch1 broken roads 1',
+                      '(3) Ch1 broken roads 2',
+                      '(4) Ch1 broken roads 3',
+                      '(5) Ch2 woods',
+                      '(6) Merchant 1',
+                      '(7) Merchant 2',
+                      '(8) Rookie protagonist 1',
+                      '(9) Experienced protagonist 2',
+                      '(10) Old man 1',
+                      '(11) Sheriff 1',
+                      '(12) Survivors 1',
+                      '(13) Options Menu',
+                      '(14) Exit\n',
+                      'Which concept art would you like to view:  '
+                      ]
+    choice = _player_choice([str(x) for x in range(1, 15)], choice_options)
+
+    if choice == '1':
+        print_blue('Artwork by: Malek Mansour\n')
+        image_path = 'images/concept art/ch1 gas station.jpg'
+        img = Image.open(image_path)
+        img.show(image_path)
+        sleep(2)
+        return concept_art()
+    elif choice == '2':
+        print_blue('Artwork by: Xavier Rault\n')
+        image_path = 'images/concept art/ch1 broken roads 1.jpg'
+        img = Image.open(image_path)
+        img.show(image_path)
+        sleep(2)
+        return concept_art()
+    elif choice == '3':
+        print_blue('Artwork by: Xavier Rault\n')
+        image_path = 'images/concept art/ch1 broken roads 2.jpg'
+        img = Image.open(image_path)
+        img.show(image_path)
+        sleep(2)
+        return concept_art()
+    elif choice == '4':
+        print_blue('Artwork by: Xavier Rault\n')
+        image_path = 'images/concept art/ch1 broken roads 3.jpg'
+        img = Image.open(image_path)
+        img.show(image_path)
+        sleep(2)
+        return concept_art()
+    elif choice == '5':
+        print_blue('Artwork by: Marcus Marcussen\n')
+        image_path = 'images/concept art/ch2 woods.jpg'
+        img = Image.open(image_path)
+        img.show(image_path)
+        sleep(2)
+        return concept_art()
+    elif choice == '6':
+        print_blue('Artwork by: Dark Souls\n')
+        image_path = 'images/concept art/merchant 1.jpg'
+        img = Image.open(image_path)
+        img.show(image_path)
+        sleep(2)
+        return concept_art()
+    elif choice == '7':
+        print_blue('Artwork by: Dark Souls\n')
+        image_path = 'images/concept art/merchant 2.jpg'
+        img = Image.open(image_path)
+        img.show(image_path)
+        sleep(2)
+        return concept_art()
+    elif choice == '8':
+        print_blue('Artwork by: Dmitry Pantiukhov\n')
+        image_path = 'images/concept art/rookie protagonist 1.jpg'
+        img = Image.open(image_path)
+        img.show(image_path)
+        sleep(2)
+        return concept_art()
+    elif choice == '9':
+        print_blue('Artwork by: pngwing.com, Unknown creator\n')
+        image_path = 'images/concept art/experienced protagonist 2.png'
+        img = Image.open(image_path)
+        img.show(image_path)
+        sleep(2)
+        return concept_art()
+    elif choice == '10':
+        print_blue('Artwork by: Dmitry Pantiukhov\n')
+        image_path = 'images/concept art/old man 1.jpg'
+        img = Image.open(image_path)
+        img.show(image_path)
+        sleep(2)
+        return concept_art()
+    elif choice == '11':
+        print_blue('Artwork by: Dmitry Pantiukhov\n')
+        image_path = 'images/concept art/sheriff 1.jpg'
+        img = Image.open(image_path)
+        img.show(image_path)
+        sleep(2)
+        return concept_art()
+    elif choice == '12':
+        print_blue('Artwork by: Gypsywine\n')
+        image_path = 'images/concept art/survivors 1.png'
+        img = Image.open(image_path)
+        img.show(image_path)
+        sleep(2)
+        return concept_art()
+    elif choice == '13':
+        return
+    elif choice == '14':
+        exit()
 
 
 def options(choice=''):
@@ -74,14 +189,15 @@ def options(choice=''):
                       '(3) Achievements List',
                       '(4) All Cheat Codes',
                       '(5) Project Releases',
-                      '(6) Credits',
-                      '(7) Donate',
-                      '(8) Main Menu',
-                      '(9) Exit\n',
+                      '(6) Concept Art',
+                      '(7) Credits',
+                      '(8) Donate',
+                      '(9) Main Menu',
+                      '(10) Exit\n',
                       'Which choice would you like to pick:  '
                       ]
-    while choice != '8' or choice != '9':
-        choice = _player_choice([str(x) for x in range(1, 10)], choice_options)
+    while choice != '9' or choice != '10':
+        choice = _player_choice([str(x) for x in range(1, 11)], choice_options)
 
         if choice == '1':
             view_stats()
@@ -94,12 +210,14 @@ def options(choice=''):
         elif choice == '5':
             open_github("Opening the latest stable release...\n", "/releases")
         elif choice == '6':
-            open_github("Opening all contributors of this project...\n", "/graphs/contributors")
+            concept_art()
         elif choice == '7':
-            donation_opener("https://www.paypal.com/donate/?business=8FGHU8Z4EJPME&no_recurring=0&currency_code=USD")
+            open_github("Opening all contributors of this project...\n", "/graphs/contributors")
         elif choice == '8':
-            return
+            donation_opener("https://www.paypal.com/donate/?business=8FGHU8Z4EJPME&no_recurring=0&currency_code=USD")
         elif choice == '9':
+            return
+        elif choice == '10':
             exit()
 
 
