@@ -5,7 +5,7 @@ import chapters.chapter2
 from other.sounds_effects import GameSounds
 from game import player1, sounds, Difficulty
 from choices import _player_choice, error_message
-from other.colors import print_green, print_yellow, print_red, print_sleep
+from other.colors import print_green, print_yellow, print_red, print_sleep, print_blue
 
 
 def game():
@@ -14,13 +14,13 @@ def game():
         print_red('You currently have no health left...\n', 1)
         player1.check_point = f'{player1.check_point}bad'
     elif player1.health >= 500:
-        print_green(player1.print_achievement(('1', 'Rare')), 2)
+        player1.print_achievement(('1', 'Rare'))
 
     if 250 <= player1.balance <= 999:
-        print_green(player1.print_achievement(('5', 'Rare')), 2)
+        player1.print_achievement(('5', 'Rare'))
 
     if player1.balance >= 1000:
-        print_green(player1.print_achievement(('2', 'Ultra Rare')), 2)
+        player1.print_achievement(('2', 'Ultra Rare'))
 
     print('You have ended up in a small local town called Hinesville. This old town contains a population of about\n'
           'only 6000 people and holds only a Gas Station, Diner, and a Park. The current year is 1999 and you\n'
@@ -36,7 +36,7 @@ def game():
               'are allowed to carry in public areas just in case anything happens...\n')
         sleep(1)
         player1.weapon_dict['0'][2] = True  # no other way to find
-        print_green(player1.print_achievement(('1', 'Common')), 2)
+        player1.print_achievement(('1', 'Common'))
     elif choice == '2':
         sleep(1)
     elif choice == '3':
@@ -96,7 +96,7 @@ def gas_station():
         print_sleep('You decide to fight off the zombies in the will of your hopes for living...\n', 1.5)
         if not player1.user_attack():
             return
-
+        player1.total_kills += 3
         print_green('You have successfully defended off the zombies inside the gas station but it was most '
                     'unfortunate the man you found could not make it...\n', 2)
         choice_options = [
@@ -104,8 +104,9 @@ def gas_station():
         user_choice = _player_choice([str(x) for x in range(1, 3)], choice_options)
 
         if user_choice == '1':
+            sounds.good_luck()
             print_sleep(
-                f'After search everybody in the gas station, you manage to find a total of {player1.get_money()} dollars and you then continue your way over to the local Diner...\n',
+                f'After searching everybody in the gas station, you manage to find a total of {player1.get_money()} dollars and you then continue your way over to the local Diner...\n',
                 2)
         player1.checkpoint_save('2')
     elif user_choice == '2':
@@ -149,6 +150,8 @@ def outside_area():
             sounds.zombie_attack_outside()
             if not player1.user_attack():
                 return
+            player1.total_kills += 1
+            sounds.good_luck()
             print_sleep(
                 f'You then search the body of the zombie and decaying woman to find a total of {player1.get_money()} Dollars...\n',
                 2)
@@ -171,14 +174,14 @@ def diner_area():
     if user_choice == '1':
         sounds.good_luck()
         print(
-            f'After finishing up your entire search of the diner, you find a total of {player1.get_money()} dollars and ',
+            f'After finishing up your entire search of the diner, you find a total of {player1.get_money()} dollars and',
             f'you refresh up on some food and gain a total of {player1.get_health(5, 15)} health!\n')
         sleep(3)
         print('You also manage to find a bloody photograph on the ground and upon looking at the image, you see a '
               'familiar face...')
         print('You see the face of the man you met earlier at the local Gas Station taking a group family picture!\n')
         sleep(3)
-        print_green(player1.print_achievement(('1', 'Uncommon')), 2)
+        player1.print_achievement(('1', 'Uncommon'))
         sounds.horror_sound_effects()
         print('Since you are finished exploring and searching the diner area, you proceed on your path to the '
               'parkview area...\n')
@@ -191,7 +194,7 @@ def diner_area():
             1.5)
         if not player1.user_attack():
             return
-
+        player1.total_kills += 5
         print_green(
             'You have successfully defended off the zombies outside the local Diner... You will now head over to the Parkview Area\n',
             2)
@@ -207,7 +210,7 @@ def broken_roads_area():
     sleep(4.5)
     if not player1.user_attack():
         return
-
+    player1.total_kills += 3
     sounds.horror_sound_effects()
     print_green(
         'You have successfully fought off the zombies surrounding the running vehicle... You then enter the running vehicle...\nYou manage to put the vehicle into drive and you drive away into the sunrise...\n',
@@ -245,7 +248,7 @@ def parkview_area():
             sounds.bad_luck()
             print_red('The man has killed you and zombies start to feast on your dead decaying flesh...\n', 2)
             return
-
+        player1.total_kills += 1
         print_green(f'You have successfully killed the man! Upon searching his body, you find a total '
                     f'of ${player1.get_money()}!\n', 1)
         sounds.horror_sound_effects()
@@ -266,7 +269,7 @@ def ch1_good_ending(checkpoint_name=''):
                               Difficulty(3): ('2', 'Rare'),
                               Difficulty(0): ('1', 'Cheater'),
                               }
-    print_green(player1.print_achievement(difficulty_achievement[player1.difficulty]), 2)
+    player1.print_achievement(difficulty_achievement[player1.difficulty])
     # check if all other achievements are unlocked
     all_achievements = player1.print_achievement(('1', 'Ultra Rare'))
     if all_achievements:
@@ -285,6 +288,13 @@ def ch1_bad_ending():
     """When the player dies at any point."""
     sounds.ch1_bad_ending()
     print_red('You have died and not reached the end of the horrors...\n', 1)
+    player1.player_deaths += 1
+    if player1.player_deaths == 1:
+        player1.print_achievement(('3', 'Common'))
+    elif player1.player_deaths == 5:
+        player1.print_achievement(('3', 'Uncommon'))
+    elif player1.player_deaths == 10:
+        player1.print_achievement(('6', 'Rare'))
     restart()
 
 

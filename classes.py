@@ -10,13 +10,16 @@ game_data = GameData()  # load/save functions Instance
 
 class Player:
     """This class is to set up the player with all variables needed throughout the game. If more variables are needed. they can be added here."""
-    def __init__(self, balance=0, health=0, difficulty=-1, xp_amount=0, user_level=0):
+
+    def __init__(self, balance=0, health=0, difficulty=-1, xp_amount=0, user_level=0, player_deaths=0, total_kills=0):
         # user attributes
         self.balance = balance
         self.health = health
         self.difficulty = Difficulty(difficulty)
         self.xp_amount = xp_amount
         self.user_level = user_level
+        self.player_deaths = player_deaths
+        self.total_kills = total_kills
         self.weapon_dict = {
             # Organized: '#': ['name', 'cost', 'purchased', 'health_rand_1', 'health_rand_2'],
             '0': ['Knife', None, False, 40, 45],  # Weapon can be found in-game at the start
@@ -39,7 +42,11 @@ class Player:
                               'unlocked': False,
                               },
             ('2', 'Common'): {'name': 'Survivor',
-                              'desc': 'Beat the game on Easy Mode.',
+                              'desc': 'Beat a chapter on Easy Mode.',
+                              'unlocked': False,
+                              },
+            ('3', 'Common'): {'name': 'Welcome to the Pit',
+                              'desc': 'Experience death for the first time.',
                               'unlocked': False,
                               },
             ('1', 'Uncommon'): {'name': 'Family Memories',
@@ -47,7 +54,15 @@ class Player:
                                 'unlocked': False,
                                 },
             ('2', 'Uncommon'): {'name': 'Battle Hardened',
-                                'desc': 'Beat the game on Medium Mode.',
+                                'desc': 'Beat a chapter on Medium Mode.',
+                                'unlocked': False,
+                                },
+            ('3', 'Uncommon'): {'name': 'The Grim Reaper',
+                                'desc': 'Die a total of 5 times.',
+                                'unlocked': False,
+                                },
+            ('4', 'Uncommon'): {'name': 'Getting the hang of it',
+                                'desc': 'Obtain a total of 5 kills.',
                                 'unlocked': False,
                                 },
             ('1', 'Rare'): {'name': 'Unstoppable Juggernaut',
@@ -55,7 +70,7 @@ class Player:
                             'unlocked': False,
                             },
             ('2', 'Rare'): {'name': 'Ruthless Maniac',
-                            'desc': 'Beat the game on Hard Mode.',
+                            'desc': 'Beat a chapter on Hard Mode.',
                             'unlocked': False,
                             },
             ('3', 'Rare'): {'name': 'Wicked Happenings',
@@ -70,12 +85,24 @@ class Player:
                             'desc': 'Obtained a total of 250 dollars or more.',
                             'unlocked': False,
                             },
+            ('6', 'Rare'): {'name': 'Dark Souls Inspired',
+                            'desc': 'Die a total of 10 times.',
+                            'unlocked': False,
+                            },
+            ('7', 'Rare'): {'name': 'Merciful Slayer',
+                            'desc': 'Obtain a total of 25 kills.',
+                            'unlocked': False,
+                            },
             ('1', 'Ultra Rare'): {'name': 'Perfection Indeed',
                                   'desc': 'Obtain all achievements.',
                                   'unlocked': False,
                                   },
             ('2', 'Ultra Rare'): {'name': 'Fifthly Rich',
                                   'desc': 'Obtain a total of 1000 dollars or more.',
+                                  'unlocked': False,
+                                  },
+            ('3', 'Ultra Rare'): {'name': 'Relentless Rampage',
+                                  'desc': 'Obtain a total of 50 kills.',
                                   'unlocked': False,
                                   },
             ('1', 'Cheater'): {'name': 'Cheater',
@@ -109,6 +136,8 @@ class Player:
             self.achievement_list[(k.split(' ', 1)[0], k.split(' ', 1)[1])] = v
         self.xp_amount = user_data['xp_amount']
         self.user_level = user_data['user_level']
+        self.player_deaths = user_data['player_deaths']
+        self.total_kills = user_data['total_kills']
 
     def get_money(self, start_int=5, end_int=30) -> int:
         """sends money to the players balance"""
@@ -223,7 +252,7 @@ class Player:
                     self.weapon_dict[buy_item][2] = True
                     print_green(f'{self.weapon_dict[buy_item][0]} has been purchased!\n', 1)
                     if buy_item == '6':
-                        print_green(self.print_achievement(('3', 'Rare')), 2)
+                        self.print_achievement(('3', 'Rare'))
                         print_green(
                             'As the Merchant hands you his own crafted spell, he tells you that you now wield true pain to foes whilst providing restoration to thine self.\n',
                             2.5)
@@ -279,6 +308,12 @@ class Player:
         if self.health <= 0:  # extra check to see if the player has no more health left.
             print_red('Sorry you have no more health! You have lost the game!\n', 1)
             return  # restart()
+        elif self.total_kills == 5:
+            self.print_achievement(('4', 'Uncommon'))
+        elif self.total_kills == 25:
+            self.print_achievement(('7', 'Rare'))
+        elif self.total_kills == 50:
+            self.print_achievement(('3', 'Ultra Rare'))
         if checkpoint_name != '':  # remove checkpoint printing for ending + difficulty selected
             self.merchant()
             print_green('A checkpoint has been reached...\n', 1)

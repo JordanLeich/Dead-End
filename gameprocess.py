@@ -1,4 +1,6 @@
+import chapters.chapter1
 import chapters.chapter2
+import chapters.chapter3
 from chapters.chapter1 import *
 from choices import _player_choice
 from game import player1, sounds, game_data, Difficulty
@@ -63,16 +65,16 @@ def xp_level_system():  # sourcery no-metrics
     from random import randint
     random_xp_amount = int
     if player1.xp_amount < 1000:  # set to 1000 since lvl 10 is achieved at xp amount 1001 and above
-        if player1.difficulty == 1:
-            random_xp_amount = randint(15, 75)
+        if player1.difficulty == Difficulty(1):
+            random_xp_amount = randint(15, 60)
             player1.xp_amount += random_xp_amount
-        elif player1.difficulty == 2:
-            random_xp_amount = randint(30, 75)
+        elif player1.difficulty == Difficulty(2):
+            random_xp_amount = randint(35, 75)
             player1.xp_amount += random_xp_amount
-        elif player1.difficulty == 3:
+        elif player1.difficulty == Difficulty(3):
             random_xp_amount = randint(75, 100)
             player1.xp_amount += random_xp_amount
-        elif player1.difficulty == 0:
+        elif player1.difficulty == Difficulty(0):
             player1.xp_amount = 500
         else:
             random_xp_amount = randint(1, 100)
@@ -83,7 +85,7 @@ def xp_level_system():  # sourcery no-metrics
     if player1.xp_amount >= 1000:
         print_green('Reached Maximum XP level - 10\n', 1.5)
         player1.user_level = 10
-        print_green(player1.print_achievement(('4', 'Rare')), 2)
+        player1.print_achievement(('4', 'Rare'))
         return
     elif 900 <= player1.xp_amount <= 999:
         player1.user_level = 9
@@ -123,8 +125,16 @@ def difficulty():
         print_sleep('Difficulty selection was skipped due to saved difficulty data already existing...\n', 1)
 
         if player1.check_point == "6":
-            print_yellow('Due to having the end of the Chapter 1 checkpoint, you will now begin Chapter 2.\n', 2)
-            chapters.chapter2.start()
+            choice_options = ['Since you have completed Chapter 1 with your saved data, would you like to '
+                              'replay Chapter 1 or continue to Chapter 2 (replay / continue): ']
+            choice = _player_choice(['r', 'replay', 'c', 'chapter 2', 'continue', 'chapter2', 'chapter1', 'chapter 1'],
+                                    choice_options)
+            if choice.lower() in ['c', 'continue', 'chapter2', 'chapter 2']:
+                print_yellow('You will now begin Chapter 2.\n', 2)
+                chapters.chapter2.start()
+            elif choice.lower() in ['r', 'replay', 'chapter1', 'chapter 1']:
+                print_yellow('You will now replay Chapter 1.\n', 2)
+                chapters.chapter1.game()
         else:
             choice_options = ['Would you like to start a new game or continue with your saved data (new / continue): ']
             choice = _player_choice(['n', 'new', 'c', 'continue'], choice_options)

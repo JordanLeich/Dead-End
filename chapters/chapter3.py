@@ -4,7 +4,7 @@ from time import sleep
 from other.sounds_effects import GameSounds
 from game import player1, sounds, Difficulty
 from choices import _player_choice, error_message
-from other.colors import print_green, print_yellow, print_red, print_sleep
+from other.colors import print_green, print_yellow, print_red, print_sleep, print_blue
 
 
 def start():
@@ -25,7 +25,7 @@ def ch3_good_ending():
                               Difficulty(3): ('2', 'Rare'),
                               Difficulty(0): ('1', 'Cheater'),
                               }
-    print_green(player1.print_achievement(difficulty_achievement[player1.difficulty]), 2)
+    player1.print_achievement(difficulty_achievement[player1.difficulty])
     # check if all other achievements are unlocked
     all_achievements = player1.print_achievement(('1', 'Ultra Rare'))
     if all_achievements:

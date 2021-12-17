@@ -11,21 +11,22 @@ def start():
     """start of ch2"""
     sounds.intro_sounds()
     print_green('Welcome to Chapter 2!\n', 3)
-    print_green('Upon driving the car through the broken roads area, the sun is certainly dwindling and time in the car'
-                'says 2:35 AM. You continue to grow yourself tired and restless from everything that had led to this '
+    print_sleep('Upon driving the car through the broken roads area, the sun is certainly dwindling and time in the car'
+                'says 2:35 AM.\nYou continue to grow yourself tired and restless from everything that had led to this '
                 'point\n', 2.5)
     choices = [str(x) for x in range(1, 3)]
     choice_options = [
-        'Due to the car getting low on gas, you have the choice to either (1) Drive back to the local gas station in '
+        'Due to the car getting low on gas, you must make a tough decision. (1) Drive back to the local gas station in '
         'town (2) Turn off the car and set up a camp fire in the woods: ']
     choice = _player_choice(choices, choice_options)
 
     if choice == '1':
         sounds.zombie_attack_inside()
-        print_red('While attempting to put the car in reverse and head backwards to the local gas station in town, '
-                  'a swarm of zombies arise on the car while the car gets stuck into gear!\n', 2.5)
+        print_sleep('While attempting to put the car in reverse and head backwards to the local gas station in town, '
+                    'a swarm of zombies arise on the car while the car gets stuck into gear!\n', 2.5)
         if not player1.user_attack():
             return
+        player1.total_kills += 5
         print_green('You have successfully killed off the heaping swarm of zombies surrounding the car!\n', 1)
         continue_message()
     elif choice == '2':
@@ -38,7 +39,7 @@ def start():
 def ch2_good_ending():
     """When the player has successfully reached the end of the game."""
     sounds.good_luck()
-    print_green('Congratulations, you have survived Chapter 2..\n', 1)
+    print_green('Congratulations, you have survived Chapter 2...\n', 1)
     print_green(f'You survived with a total of {player1.health} health left!\n', 1)
 
     difficulty_achievement = {Difficulty(1): ('2', 'Common'),
@@ -46,7 +47,7 @@ def ch2_good_ending():
                               Difficulty(3): ('2', 'Rare'),
                               Difficulty(0): ('1', 'Cheater'),
                               }
-    print_green(player1.print_achievement(difficulty_achievement[player1.difficulty]), 2)
+    player1.print_achievement(difficulty_achievement[player1.difficulty])
     # check if all other achievements are unlocked
     all_achievements = player1.print_achievement(('1', 'Ultra Rare'))
     if all_achievements:
