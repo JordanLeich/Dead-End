@@ -11,12 +11,6 @@ def load_or_save_data():
     player1.load_data(game_data.load_game())
 
 
-def game_intro():
-    """simple intro sound plays and head to the difficulty selection screen"""
-    sounds.intro_sound()
-    difficulty()
-
-
 def unlock_all_cheat():
     """secret cheat code that activates unlimited money, health, and in game items"""
     sounds.good_luck()
@@ -44,20 +38,26 @@ def _difficulty_set_health():
                  1)
 
 
-def xp_level_system():
+def xp_level_system():  # sourcery no-metrics
     """Used for leveling and award the player with their respective XP amount based their difficulty level."""
     from random import randint
-    if player1.xp_amount < 500:
+    random_xp_amount = int
+    if player1.xp_amount < 1000:  # set to 1000 since lvl 10 is achieved at xp amount 1001 and above
         if player1.difficulty == 1:
-            player1.xp_amount += randint(15, 75)
+            random_xp_amount = randint(15, 75)
+            player1.xp_amount += random_xp_amount
         elif player1.difficulty == 2:
-            player1.xp_amount += randint(30, 75)
+            random_xp_amount = randint(30, 75)
+            player1.xp_amount += random_xp_amount
         elif player1.difficulty == 3:
-            player1.xp_amount += randint(75, 100)
+            random_xp_amount = randint(75, 100)
+            player1.xp_amount += random_xp_amount
         elif player1.difficulty == 0:
             player1.xp_amount = 500
         else:
-            player1.xp_amount += randint(1, 100)
+            random_xp_amount = randint(1, 100)
+            player1.xp_amount += random_xp_amount
+        print_green(f'XP gained - {random_xp_amount}\n', 1)
     # End of code where the player is awarded XP.
     # Start of code where the player is leveled up.
     if player1.xp_amount > 1001:
@@ -89,7 +89,8 @@ def xp_level_system():
         print_yellow('You currently do not have any XP Level - 0\n', 1)
         player1.user_level = 0
         return
-    print_green(f'Current XP Amount - {player1.xp_amount}\n', 1)
+    sounds.good_luck()
+    print_green(f'Current XP Amount - {player1.xp_amount}\n', .5)
     print_green(f'Current XP Level - {player1.user_level}\n', 1)
     return
 

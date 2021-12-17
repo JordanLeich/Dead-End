@@ -1,11 +1,7 @@
 #!/usr/bin/python3
 
 # Created on 5/11/2021
-from sys import exit
 import webbrowser
-from time import sleep
-from random import randint
-from other.colors import print_green, print_sleep
 from classes import Player, Difficulty
 from gamedata import GameData
 from other.sounds_effects import GameSounds
@@ -103,13 +99,14 @@ def game_menu():
                       '(4) Exit\n',
                       'Selection: ',
                       ]
-    choice_dict = {'1': [game_intro, game, go_to_checkpoint],
-                   '2': [load_or_save_data, game_intro, go_to_checkpoint],
+    choice_dict = {'1': [difficulty, game, go_to_checkpoint],
+                   '2': [load_or_save_data, difficulty, go_to_checkpoint],
                    '3': [options],
                    '4': [exit],
                    'unlock_all_cheat': [unlock_all_cheat, game]
                    }
     while True:
+        sounds.intro_sounds()
         print_green('Welcome to Dead End!\n')
         print_sleep('This is a zombie survival game where you must make the best choices and '
                     'decisions possible in order to live.\nAs a survivor, you will encounter zombies, weapons, people, '

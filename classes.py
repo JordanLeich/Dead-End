@@ -1,10 +1,9 @@
 from random import randint
 from enum import Enum
 from copy import deepcopy
-# new imports to fix
 from other.colors import print_green, print_yellow, print_red, print_sleep, print_blue
 from gamedata import GameData
-from choices import _player_choice, error_message
+from choices import _player_choice
 
 game_data = GameData()  # load/save functions Instance
 
@@ -157,6 +156,8 @@ class Player:
 
         item['unlocked'] = True
         message = f'{achievement[1]} Achievement Unlocked! {item["name"]} - {item["desc"]}\n'
+        from game import sounds
+        sounds.good_luck()
         print_blue(message, 2)
 
     def merchant(self):  # sourcery no-metrics

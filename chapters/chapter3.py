@@ -8,7 +8,9 @@ from other.colors import print_green, print_yellow, print_red, print_sleep
 
 
 def start():
-    print_green('Welcome to Chapter 3!\n', 1)
+    """start of ch3"""
+    sounds.intro_sounds()
+    print_green('Welcome to Chapter 3!\n', 3)
     continue_message()
 
 
@@ -41,7 +43,7 @@ def ch3_bad_ending():
 
 def restart():
     """Allows the players to restart their game and reset their saved data values"""
-    from gameprocess import game_intro, game, go_to_checkpoint
+    from gameprocess import difficulty, game, go_to_checkpoint
     choices = ['y', 'yes', 'n', 'no']
     choice_options = ['Would you like to restart the game (yes / no): ']
     restart_choice = _player_choice(choices, choice_options)
@@ -51,7 +53,7 @@ def restart():
         sounds.set_volume(0.05)
         print_green('Default stats have been loaded/saved and a new game will begin...\n', 1)
         player1.check_point = player1.check_point.replace('bad', '')  # load game from last checkpoint
-        game_intro()
+        difficulty()
         game()
         go_to_checkpoint()
     elif restart_choice in ['n', 'no']:

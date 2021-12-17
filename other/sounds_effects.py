@@ -17,9 +17,15 @@ class GameSounds:
         soundObj.set_volume(self.volume_level)  # Default volume is 0.05. Max volume is 1.0 and Min volume is 0.0
         soundObj.play()
 
-    def intro_sound(self):
+    def intro_sounds(self):
         """plays intro sound"""
-        self._play_sound('sounds/introsoundtrack.mp3')
+        intro_sound_paths = ['sounds/introsoundtrack1.mp3',
+                             'sounds/introsoundtrack2.mp3',
+                             'sounds/introsoundtrack3.mp3',
+                             'sounds/introsoundtrack4.mp3',
+                             'sounds/introsoundtrack5.mp3',
+                             ]
+        self._play_sound(choice(intro_sound_paths))
 
     def bad_ending(self):
         """plays bad ending sound"""
@@ -39,7 +45,16 @@ class GameSounds:
 
     def good_luck(self):
         """plays when something good happens"""
-        self._play_sound('sounds/goodluck.wav')
+        goodluck_paths = ['sounds/goodluck0.wav',
+                          'sounds/goodluck1.mp3',
+                          'sounds/goodluck2.wav',
+                          'sounds/goodluck3.wav',
+                          'sounds/goodluck4.mp3',
+                          'sounds/goodluck5.mp3',
+                          'sounds/goodluck6.mp3',
+                          'sounds/goodluck7.mp3',
+                          ]
+        self._play_sound(choice(goodluck_paths))
 
     def merchant_purchase_sound(self):
         """plays when player buys something"""
@@ -62,7 +77,10 @@ class GameSounds:
 
     def wind_sound(self):
         """plays usually when outside"""
-        self._play_sound('sounds/heavy_wind.wav')
+        wind_paths = ['sounds/heavy_wind.wav',
+                      'sounds/heavy_wind2.mp3',
+                      ]
+        self._play_sound(choice(wind_paths))
 
     def menu_button_sound(self):
         """plays when the player gives any sort of in game input"""

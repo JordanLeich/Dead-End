@@ -8,7 +8,9 @@ from other.colors import print_green, print_yellow, print_red, print_sleep
 
 
 def start():
-    print_green('Welcome to Chapter 2!\n', 1)
+    """start of ch2"""
+    sounds.intro_sounds()
+    print_green('Welcome to Chapter 2!\n', 3)
     print_green('Upon driving the car through the broken roads area, the sun is certainly dwindling and time in the car'
                 'says 2:35 AM. You continue to grow yourself tired and restless from everything that had led to this '
                 'point\n', 2.5)
@@ -21,7 +23,7 @@ def start():
     if choice == '1':
         sounds.zombie_attack_inside()
         print_red('While attempting to put the car in reverse and head backwards to the local gas station in town, '
-              'a swarm of zombies arise on the car while the car gets stuck into gear!\n', 2.5)
+                  'a swarm of zombies arise on the car while the car gets stuck into gear!\n', 2.5)
         if not player1.user_attack():
             return
         print_green('You have successfully killed off the heaping swarm of zombies surrounding the car!\n', 1)
@@ -62,7 +64,7 @@ def ch2_bad_ending():
 
 def restart():
     """Allows the players to restart their game and reset their saved data values"""
-    from gameprocess import game_intro, game, go_to_checkpoint
+    from gameprocess import difficulty, game, go_to_checkpoint
     choices = ['y', 'yes', 'n', 'no']
     choice_options = ['Would you like to restart the game (yes / no): ']
     restart_choice = _player_choice(choices, choice_options)
@@ -72,7 +74,7 @@ def restart():
         sounds.set_volume(0.05)
         print_green('Default stats have been loaded/saved and a new game will begin...\n', 1)
         player1.check_point = player1.check_point.replace('bad', '')  # load game from last checkpoint
-        game_intro()
+        difficulty()
         game()
         go_to_checkpoint()
     elif restart_choice in ['n', 'no']:
