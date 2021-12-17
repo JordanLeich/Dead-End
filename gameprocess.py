@@ -1,23 +1,24 @@
-# from classes import Player, Difficulty
 import chapters.chapter2
-import game
-from game import player1, sounds, game_data, Difficulty
-from choices import _player_choice
 from chapters.chapter1 import *
+from choices import _player_choice
+from game import player1, sounds, game_data, Difficulty
 
 
 # GAME SETUP, PROCESS, AND RESET HANDLERS
 
 def load_or_save_data():
+    """loads or saves data from the data.json game data file"""
     player1.load_data(game_data.load_game())
 
 
 def game_intro():
+    """simple intro sound plays and head to the difficulty selection screen"""
     sounds.intro_sound()
     difficulty()
 
 
 def unlock_all_cheat():
+    """secret cheat code that activates unlimited money, health, and in game items"""
     sounds.good_luck()
     player1.reset_values(999999, 999999, True)
     player1.difficulty = Difficulty(0)
@@ -41,6 +42,7 @@ def _difficulty_set_health():
     print_health(player1.difficulty,
                  f'{player1.difficulty.name} mode has been selected, you will begin with {player1.health} health.\n',
                  1)
+
 
 def xp_level_system():
     """Used for leveling and award the player with their respective XP amount based their difficulty level."""
@@ -91,18 +93,12 @@ def xp_level_system():
     print_green(f'Current XP Level - {player1.user_level}\n', 1)
     return
 
+
 def difficulty():
+    """handles difficulty activation procedure, if a difficulty has not been set then the user will select one"""
     if player1.difficulty.value != -1:
         sounds.difficulty_select_sound()
-
-        if player1.difficulty.name == 1:
-            print_green(f'Current difficulty is set to {player1.difficulty.name}\n', 1)
-        elif player1.difficulty == 2:
-            print_yellow(f'Current difficulty is set to {player1.difficulty.name}\n', 1)
-        elif player1.difficulty == 3:
-            print_red(f'Current difficulty is set to {player1.difficulty.name}\n', 1)
-        else:
-            print_sleep(f'Current difficulty is set to {player1.difficulty.name}\n', 1)
+        print_sleep(f'Current difficulty is set to {player1.difficulty.name}\n', 1)
         print_sleep('Difficulty selection was skipped due to saved difficulty data already existing...\n', 1)
 
         if player1.check_point == "6":
@@ -124,6 +120,7 @@ def difficulty():
 
 
 def difficulty_select():
+    """allows the user to select a difficulty"""
     print_sleep('--- All difficulty levels ---\n')
     print_green('(1) Easy - Lowest amount of XP awarded\n')
     print_yellow('(2) Medium - Average amount of XP awarded\n')
@@ -140,7 +137,8 @@ def difficulty_select():
     _difficulty_set_health()
 
 
-def go_to_checkpoint():  # main program running movement to levels -- checkpoint when leaving area
+def go_to_checkpoint():
+    """runs movement to levels -- checkpoint when leaving area"""
     checkpoints = {'1': outside_area,
                    '2': diner_area,
                    '3': gas_station,
@@ -158,6 +156,7 @@ def go_to_checkpoint():  # main program running movement to levels -- checkpoint
 
 # move to player class
 def print_health(player_difficulty, message, sleep_duration=0):
+    """prints the users health and color based upon difficulty selection"""
     if player_difficulty == Difficulty(1):
         print_green(message, sleep_duration)
     elif player_difficulty == Difficulty(2):

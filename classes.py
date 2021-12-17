@@ -10,10 +10,7 @@ game_data = GameData()  # load/save functions Instance
 
 
 class Player:
-    """
-This class is to setup the player with all variables needed through out the game.
-If more variables are needed. they can be added here.
-    """
+    """This class is to set up the player with all variables needed throughout the game. If more variables are needed. they can be added here."""
     def __init__(self, balance=0, health=0, difficulty=-1, xp_amount=0, user_level=0):
         # user attributes
         self.balance = balance
@@ -83,6 +80,7 @@ If more variables are needed. they can be added here.
         self.user_level = 0
 
     def get_data(self) -> dict:
+        """used to get data from achievements and difficulty"""
         value_dict = deepcopy(vars(self))
         value_dict['difficulty'] = self.difficulty.value
         value_dict['achievement_list'] = {}
@@ -106,30 +104,37 @@ If more variables are needed. they can be added here.
         self.user_level = user_data['user_level']
 
     def get_money(self, start_int=5, end_int=30) -> int:
+        """sends money to the players balance"""
         random_money = randint(start_int, end_int)
         self.balance += random_money
         return random_money
 
     def lose_health(self, start_int, end_int) -> int:
+        """subtracts health from the players health"""
         random_health = randint(start_int, end_int)
         self.health -= random_health
         return random_health
 
     def get_health(self, start_int, end_int) -> int:
+        """adds health to the players health"""
         random_health = randint(start_int, end_int)
         self.health += random_health
         return random_health
 
     def use_item(self, key) -> int:
+        """allows the player to use a weapon of their choice while still losing health in an attack"""
         return self.lose_health(self.weapon_dict[key][-2], self.weapon_dict[key][-1])
 
     def consume(self, index) -> int:
+        """allows the player to gain health via consumables"""
         return self.get_health(self.consumables[index][-2], self.consumables[index][-1])
 
     def set_difficulty(self, difficulty) -> None:
+        """sets the class difficulty to the function variable named difficulty"""
         self.difficulty = Difficulty(difficulty)
 
     def reset_values(self, balance, health, default_value) -> None:
+        """resets the player's health, balance, owned items to default"""
         self.balance = balance
         self.health = health
         for k, v in self.weapon_dict.items():
@@ -137,17 +142,15 @@ If more variables are needed. they can be added here.
         for v in self.consumables:
             v[2] = default_value
 
-    def print_achievement(self, achievement: tuple) -> str:
+    def print_achievement(self, achievement: tuple) -> None:
+        """prints an achievement that gets unlocked"""
         item = self.achievement_list[achievement]
         if item['unlocked']:  # achievement already unlocked
             return
         # specific achievement checks
         if achievement == ('1', 'Ultra Rare'):  # all other achievements unlocked
-            item = all(
-                [v['unlocked']
-                for k, v in self.achievement_list.items()
-                if k != achievement]
-            )
+            item = all(v['unlocked'] for k, v in self.achievement_list.items()
+                       if k != achievement)
 
             if not item:  # not all achievements are unlocked
                 return
@@ -156,19 +159,15 @@ If more variables are needed. they can be added here.
         message = f'{achievement[1]} Achievement Unlocked! {item["name"]} - {item["desc"]}\n'
         print_blue(message, 2)
 
-    def merchant(self):
-        """
-    Merchant randomly shows up, allowing the player to purchase weapons and consumables.
-        """
+    def merchant(self):  # sourcery no-metrics
+        """Merchant randomly shows up, allowing the player to purchase weapons and consumables"""
         from game import sounds
-
         if self.health <= 0:  # end game if no health
             print_red('You currently have no health left...\n', 1)
             self.check_point = f'{self.check_point}bad'
 
         if randint(1, 7) != 3:  # Random chance for player to interact with merchant
             return
-
         sounds.good_luck()
         print_green('Whoosh! The lucky merchant has appeared in-front of you...\n', 1)
         if self.balance <= 0:
@@ -225,9 +224,7 @@ If more variables are needed. they can be added here.
             print_sleep('The merchant has been skipped but can be brought back later...\n', 1)
 
     def user_attack(self, enemy='zombies'):
-        from game import sounds
-
-        """For fights with zombies or humans. User choice of weapon to use"""
+        """used whenever the player gets in a battle with a zombie"""
         choice_names = [v[0] for k, v in self.weapon_dict.items() if v[2]]
         if not choice_names:  # no choice for them to make
             self.health = 0
@@ -267,19 +264,19 @@ If more variables are needed. they can be added here.
         return True  # attack successful
 
     def checkpoint_save(self, checkpoint_name=''):
+        """activates a checkpoint save and writes to the data.json file, also allows the user to continue playing or not"""
         self.check_point = checkpoint_name
         game_data.save_game(self.get_data())  # Sends self info to save file
-        if self.health <= 0:  # shouldn't really get to this point --> TODO
+        if self.health <= 0:  # extra check to see if the player has no more health left.
             print_red('Sorry you have no more health! You have lost the game!\n', 1)
             return  # restart()
         if checkpoint_name != '':  # remove checkpoint printing for ending + difficulty selected
             self.merchant()
             print_green('A checkpoint has been reached...\n', 1)
-            print_green(f'Health: {self.health}\n', 0)
-            print_green(f'Balance: {self.balance}\n', 0)
-            print_green(f'XP Amount: {self.xp_amount}\n', 0)
+            print_green(f'Health: {self.health}\n')
+            print_green(f'Balance: {self.balance}\n')
+            print_green(f'XP Amount: {self.xp_amount}\n')
             print_green(f'XP Level: {self.user_level}\n', 2)
-
             choices = ['y', 'yes', 'n', 'no']
             choice_options = ['Would you like to continue the game (yes / no): ']
             exit_choice = _player_choice(choices, choice_options)
@@ -287,16 +284,13 @@ If more variables are needed. they can be added here.
                 self.check_point = f'{checkpoint_name}exit'
 
 
-
-
-
-# helper function for user_attack to find the corresponding item in weapon_dict
 def deep_index(lst, w):
+    """helper function for user_attack to find the corresponding item in weapon_dict"""
     return [i for (i, sub) in enumerate(lst) if w in sub][0]
 
 
-# Difficulty labeling - easier for referencing + printing
 class Difficulty(Enum):
+    """Difficulty labeling - easier for referencing + printing"""
     Notset = -1
     God = 0
     Easy = 1

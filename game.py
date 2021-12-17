@@ -39,7 +39,7 @@ def view_stats():
 
 
 def open_github(print_text, website_append=''):
-    """Open github in the users default web browser"""
+    """Open GitHub in the users default web browser"""
     print_green(print_text)
     webbrowser.open_new(f'https://github.com/JordanLeich/Zombie-Survival-Game{website_append}')
     sleep(1)
@@ -53,6 +53,7 @@ def donation_opener(website):
 
 
 def list_achievements():
+    """Simply prints an entire list of all the achievements found in the classes file"""
     for k, v in player1.achievement_list.items():
         if k[0] == '1':
             print(f'\nAll {k[1]} Achievements')
@@ -95,6 +96,7 @@ def options(choice=''):
 
 
 def game_menu():
+    """handles the main menu UI options"""
     choice_options = ['(1) New Game',
                       '(2) Load Game',
                       '(3) Options',
@@ -108,16 +110,17 @@ def game_menu():
                    'unlock_all_cheat': [unlock_all_cheat, game]
                    }
     while True:
-        print_green('Welcome to Dead End!\n', 0)
+        print_green('Welcome to Dead End!\n')
         print_sleep('This is a zombie survival game where you must make the best choices and '
                     'decisions possible in order to live.\nAs a survivor, you will encounter zombies, weapons, people, '
                     'and a merchant to buy from with an in-game currency.\nEvery decision you make has a cause and '
-                    'effect while some lead you to fortune and others lead you to death.\n', 0)
+                    'effect while some lead you to fortune and others lead you to death.\n')
         for item in choice_dict[_player_choice(list(choice_dict.keys()), choice_options)]:
             item()
 
 
 def audio_options():
+    """allows the player to control or disable in game audio"""
     choice_options = ['What would you like to set your volume level to (0 - 100) or exit: ']
     choices = [str(x) for x in range(101)]
     exit_choices = ['e', 'exit', 'c', 'close']

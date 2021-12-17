@@ -12,6 +12,7 @@ This class will offer loading and saving of game data for Zombie-Survival-Game.
         self.file_exists = bool(file_exists(self.file))
 
     def load_game(self):
+        """loads and read data from data.json file"""
         if self.file_exists:
             with open(self.file, 'r') as user_data_file:
                 user_data = json.load(user_data_file)
@@ -22,6 +23,7 @@ This class will offer loading and saving of game data for Zombie-Survival-Game.
             print_green('Starting a fresh game...\n')
 
     def save_game(self, player_data: dict):
+        """saves and writes to data.json file, if the file does not exist then this function will create a new save"""
         if not self.file_exists:
             print_yellow("No previous save! Creating a new save...\n")
 
