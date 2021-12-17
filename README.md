@@ -8,7 +8,7 @@
     <img src="https://img.shields.io/badge/-Spooky-brightgreen">    
     <img src="https://img.shields.io/github/languages/code-size/JordanLeich/Zombie-Survival-Game">    
     <img src="https://img.shields.io/github/repo-size/JordanLeich/Zombie-Survival-Game"> 
-    <img src="https://img.shields.io/tokei/lines/github/JordanLeich/Zombie-Survival-Game?label=lines%20of%20code">
+    <img src="https://img.shields.io/tokei/lines/github/JordanLeich/Dead-End">
     <img src="https://img.shields.io/github/stars/jordanleich/Zombie-Survival-Game?style=socialhttps://img.shields.io/tokei/lines/github/JordanLeich/Zombie-Survival-Game?label=lines%20of%20code"> 
     <img src="https://img.shields.io/github/stars/jordanleich?label=user%20stars&style=social"> 
     <img src="https://img.shields.io/github/v/release/jordanleich/Zombie-Survival-Game?include_prereleases"> 
