@@ -16,6 +16,12 @@ def game():
     elif player1.health >= 500:
         print_green(player1.print_achievement(('1', 'Rare')), 2)
 
+    if 250 <= player1.balance <= 999:
+        print_green(player1.print_achievement(('5', 'Rare')), 2)
+
+    if player1.balance >= 1000:
+        print_green(player1.print_achievement(('2', 'Ultra Rare')), 2)
+
     print('You have ended up in a small local town called Hinesville. This old town contains a population of about\n'
           'only 6000 people and holds only a Gas Station, Diner, and a Park. The current year is 1999 and you\n'
           'cannot wait to finally get on with your life and move somewhere more alive\n')

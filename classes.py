@@ -66,8 +66,16 @@ class Player:
                             'desc': 'Reached the maximum in-game XP level.',
                             'unlocked': False,
                             },
+            ('5', 'Rare'): {'name': 'Rags to Riches',
+                            'desc': 'Obtained a total of 250 dollars or more.',
+                            'unlocked': False,
+                            },
             ('1', 'Ultra Rare'): {'name': 'Perfection Indeed',
                                   'desc': 'Obtain all achievements.',
+                                  'unlocked': False,
+                                  },
+            ('2', 'Ultra Rare'): {'name': 'Fifthly Rich',
+                                  'desc': 'Obtain a total of 1000 dollars or more.',
                                   'unlocked': False,
                                   },
             ('1', 'Cheater'): {'name': 'Cheater',
@@ -133,7 +141,7 @@ class Player:
         self.difficulty = Difficulty(difficulty)
 
     def reset_values(self, balance, health, default_value) -> None:
-        """resets the player's health, balance, owned items to default"""
+        """resets the player's health, balance, owned items to a set amount"""
         self.balance = balance
         self.health = health
         for k, v in self.weapon_dict.items():

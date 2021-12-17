@@ -58,20 +58,30 @@ def list_achievements():
     sleep(5)
 
 
+def list_cheat_codes():
+    """Simply prints an entire list of all the cheat codes"""
+    print_yellow('--- Cheat codes must be entered at the main menu screen of the game ---\n', 2)
+    print('''unlock_all_cheat
+infinite_health_cheat
+infinite_money_cheat\n''')
+    sleep(3)
+
+
 def options(choice=''):
     """UI for the user to view additional info or extra parts of this project"""
     choice_options = ['(1) View Stats',
                       '(2) Audio Options',
                       '(3) Achievements List',
-                      '(4) Project Releases',
-                      '(5) Credits',
-                      '(6) Donate',
-                      '(7) Main Menu',
-                      '(8) Exit\n',
+                      '(4) All Cheat Codes',
+                      '(5) Project Releases',
+                      '(6) Credits',
+                      '(7) Donate',
+                      '(8) Main Menu',
+                      '(9) Exit\n',
                       'Which choice would you like to pick:  '
                       ]
-    while choice != '7' or choice != '8':
-        choice = _player_choice([str(x) for x in range(1, 9)], choice_options)
+    while choice != '8' or choice != '9':
+        choice = _player_choice([str(x) for x in range(1, 10)], choice_options)
 
         if choice == '1':
             view_stats()
@@ -80,14 +90,16 @@ def options(choice=''):
         elif choice == '3':
             list_achievements()
         elif choice == '4':
-            open_github("Opening the latest stable release...\n", "/releases")
+            list_cheat_codes()
         elif choice == '5':
-            open_github("Opening all contributors of this project...\n", "/graphs/contributors")
+            open_github("Opening the latest stable release...\n", "/releases")
         elif choice == '6':
-            donation_opener("https://www.paypal.com/donate/?business=8FGHU8Z4EJPME&no_recurring=0&currency_code=USD")
+            open_github("Opening all contributors of this project...\n", "/graphs/contributors")
         elif choice == '7':
-            return
+            donation_opener("https://www.paypal.com/donate/?business=8FGHU8Z4EJPME&no_recurring=0&currency_code=USD")
         elif choice == '8':
+            return
+        elif choice == '9':
             exit()
 
 
@@ -103,7 +115,9 @@ def game_menu():
                    '2': [load_or_save_data, difficulty, go_to_checkpoint],
                    '3': [options],
                    '4': [exit],
-                   'unlock_all_cheat': [unlock_all_cheat, game]
+                   'unlock_all_cheat': [unlock_all_cheat, game],
+                   'infinite_health_cheat': [infinite_health_cheat, game],
+                   'infinite_money_cheat': [infinite_money_cheat, game]
                    }
     while True:
         sounds.intro_sounds()

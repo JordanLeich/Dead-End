@@ -20,6 +20,26 @@ def unlock_all_cheat():
     player1.checkpoint_save()
 
 
+def infinite_health_cheat():
+    """secret cheat code that activates unlimited health"""
+    sounds.good_luck()
+    player1.health = 999999
+    player1.difficulty = Difficulty(0)
+    print_green('Infinite health cheat has been activated!\n', 2)
+    player1.checkpoint_save()
+
+
+def infinite_money_cheat():
+    """secret cheat code that activates unlimited money"""
+    sounds.good_luck()
+    player1.balance = 999999
+    player1.health = 200  # health has to be set to an amount above at least 0.
+    # otherwise, the player will be given 0 health and the game will instantly end.
+    player1.difficulty = Difficulty(0)
+    print_green('Infinite money cheat has been activated!\n', 2)
+    player1.checkpoint_save()
+
+
 # helper function for player health setting and printing
 def _difficulty_set_health():
     if player1.difficulty == Difficulty(1):
@@ -129,11 +149,7 @@ def difficulty_select():
     choices = [str(x) for x in range(1, 4)]
     choices.append('unlock_all_cheat')
     choice_options = ['Select a difficulty: ']
-    try:
-        player1.difficulty = Difficulty(int(_player_choice(choices, choice_options)))
-    except:
-        player1.difficulty = Difficulty(0)  # unlock_all_cheat 
-
+    player1.difficulty = Difficulty(int(_player_choice(choices, choice_options)))
     sounds.difficulty_select_sound()
     _difficulty_set_health()
 
