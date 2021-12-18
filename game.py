@@ -2,6 +2,7 @@
 
 # Created on 5/11/2021
 import sys
+import time
 import webbrowser
 from PIL import Image
 from classes import Player, Difficulty
@@ -192,14 +193,15 @@ def options(choice=''):
                       '(4) All Cheat Codes',
                       '(5) Project Releases',
                       '(6) Concept Art',
-                      '(7) Credits',
-                      '(8) Donate',
-                      '(9) Main Menu',
-                      '(10) Exit\n',
+                      '(7) Time Played',
+                      '(8) Credits',
+                      '(9) Donate',
+                      '(10) Main Menu',
+                      '(11) Exit\n',
                       'Which choice would you like to pick:  '
                       ]
-    while choice != '9' or choice != '10':
-        choice = _player_choice([str(x) for x in range(1, 11)], choice_options)
+    while choice != '10' or choice != '11':
+        choice = _player_choice([str(x) for x in range(1, 12)], choice_options)
 
         if choice == '1':
             view_stats()
@@ -214,12 +216,14 @@ def options(choice=''):
         elif choice == '6':
             concept_art()
         elif choice == '7':
-            open_github("Opening all contributors of this project...\n", "/graphs/contributors")
+            display_background_timer()
         elif choice == '8':
-            donation_opener("https://www.paypal.com/donate/?business=8FGHU8Z4EJPME&no_recurring=0&currency_code=USD")
+            open_github("Opening all contributors of this project...\n", "/graphs/contributors")
         elif choice == '9':
-            return
+            donation_opener("https://www.paypal.com/donate/?business=8FGHU8Z4EJPME&no_recurring=0&currency_code=USD")
         elif choice == '10':
+            return
+        elif choice == '11':
             exit()
 
 
@@ -266,5 +270,18 @@ def audio_options():
         print_sleep(f'Your current volume level is set at {choice}%\n', 1)
 
 
+def start_background_timer():
+    """Acts as a background timer that starts as soon as the game is ran."""
+    player1.start_timer = time.time()  # Starts the background timer as soon as the game starts
+
+
+def display_background_timer():
+    """Acts as a background timer that starts as soon as the game is ran."""
+    end_timer = time.time()
+    temporary_time_played = int((int(end_timer) - (int(player1.start_timer))) / 60)
+    return print_blue(f'{temporary_time_played} Minutes played.\n', 1)
+
+
 if __name__ == '__main__':
+    start_background_timer()
     game_menu()

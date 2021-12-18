@@ -11,7 +11,8 @@ game_data = GameData()  # load/save functions Instance
 class Player:
     """This class is to set up the player with all variables needed throughout the game. If more variables are needed. they can be added here."""
 
-    def __init__(self, balance=0, health=0, difficulty=-1, xp_amount=0, user_level=0, player_deaths=0, total_kills=0):
+    def __init__(self, balance=0, health=0, difficulty=-1, xp_amount=0, user_level=0, player_deaths=0, total_kills=0,
+                 start_timer=0):
         # user attributes
         self.balance = balance
         self.health = health
@@ -20,6 +21,7 @@ class Player:
         self.user_level = user_level
         self.player_deaths = player_deaths
         self.total_kills = total_kills
+        self.start_timer = start_timer
         self.weapon_dict = {
             # Organized: '#': ['name', 'cost', 'purchased', 'health_rand_1', 'health_rand_2'],
             '0': ['Knife', None, False, 40, 45],  # Weapon can be found in-game at the start
@@ -316,11 +318,11 @@ class Player:
             self.print_achievement(('3', 'Ultra Rare'))
         if checkpoint_name != '':  # remove checkpoint printing for ending + difficulty selected
             self.merchant()
-            print_green('A checkpoint has been reached...\n', 1)
-            print_green(f'Health: {self.health}\n')
-            print_green(f'Balance: {self.balance}\n')
-            print_green(f'XP Amount: {self.xp_amount}\n')
-            print_green(f'XP Level: {self.user_level}\n', 2)
+            print_green('A checkpoint has been reached, Your in-game stats will now be displayed.\n', 1)
+            print_green(f'Health: {self.health}')
+            print_green(f'Balance: {self.balance}')
+            print_green(f'XP Amount: {self.xp_amount}')
+            print_green(f'XP Level: {self.user_level}\n', 1)
             choices = ['y', 'yes', 'n', 'no']
             choice_options = ['Would you like to continue the game (yes / no): ']
             exit_choice = _player_choice(choices, choice_options)

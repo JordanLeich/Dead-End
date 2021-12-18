@@ -58,7 +58,7 @@ def ch2_good_ending():
 
 def ch2_bad_ending():
     """When the player dies at any point."""
-    sounds.ch1_bad_ending()
+    sounds.bad_ending()
     print_red('You have died and not reached the end of the horrors...\n', 1)
     restart()
 

@@ -79,7 +79,7 @@ def xp_level_system():  # sourcery no-metrics
         else:
             random_xp_amount = randint(1, 100)
             player1.xp_amount += random_xp_amount
-        print_green(f'XP gained - {random_xp_amount}\n', 1)
+        print_green(f'XP gained - {random_xp_amount}')
     # End of code where the player is awarded XP.
     # Start of code where the player is leveled up.
     if player1.xp_amount >= 1000:
@@ -112,8 +112,8 @@ def xp_level_system():  # sourcery no-metrics
         player1.user_level = 0
         return
     sounds.good_luck()
-    print_green(f'Current XP Amount - {player1.xp_amount}\n', .5)
-    print_green(f'Current XP Level - {player1.user_level}\n', 1)
+    print_green(f'Current XP Amount - {player1.xp_amount}')
+    print_green(f'Current XP Level - {player1.user_level}\n', 2)
     return
 
 
@@ -142,7 +142,8 @@ def difficulty():
             if choice in ['n', 'new']:
                 player1.reset_values(0, 100, False)
                 difficulty_select()
-                player1.checkpoint_save()
+                player1.checkpoint_save('0')
+                go_to_checkpoint()
             elif choice in ['c', 'continue']:
                 print_green('Continuing game...\n', 1)
                 go_to_checkpoint()
@@ -166,7 +167,8 @@ def difficulty_select():
 
 def go_to_checkpoint():
     """runs movement to levels -- checkpoint when leaving area"""
-    checkpoints = {'1': outside_area,
+    checkpoints = {'0': game,
+                   '1': outside_area,
                    '2': diner_area,
                    '3': gas_station,
                    '4': parkview_area,

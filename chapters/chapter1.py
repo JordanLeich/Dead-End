@@ -9,7 +9,7 @@ from other.colors import print_green, print_yellow, print_red, print_sleep, prin
 
 
 def game():
-    """Intro section of the game that begins in the apartment room"""
+    """Intro section of the game that begins in the apartment room, checkpoint area # 0"""
     if player1.health <= 0:
         print_red('You currently have no health left...\n', 1)
         player1.check_point = f'{player1.check_point}bad'
@@ -286,7 +286,7 @@ def ch1_good_ending(checkpoint_name=''):
 
 def ch1_bad_ending():
     """When the player dies at any point."""
-    sounds.ch1_bad_ending()
+    sounds.bad_ending()
     print_red('You have died and not reached the end of the horrors...\n', 1)
     player1.player_deaths += 1
     if player1.player_deaths == 1:
