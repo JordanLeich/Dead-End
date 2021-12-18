@@ -25,7 +25,7 @@
   decision you make has a cause and effect while some lead you to fortune and others lead you to death.
 
 # Features 🌟
-- Unlockable achievements with varying difficulty
+- Unlock-able achievements with varying difficulty
 - XP progression system to keep you climbing the ropes
 - Difficulty system built for newcomers or experts
 - Currency system with a merchant to buy unique items
@@ -36,4 +36,4 @@
 # [Requirements](https://github.com/JordanLeich/Zombie-Survival-Game/blob/main/requirements.txt) ⚡
 
 # TODO List ❗
-- Check out the issues page for this game project [here](https://github.com/JordanLeich/Zombie-Survival-Game/issues/1).
+- Check out the issues' page for this game project [here](https://github.com/JordanLeich/Zombie-Survival-Game/issues/1).
