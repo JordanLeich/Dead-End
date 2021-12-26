@@ -1,3 +1,4 @@
+""" This file is used to control cheats and how the game functions in a specific order based on user input. """
 import chapters.chapter1
 import chapters.chapter2
 import chapters.chapter3

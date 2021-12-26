@@ -1,3 +1,4 @@
+""" File is called when the player needs to make a choice otherwise an error will be returned to try again. """
 from other.colors import print_sleep
 
 

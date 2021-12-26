@@ -1,3 +1,4 @@
+""" This file holds all the important game data (saving and loading) of the game. """
 import json
 from os.path import exists as file_exists
 from other.colors import print_green, print_yellow

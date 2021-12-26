@@ -1,3 +1,4 @@
+""" Holds the player class along with important functions that control the achievements, xp system, and much more. """
 from random import randint
 from enum import Enum
 from copy import deepcopy

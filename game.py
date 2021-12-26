@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+""" This file holds all the main menus of the game and starts the game. """
 
 # Created on 5/11/2021
 import sys

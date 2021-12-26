@@ -1,0 +1,3 @@
+Use this command each time changes are made to the game to then update the exe version.
+
+pyinstaller -F -i images\icon.ico game.py

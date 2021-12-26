@@ -1,3 +1,4 @@
+""" File is used to control/call all sounds and music. """
 from random import choice
 import pygame
 

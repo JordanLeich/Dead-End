@@ -1,3 +1,4 @@
+""" This file holds all the chapter 3 areas of the game. """
 from sys import exit
 from time import sleep
 # from classes import Player, Difficulty

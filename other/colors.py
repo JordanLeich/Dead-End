@@ -1,3 +1,4 @@
+""" File is called when colored text is printed to the screen. """
 # Created by Jordan Leich on 7/27/2020
 
 from colored import fg, attr
