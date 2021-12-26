@@ -1,3 +1,3 @@
 Use this command each time changes or updates are made to the game to then update the exe version.
 
-pyinstaller -F -i images\icon.ico game.py -n Dead End
+pyinstaller -F -i images\icon.ico game.py -n Dead-End

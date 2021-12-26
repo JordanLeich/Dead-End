@@ -186,23 +186,43 @@ def concept_art():  # sourcery no-metrics
         exit()
 
 
+def game_version():
+    """ Allows the user to see what version of the game they are currently playing on. """
+    current_game_version = 6.0
+    latest_stable_release_version = 6.0
+
+    if current_game_version == latest_stable_release_version:
+        print_green(f'You are playing on {current_game_version}, this version matches the most stable release of '
+                    f'{latest_stable_release_version} on GitHub.\n', 2)
+    elif current_game_version < latest_stable_release_version:
+        print_red(f'You are playing on {current_game_version}, this version is outdated from the most '
+                  f'stable release of 'f'{latest_stable_release_version} on GitHub. It is recommended to update to '
+                  f'the latest release version on GitHub!\n', 2)
+    elif current_game_version > latest_stable_release_version:
+        print_yellow(f'You are playing on {current_game_version}, this version is updated beyond the most stable '
+                     f'release of 'f'{latest_stable_release_version} on GitHub. Beware of bugs that may occur!\n', 2)
+    else:
+        return print_red('Game version could not be found...\n', 2)
+
+
 def options(choice=''):
     """UI for the user to view additional info or extra parts of this project"""
     choice_options = ['(1) View Stats',
                       '(2) Audio Options',
                       '(3) Achievements List',
                       '(4) All Cheat Codes',
-                      '(5) Project Releases',
-                      '(6) Concept Art',
-                      '(7) Time Played',
-                      '(8) Credits',
-                      '(9) Donate',
-                      '(10) Main Menu',
-                      '(11) Exit\n',
+                      '(5) Game Version',
+                      '(6) Project Releases',
+                      '(7) Concept Art',
+                      '(8) Time Played',
+                      '(9) Credits',
+                      '(10) Donate',
+                      '(11) Main Menu',
+                      '(12) Exit\n',
                       'Which choice would you like to pick:  '
                       ]
-    while choice != '10' or choice != '11':
-        choice = _player_choice([str(x) for x in range(1, 12)], choice_options)
+    while choice != '11' or choice != '12':
+        choice = _player_choice([str(x) for x in range(1, 13)], choice_options)
 
         if choice == '1':
             view_stats()
@@ -213,18 +233,20 @@ def options(choice=''):
         elif choice == '4':
             list_cheat_codes()
         elif choice == '5':
-            open_github("Opening the latest stable release...\n", "/releases")
+            game_version()
         elif choice == '6':
-            concept_art()
+            open_github("Opening the latest stable release...\n", "/releases")
         elif choice == '7':
-            display_background_timer()
+            concept_art()
         elif choice == '8':
-            open_github("Opening all contributors of this project...\n", "/graphs/contributors")
+            display_background_timer()
         elif choice == '9':
-            donation_opener("https://www.paypal.com/donate/?business=8FGHU8Z4EJPME&no_recurring=0&currency_code=USD")
+            open_github("Opening all contributors of this project...\n", "/graphs/contributors")
         elif choice == '10':
-            return
+            donation_opener("https://www.paypal.com/donate/?business=8FGHU8Z4EJPME&no_recurring=0&currency_code=USD")
         elif choice == '11':
+            return
+        elif choice == '12':
             exit()
 
 
