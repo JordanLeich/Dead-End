@@ -5,6 +5,7 @@ import chapters.chapter3
 from chapters.chapter1 import *
 from choices import _player_choice
 from game import player1, sounds, game_data, Difficulty
+from random import randint
 
 
 # GAME SETUP, PROCESS, AND RESET HANDLERS
@@ -61,57 +62,34 @@ def _difficulty_set_health():
                  1)
 
 
-def xp_level_system():  # sourcery no-metrics
+def xp_level_system():
     """Used for leveling and award the player with their respective XP amount based their difficulty level."""
-    from random import randint
-    random_xp_amount = int
+    # player is awarded XP
     if player1.xp_amount < 1000:  # set to 1000 since lvl 10 is achieved at xp amount 1001 and above
+        initial_xp = player1.xp_amount
         if player1.difficulty == Difficulty(1):
-            random_xp_amount = randint(15, 60)
-            player1.xp_amount += random_xp_amount
+            player1.xp_amount += randint(15, 60)
         elif player1.difficulty == Difficulty(2):
-            random_xp_amount = randint(35, 75)
-            player1.xp_amount += random_xp_amount
+            player1.xp_amount += randint(35, 75)
         elif player1.difficulty == Difficulty(3):
-            random_xp_amount = randint(75, 100)
-            player1.xp_amount += random_xp_amount
-        elif player1.difficulty == Difficulty(0):
+            player1.xp_amount += randint(75, 100)
+        elif player1.difficulty == Difficulty(0): # is there any xp gained or is it always just 500? TODO
             player1.xp_amount = 500
         else:
-            random_xp_amount = randint(1, 100)
-            player1.xp_amount += random_xp_amount
-        print_green(f'XP gained - {random_xp_amount}')
-    # End of code where the player is awarded XP.
-    # Start of code where the player is leveled up.
+            player1.xp_amount += randint(1, 100)
+        print_green(f'XP gained - {player1.xp_amount - initial_xp}')
+    # Leveling the player up
     if player1.xp_amount >= 1000:
         print_green('Reached Maximum XP level - 10\n', 1.5)
         player1.user_level = 10
         player1.print_achievement(('4', 'Rare'))
         return
-    elif 900 <= player1.xp_amount <= 999:
-        player1.user_level = 9
-    elif 800 <= player1.xp_amount <= 899:
-        player1.user_level = 8
-    elif 700 <= player1.xp_amount <= 799:
-        player1.user_level = 7
-    elif 600 <= player1.xp_amount <= 699:
-        player1.user_level = 6
-    elif 500 <= player1.xp_amount <= 599:
-        player1.user_level = 5
-    elif 400 <= player1.xp_amount <= 499:
-        player1.user_level = 4
-    elif 300 <= player1.xp_amount <= 399:
-        player1.user_level = 3
-    elif 200 <= player1.xp_amount <= 299:
-        player1.user_level = 2
-    elif 100 <= player1.xp_amount <= 199:
-        player1.user_level = 1
-    elif 0 <= player1.xp_amount <= 99:
-        player1.user_level = 0
-    else:
+    elif player1.xp_amount <= 0: 
         print_yellow('You currently do not have any XP Level - 0\n', 1)
         player1.user_level = 0
         return
+    else: 
+        player1.user_level = int(player1.xp_amount / 100)
     sounds.good_luck()
     print_green(f'Current XP Amount - {player1.xp_amount}')
     print_green(f'Current XP Level - {player1.user_level}\n', 2)
@@ -144,10 +122,9 @@ def difficulty():
                 player1.reset_values(0, 100, False)
                 difficulty_select()
                 player1.checkpoint_save('0')
-                go_to_checkpoint()
             elif choice in ['c', 'continue']:
                 print_green('Continuing game...\n', 1)
-                go_to_checkpoint()
+            go_to_checkpoint()
     else:
         difficulty_select()
 
