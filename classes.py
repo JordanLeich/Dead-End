@@ -39,6 +39,7 @@ class Player:
             ['Apple', 10, False, 5, 15],
             ['Body Armor', 50, False, 40, 60],
         ]
+        self.chapter = 0
         self.check_point = ''
         self.achievement_list = {
             ('1', 'Common'): {'name': 'Slice & Dice',
