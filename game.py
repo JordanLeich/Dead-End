@@ -90,15 +90,16 @@ def concept_art():  # sourcery no-metrics
         '10': {'author': 'Dmitry Pantiukhov', 'filename': 'old man 1'},
         '11': {'author': 'Dmitry Pantiukhov', 'filename': 'sheriff 1'},
         '12': {'author': 'Gypsywine', 'filename': 'survivors 1'},
-    } 
-    choice_options = [f"({c+1}) {item[1]['filename'].capitalize()}" for c,item in enumerate(artwork_data.items())]
-    choice_options.extend([f'({len(choice_options)+1}) Options Menu', f'({len(choice_options)+2}) Exit\n', 'Which concept art would you like to view:  '])
+    }
+    choice_options = [f"({c + 1}) {item[1]['filename'].capitalize()}" for c, item in enumerate(artwork_data.items())]
+    choice_options.extend([f'({len(choice_options) + 1}) Options Menu', f'({len(choice_options) + 2}) Exit\n',
+                           'Which concept art would you like to view:  '])
 
     choice = _player_choice([str(x) for x in range(1, 15)], choice_options)
-    
-    if choice == str(choice_options[len(choice_options) - 3]):
+
+    if choice == '13':
         return
-    elif choice == str(choice_options[len(choice_options) - 2]):
+    elif choice == '14':
         exit()
     else:
         print_blue(f'Artwork by: {artwork_data[choice]["author"]}\n')
@@ -111,7 +112,7 @@ def concept_art():  # sourcery no-metrics
 
 def game_version():
     """ Allows the user to see what version of the game they are currently playing on. """
-    current_game_version = 6.0
+    current_game_version = 6.2
     latest_stable_release_version = 6.0
 
     if current_game_version == latest_stable_release_version:
@@ -156,7 +157,7 @@ def options(choice=''):
         '9': [open_github, "Opening all contributors of this project...\n", "/graphs/contributors"],
         '10': [donation_opener],
     }
-    
+
     while choice != str(len(choice_options) - 2) or choice != str(len(choice_options) - 1):
         choice = _player_choice([str(x) for x in range(1, len(choice_options))], choice_options)
 
@@ -168,7 +169,7 @@ def options(choice=''):
             else:
                 choice_dict[choice][0]()
 
-                
+
 def game_menu():
     """handles the main menu UI options"""
     choice_options = ['(1) New Game',
@@ -213,12 +214,12 @@ def audio_options():
 
 
 def start_background_timer():
-    """Acts as a background timer that starts as soon as the game is ran."""
+    """Acts as a background timer that starts as soon as the game is run."""
     player1.start_timer = time.time()  # Starts the background timer as soon as the game starts
 
 
 def display_background_timer():
-    """Acts as a background timer that starts as soon as the game is ran."""
+    """Acts as a background timer that starts as soon as the game is run."""
     end_timer = time.time()
     temporary_time_played = int((int(end_timer) - (int(player1.start_timer))) / 60)
     return print_blue(f'{temporary_time_played} Minutes played.\n', 1)

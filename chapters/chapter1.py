@@ -29,7 +29,8 @@ def game():
     sleep(2)
     choices = [str(x) for x in range(1, 4)]
     choice_options = [
-        'While sitting down in the living room of your house, you can either (1) Look around (2) Walk outside (3) Travel down the hidden door in the floor: ']
+        'While sitting down in the living room of your house, you can either (1) Look around (2) Walk outside (3) '
+        'Travel down the hidden door in the floor: ']
     choice = _player_choice(choices, choice_options)
 
     if choice == '1':
@@ -50,21 +51,21 @@ def basement_area():
     """not given a checkpoint, one of the first areas of chapter 1"""
     print_sleep('You have reached the basement area.\n', 1)
     sounds.horror_sound_effects()
-    print_sleep('''After living at your home for awhile now, you've had many supplies and broken utilities stored up in your basement.
-Trailing behind you leads a lurking stench of odor containing of what smells like mold and rotten flesh.\n''', 1.5)
+    print_sleep('''After living at your home for awhile now, you've had many supplies and broken utilities stored up 
+    in your basement. Trailing behind you leads a lurking stench of odor containing of what smells like mold and 
+    rotten flesh.\n''', 1.5)
     choice_options = ['(1) Search around the basement (2) Forget about the basement and leave: ']
     choice = _player_choice([str(x) for x in range(1, 3)], choice_options)
 
     if choice == '1':
-        print_sleep(
-            'Amongst searching the basement, you stumble upon some spare money you forgot you had saved up in the basement.\n',
-            1.5)
+        print_sleep('Amongst searching the basement, you stumble upon some spare money you forgot you had '
+                    'saved up in the basement.\n', 1.5)
         sounds.good_luck()
         print_green(f'You found a total of ${player1.get_money()} dollars!\n', 1)
     elif choice == '2':
         sounds.wind_sound()
-        print_sleep('''Upon leaving the basement, you head out into the outside area for a breath of fresh air after consuming 
-the moldy and old smells of the basement.\n''', 2)
+        print_sleep('''Upon leaving the basement, you head out into the outside area for a breath of fresh air after 
+        consuming the moldy and old smells of the basement.\n''', 2)
 
 
 def gas_station():
@@ -79,7 +80,8 @@ def gas_station():
     sleep(6)
 
     choice_options = [
-        'You have the choice to either (1) Keep talking to the man (2) Ask the man for any supplies along your journey: ']
+        'You have the choice to either (1) Keep talking to the man (2) Ask the man for any supplies along your '
+        'journey: ']
     user_choice = _player_choice([str(x) for x in range(1, 3)], choice_options)
 
     if user_choice == '1':
@@ -101,23 +103,23 @@ def gas_station():
         print_green('You have successfully defended off the zombies inside the gas station but it was most '
                     'unfortunate the man you found could not make it...\n', 2)
         choice_options = [
-            'You have the choice to either (1) Search the all the bodies of zombies and the dead man (2) Head over to the local Diner: ']
+            'You have the choice to either (1) Search the all the bodies of zombies and the dead man (2) Head over to '
+            'the local Diner: ']
         user_choice = _player_choice([str(x) for x in range(1, 3)], choice_options)
 
         if user_choice == '1':
             sounds.good_luck()
             print_sleep(
-                f'After searching everybody in the gas station, you manage to find a total of {player1.get_money()} dollars and you then continue your way over to the local Diner...\n',
-                2)
+                f'After searching everybody in the gas station, you manage to find a total of {player1.get_money()} '
+                f'dollars and you then continue your way over to the local Diner...\n', 2)
         player1.checkpoint_save('2')
     elif user_choice == '2':
         sounds.good_luck()
-        print(
-            f'The man hands over some cash ({player1.get_money()} dollars) and tells you about a mysterious lurking salesman who would wonder around the town quite '
-            'often... ')
-        print('The man says that he has not seen him since the apocalypse has happened but keep the money on '
-              'you in-case he shows...\n')
-        sleep(2.5)
+        print_green(f'The man hands over some cash ({player1.get_money()} dollars.\n', 1.5)
+        print_sleep('He tells you about a mysterious lurking salesman who would wonder around the town quite '
+                    'often...\n', 2.5)
+        print_sleep('The man says that he has not seen him since the apocalypse has happened but keep the money on '
+                    'you in-case he shows...\n', 2.5)
         sounds.wind_sound()
         print('You give thanks to the man and exit the local Gas Station and make your way down a tumbled and broken '
               'road... ')
@@ -154,8 +156,8 @@ def outside_area():
             player1.total_kills += 1
             sounds.good_luck()
             print_sleep(
-                f'You then search the body of the zombie and decaying woman to find a total of {player1.get_money()} Dollars...\n',
-                2)
+                f'You then search the body of the zombie and decaying woman to find a total of {player1.get_money()}'
+                f' Dollars...\n', 2)
             print_sleep('Finally, you get to make your way over to the local Gas Station...\n', 1.5)
         elif user_choice == '2':
             pass
@@ -169,14 +171,15 @@ def diner_area():
     sounds.horror_sound_effects()
     print_sleep('You have entered the local Diner...\n', 1)
     choice_options = [
-        'You have the choice to either (1) Search inside the Diner Restaurant Area (2) head towards the Parkview Area: ']
+        'You have the choice to either (1) Search inside the Diner Restaurant Area (2) head towards the '
+        'Parkview Area: ']
     user_choice = _player_choice([str(x) for x in range(1, 3)], choice_options)
 
     if user_choice == '1':
         sounds.good_luck()
         print(
-            f'After finishing up your entire search of the diner, you find a total of {player1.get_money()} dollars and',
-            f'you refresh up on some food and gain a total of {player1.get_health(5, 15)} health!\n')
+            f'After finishing up your entire search of the diner, you find a total of {player1.get_money()} dollars '
+            f'and you refresh up on some food and gain a total of {player1.get_health(5, 15)} health!\n')
         sleep(3)
         print('You also manage to find a bloody photograph on the ground and upon looking at the image, you see a '
               'familiar face...')
@@ -197,8 +200,8 @@ def diner_area():
             return
         player1.total_kills += 5
         print_green(
-            'You have successfully defended off the zombies outside the local Diner... You will now head over to the Parkview Area\n',
-            2)
+            'You have successfully defended off the zombies outside the local Diner... You will now head over to the '
+            'Parkview Area\n', 2)
         player1.checkpoint_save('4')
 
 
@@ -214,8 +217,8 @@ def broken_roads_area():
     player1.total_kills += 3
     sounds.horror_sound_effects()
     print_green(
-        'You have successfully fought off the zombies surrounding the running vehicle... You then enter the running vehicle...\nYou manage to put the vehicle into drive and you drive away into the sunrise...\n',
-        4)
+        'You have successfully fought off the zombies surrounding the running vehicle... You then enter the running '
+        'vehicle...\nYou manage to put the vehicle into drive and you drive away into the sunrise...\n', 4)
     player1.checkpoint_save('6')
 
 

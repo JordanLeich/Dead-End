@@ -1,3 +1,6 @@
-Use this command each time changes or updates are made to the game to then update the exe version.
+--- Important Info about this command ---
+1. You need pyinstaller installed in order to use this command in either the command prompt or terminal. use pip install pyinstaller.
+2. Use this command each time changes or updates are made to the game to then update the exe version.
 
+--- Command ---
 pyinstaller -F -i images\icon.ico game.py -n Dead-End

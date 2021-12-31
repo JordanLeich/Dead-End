@@ -10,7 +10,8 @@ game_data = GameData()  # load/save functions Instance
 
 
 class Player:
-    """This class is to set up the player with all variables needed throughout the game. If more variables are needed. they can be added here."""
+    """This class is to set up the player with all variables needed throughout the game. If more variables are
+    needed. they can be added here. """
 
     def __init__(self, balance=0, health=0, difficulty=-1, xp_amount=0, user_level=0, player_deaths=0, total_kills=0,
                  start_timer=0):
@@ -247,8 +248,8 @@ class Player:
                 elif consumable_index >= 0 and self.balance > self.consumables[consumable_index][1]:
                     self.balance -= self.consumables[consumable_index][1]
                     print_green(
-                        f'You have used the {self.consumables[consumable_index][0]}, giving you a bonus of {self.consume(consumable_index)} health.\n',
-                        2)
+                        f'You have used the {self.consumables[consumable_index][0]}, giving you a bonus '
+                        f'of {self.consume(consumable_index)} health.\n', 2)
                 elif self.balance >= self.weapon_dict[buy_item][1]:
                     sounds.merchant_purchase_sound()
                     self.balance -= self.weapon_dict[buy_item][1]
@@ -256,9 +257,8 @@ class Player:
                     print_green(f'{self.weapon_dict[buy_item][0]} has been purchased!\n', 1)
                     if buy_item == '6':
                         self.print_achievement(('3', 'Rare'))
-                        print_green(
-                            'As the Merchant hands you his own crafted spell, he tells you that you now wield true pain to foes whilst providing restoration to thine self.\n',
-                            2.5)
+                        print_green('As the Merchant hands you his own crafted spell, he tells you that you now '
+                                    'wield true pain to foes whilst providing restoration to thine self.\n', 2.5)
                 else:
                     print_yellow('Sorry, not enough available funds to purchase that item!\n', 2)
         elif choice in ['s', 'skip', 'n', 'no']:
@@ -269,9 +269,8 @@ class Player:
         choice_names = [v[0] for k, v in self.weapon_dict.items() if v[2]]
         if not choice_names:  # no choice for them to make
             self.health = 0
-            print_red(
-                'Due to not having any available weapons on you... You try to defend yourself...\nThe zombie overpowers you! Game Over!\n',
-                3)
+            print_red('Due to not having any available weapons on you... You try to defend yourself...\nThe zombie '
+                      'overpowers you! Game Over!\n', 3)
             self.check_point = f'{self.check_point}bad'
             return False
 
@@ -285,15 +284,17 @@ class Player:
 
         if key == '6':
             print_green(
-                f'You have used the Merchants Strange Spell and defeated the {enemy} without losing any health! \nThrough the power of the Strange Spell, you gain {self.get_health(10, 30)} health through its restoration casting!\n',
-                3.5)
+                f'You have used the Merchants Strange Spell and defeated the {enemy} without losing any health! '
+                f'\nThrough the power of the Strange Spell, you gain {self.get_health(10, 30)} health through its '
+                f'restoration casting!\n', 3.5)
         else:  # print color based on user health
             lost_health = self.use_item(key)
             if lost_health > self.health:
                 print_red(f'The {enemy} overpowered you. Losing all of your health...\n', 1)
                 self.check_point = f'{self.check_point}bad'
                 return False
-            message = f'You have used the {self.weapon_dict[key][0]} and defeated the {enemy} losing {lost_health} health!\n'
+            message = f'You have used the {self.weapon_dict[key][0]} and defeated the {enemy} losing {lost_health}' \
+                      f' health!\n '
             if self.health < 25:
                 print_red(message, 2)
             elif self.health < 50:
@@ -305,7 +306,8 @@ class Player:
         return True  # attack successful
 
     def checkpoint_save(self, checkpoint_name=''):
-        """activates a checkpoint save and writes to the data.json file, also allows the user to continue playing or not"""
+        """activates a checkpoint save and writes to the data.json file, also allows the user to continue playing or
+        not """
         self.check_point = checkpoint_name
         game_data.save_game(self.get_data())  # Sends self info to save file
         if self.health <= 0:  # extra check to see if the player has no more health left.

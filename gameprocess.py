@@ -73,7 +73,7 @@ def xp_level_system():
             player1.xp_amount += randint(35, 75)
         elif player1.difficulty == Difficulty(3):
             player1.xp_amount += randint(75, 100)
-        elif player1.difficulty == Difficulty(0): # is there any xp gained or is it always just 500? TODO
+        elif player1.difficulty == Difficulty(0):  # Cheater difficulty will always receive a flat amount of 500 XP.
             player1.xp_amount = 500
         else:
             player1.xp_amount += randint(1, 100)
@@ -84,11 +84,11 @@ def xp_level_system():
         player1.user_level = 10
         player1.print_achievement(('4', 'Rare'))
         return
-    elif player1.xp_amount <= 0: 
+    elif player1.xp_amount <= 0:
         print_yellow('You currently do not have any XP Level - 0\n', 1)
         player1.user_level = 0
         return
-    else: 
+    else:
         player1.user_level = int(player1.xp_amount / 100)
     sounds.good_luck()
     print_green(f'Current XP Amount - {player1.xp_amount}')
