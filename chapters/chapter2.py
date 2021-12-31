@@ -10,7 +10,7 @@ from choices import _player_choice, error_message
 from other.colors import print_green, print_yellow, print_red, print_sleep, print_blue
 
 
-class Chapter1(Chapter):
+class Chapter2(Chapter):
     chapter_num = 2
 
     def checkpoints(self):
@@ -45,9 +45,9 @@ class Chapter1(Chapter):
                 return
             player1.total_kills += 5
             print_green('You have successfully killed off the heaping swarm of zombies surrounding the car!\n', 1)
-            continue_message()
+            self.continue_message()
         elif choice == '2':
             print_sleep(
                 'You have parked the car near the closet woods area and now need to gather up some supplies for a camp '
                 'fire.\n', 1)
-            continue_message()
+            self.continue_message()
