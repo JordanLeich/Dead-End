@@ -13,6 +13,7 @@ class Chapter:
         """start of chapter"""
         sounds.intro_sounds()
         print_green(f'Welcome to Chapter {self.chapter_num}!\n', 3)
+        player1.chapter = self.chapter_num
 
 
     def good_ending(self):
