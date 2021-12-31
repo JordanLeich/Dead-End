@@ -25,10 +25,9 @@ class Chapter1(Chapter):
         Chapter3.game()
 
 
-    def game():
+    def game(self):
         """start of ch2"""
-        sounds.intro_sounds()
-        print_green('Welcome to Chapter 2!\n', 3)
+        self.start()
         print_sleep('Upon driving the car through the broken roads area, the sun is certainly dwindling and time in the car'
                     'says 2:35 AM.\nYou continue to grow yourself tired and restless from everything that had led to this '
                     'point\n', 2.5)
