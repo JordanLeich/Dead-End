@@ -32,14 +32,13 @@ class Chapter:
         if all_achievements:
             print_green(all_achievements)
         sounds.good_luck()
-        restart()# TODO each class implements the next area to go to or chapter cycle idea
 
 
     def bad_ending(self):
         """When the player dies at any point."""
         sounds.bad_ending()
         print_red('You have died and not reached the end of the horrors...\n', 1)
-        restart()
+        self.restart()
 
 
     def restart(self):
