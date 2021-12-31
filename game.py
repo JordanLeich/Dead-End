@@ -8,7 +8,7 @@ import webbrowser
 from PIL import Image
 from classes import Player, Difficulty
 from gamedata import GameData
-from other.colors import print_blue
+from other.colors import print_blue, print_green, print_sleep
 from other.sounds_effects import GameSounds
 from prettytable import PrettyTable
 from choices import _player_choice, error_message
@@ -95,11 +95,11 @@ def concept_art():  # sourcery no-metrics
     choice_options.extend([f'({len(choice_options) + 1}) Options Menu', f'({len(choice_options) + 2}) Exit\n',
                            'Which concept art would you like to view:  '])
 
-    choice = _player_choice([str(x) for x in range(1, 15)], choice_options)
-
-    if choice == '13':
+    choice = _player_choice([str(x) for x in range(1, len(choice_options) + 3)], choice_options)
+    
+    if choice == str(len(artwork_data) + 1):
         return
-    elif choice == '14':
+    elif choice == str(len(artwork_data) + 2):
         exit()
     else:
         print_blue(f'Artwork by: {artwork_data[choice]["author"]}\n')

@@ -1,9 +1,10 @@
 """ This file is used to control cheats and how the game functions in a specific order based on user input. """
-import chapters.chapter1
-import chapters.chapter2
-import chapters.chapter3
-from chapters.chapter1 import *
+from chapters.chapter1 import Chapter1
+from chapters.chapter2 import Chapter2
+from chapters.chapter3 import Chapter3
+
 from choices import _player_choice
+from other.colors import print_blue, print_green, print_sleep, print_yellow, print_red
 from game import player1, sounds, game_data, Difficulty
 from random import randint
 
@@ -62,6 +63,9 @@ def _difficulty_set_health():
                  1)
 
 
+def game():
+    Chapter1().game()
+
 def xp_level_system():
     """Used for leveling and award the player with their respective XP amount based their difficulty level."""
     # player is awarded XP
@@ -110,10 +114,10 @@ def difficulty():
                                     choice_options)
             if choice.lower() in ['c', 'continue', 'chapter2', 'chapter 2']:
                 print_yellow('You will now begin Chapter 2.\n', 2)
-                chapters.chapter2.start()
+                Chapter2.game()
             elif choice.lower() in ['r', 'replay', 'chapter1', 'chapter 1']:
                 print_yellow('You will now replay Chapter 1.\n', 2)
-                chapters.chapter1.game()
+                Chapter1.game()
         else:
             choice_options = ['Would you like to start a new game or continue with your saved data (new / continue): ']
             choice = _player_choice(['n', 'new', 'c', 'continue'], choice_options)
@@ -145,20 +149,16 @@ def difficulty_select():
 
 def go_to_checkpoint():
     """runs movement to levels -- checkpoint when leaving area"""
-    checkpoints = {'0': game,
-                   '1': outside_area,
-                   '2': diner_area,
-                   '3': gas_station,
-                   '4': parkview_area,
-                   '5': broken_roads_area,
-                   '6': ch1_good_ending,
-                   '7': ch1_bad_ending,
-                   }
+    story = {1: Chapter1,
+             2: Chapter2,
+             3: Chapter3,
+    }
     while 'exit' not in player1.check_point:
+        chapter_checkpoints = story[player1.chapter]().checkpoints()
         if 'bad' in player1.check_point:
-            checkpoints['7']()
+            chapter_checkpoints[len(chapter_checkpoints) - 1]()
         else:
-            checkpoints[player1.check_point]()
+            chapter_checkpoints[player1.check_point]()
 
 
 # move to player class
