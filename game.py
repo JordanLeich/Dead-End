@@ -113,7 +113,7 @@ def concept_art():  # sourcery no-metrics
 
 def game_version():
     """ Allows the user to see what version of the game they are currently playing on. """
-    current_game_version = 6.5
+    current_game_version = 6.6
     latest_stable_release_version = 6.0
 
     if current_game_version == latest_stable_release_version:
@@ -224,6 +224,7 @@ def display_background_timer():
     end_timer = time.time()
     temporary_time_played = int((int(end_timer) - (int(player1.start_timer))) / 60)
     return print_blue(f'{temporary_time_played} Minutes played.\n', 1)
+
 
 
 if __name__ == '__main__':

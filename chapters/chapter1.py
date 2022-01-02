@@ -186,8 +186,8 @@ consuming the moldy and old smells of the basement.\n''', 2)
                 player1.total_kills += 1
                 sounds.good_luck()
                 print_sleep(
-                    f'You then search the body of the zombie and decaying woman to find a total of {player1.get_money()}'
-                    f' Dollars...\n', 2)
+                    f'You then search the body of the zombie and decaying woman to find a total '
+                    f'of {player1.get_money()} Dollars...\n', 2)
                 print_sleep('Finally, you get to make your way over to the local Gas Station...\n', 1.5)
             elif user_choice == '2':
                 pass
@@ -207,8 +207,8 @@ consuming the moldy and old smells of the basement.\n''', 2)
         if user_choice == '1':
             sounds.good_luck()
             print(
-                f'After finishing up your entire search of the diner, you find a total of {player1.get_money()} dollars '
-                f'and you refresh up on some food and gain a total of {player1.get_health(5, 15)} health!\n')
+                f'After finishing up your entire search of the diner, you find a total of {player1.get_money()} '
+                f'dollars and you refresh up on some food and gain a total of {player1.get_health(5, 15)} health!\n')
             sleep(3)
             print('You also manage to find a bloody photograph on the ground and upon looking at the image, you see a '
                   'familiar face...')
@@ -224,14 +224,14 @@ consuming the moldy and old smells of the basement.\n''', 2)
         elif user_choice == '2':
             sounds.zombie_attack_outside()
             print_red(
-                'Upon leaving the diner area, you come across a group of about 5 zombies heading directly towards you!\n',
-                1.5)
+                'Upon leaving the diner area, you come across a group of about 5 zombies heading directly towards '
+                'you!\n', 1.5)
             if not player1.user_attack():
                 return
             player1.total_kills += 5
             print_green(
-                'You have successfully defended off the zombies outside the local Diner... You will now head over to the '
-                'Parkview Area\n', 2)
+                'You have successfully defended off the zombies outside the local Diner... You will now head '
+                'over to the Parkview Area\n', 2)
             player1.checkpoint_save('4')
 
     def broken_roads_area(self):
@@ -277,6 +277,8 @@ consuming the moldy and old smells of the basement.\n''', 2)
                     'You now prepare to fight him off!\n')
                 sleep(2.5)
             elif user_choice == '2':
+                player1.health += 15  # Player gets a bonus of 15 HP due to picking the smarter decision to kill the
+                # deranged man instead of helping him.
                 sounds.bad_luck()
 
             if not player1.user_attack('man'):  # attack same for both options - only difference is lead up to it
