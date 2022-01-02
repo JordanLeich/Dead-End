@@ -10,6 +10,8 @@ from choices import _player_choice, error_message
 from other.colors import print_green, print_yellow, print_red, print_sleep, print_blue
 
 chapter3 = Chapter3()
+
+
 class Chapter2(Chapter):
     """Contains all the main chapter 2 areas of the game."""
     chapter_num = 2

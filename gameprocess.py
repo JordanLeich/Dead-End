@@ -115,11 +115,10 @@ def difficulty():
             choice = _player_choice(['r', 'replay', 'c', 'chapter 2', 'continue', 'chapter2', 'chapter1', 'chapter 1'],
                                     choice_options)
             if choice.lower() in ['c', 'continue', 'chapter2', 'chapter 2']:
-                print_yellow('You will now begin Chapter 2.\n', 2)
                 Chapter2().game()
             elif choice.lower() in ['r', 'replay', 'chapter1', 'chapter 1']:
                 print_yellow('You will now replay Chapter 1.\n', 2)
-                Chapter1.game()
+                Chapter1().game()
         else:
             choice_options = ['Would you like to start a new game or continue with your saved data (new / continue): ']
             choice = _player_choice(['n', 'new', 'c', 'continue'], choice_options)

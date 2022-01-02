@@ -97,7 +97,7 @@ def concept_art():  # sourcery no-metrics
                            'Which concept art would you like to view:  '])
 
     choice = _player_choice([str(x) for x in range(1, len(choice_options) + 3)], choice_options)
-    
+
     if choice == str(len(artwork_data) + 1):
         return
     elif choice == str(len(artwork_data) + 2):
@@ -169,6 +169,8 @@ def options(choice=''):
                 choice_dict[choice][0](choice_dict[choice][1], choice_dict[choice][2])
             else:
                 choice_dict[choice][0]()
+        elif choice == str(len(choice_options) - 2):
+            break
 
 
 def game_menu():
@@ -224,7 +226,6 @@ def display_background_timer():
     end_timer = time.time()
     temporary_time_played = int((int(end_timer) - (int(player1.start_timer))) / 60)
     return print_blue(f'{temporary_time_played} Minutes played.\n', 1)
-
 
 
 if __name__ == '__main__':

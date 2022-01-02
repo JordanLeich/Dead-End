@@ -29,7 +29,7 @@ class Chapter1(Chapter):
     def good_ending_and_continue(self):
         """Simply plays the good ending scene and then drops the player into chapter 2."""
         self.good_ending()
-        chapter2().game()
+        Chapter2().game()
 
     def game(self):
         """Intro section of the game that begins in the apartment room, checkpoint area # 0"""
@@ -115,8 +115,8 @@ consuming the moldy and old smells of the basement.\n''', 2)
             sleep(2)
             sounds.zombie_attack_inside()
             print_sleep(
-                'Out of nowhere, a group of 3 zombies begin to bang on the glass door from which you entered in from...\n',
-                2.5)
+                'Out of nowhere, a group of 3 zombies begin to bang on the glass door from which you entered in '
+                'from...\n', 2.5)
             sounds.zombie_attack_inside()
             print(
                 'While attempting to save you, the man fights off 2 zombies with his pump shotgun and get eaten alive '
@@ -151,7 +151,7 @@ consuming the moldy and old smells of the basement.\n''', 2)
                 'You give thanks to the man and exit the local Gas Station and make your way down a tumbled and broken '
                 'road... ')
             print('The gleaming fog and ashe outside is giving way to your vision and you see more and more '
-                  'unclear... Deep down inside... you know you must go on further...\n')
+                  'unclear...\nDeep down inside... you know you must go on further...\n')
             sleep(3.5)
             player1.checkpoint_save('2')
 
@@ -207,7 +207,7 @@ consuming the moldy and old smells of the basement.\n''', 2)
         if user_choice == '1':
             sounds.good_luck()
             print(
-                f'After finishing up your entire search of the diner, you find a total of {player1.get_money()} '
+                f'After finishing up your entire search of the diner,\nyou find a total of {player1.get_money()} '
                 f'dollars and you refresh up on some food and gain a total of {player1.get_health(5, 15)} health!\n')
             sleep(3)
             print('You also manage to find a bloody photograph on the ground and upon looking at the image, you see a '
@@ -237,8 +237,8 @@ consuming the moldy and old smells of the basement.\n''', 2)
     def broken_roads_area(self):
         """checkpoint area # 5"""
         sounds.zombie_attack_outside()
-        print('You have reached the broken roads area and managed to find a running vehicle but there are a group of '
-              'about 3 zombies surrounding the vehicle... \nThe zombies begin to head directly towards you and you '
+        print('You have reached the broken roads area and managed to find a running vehicle\nbut there are a group of '
+              'about 3 zombies surrounding the vehicle... The zombies begin to head directly towards you and you '
               'prepare to fight once more...\n')
         sleep(4.5)
         if not player1.user_attack():
