@@ -3,6 +3,7 @@
 
 # Created on 5/11/2021
 import sys
+from time import sleep
 import time
 import webbrowser
 from PIL import Image
@@ -112,7 +113,7 @@ def concept_art():  # sourcery no-metrics
 
 def game_version():
     """ Allows the user to see what version of the game they are currently playing on. """
-    current_game_version = 6.2
+    current_game_version = 6.4
     latest_stable_release_version = 6.0
 
     if current_game_version == latest_stable_release_version:

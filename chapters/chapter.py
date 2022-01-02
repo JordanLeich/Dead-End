@@ -9,12 +9,12 @@ from other.colors import print_green, print_yellow, print_red, print_sleep, prin
 
 
 class Chapter:
+    """Contains many of the essential functions used to traverse through the main game."""
     def start(self):
         """start of chapter"""
         sounds.intro_sounds()
         print_green(f'Welcome to Chapter {self.chapter_num}!\n', 3)
         player1.chapter = self.chapter_num
-
 
     def good_ending(self):
         """When the player has successfully reached the end of the game."""
@@ -34,13 +34,11 @@ class Chapter:
             print_green(all_achievements)
         sounds.good_luck()
 
-
     def bad_ending(self):
         """When the player dies at any point."""
         sounds.bad_ending()
         print_red('You have died and not reached the end of the horrors...\n', 1)
         self.restart()
-
 
     def restart(self):
         """Allows the players to restart their game and reset their saved data values"""
@@ -60,7 +58,6 @@ class Chapter:
         elif restart_choice in ['n', 'no']:
             print_sleep('Ending game...', 1)
             exit()
-
 
     def continue_message(self):
         """Only for development purposes and has no impact on the game"""

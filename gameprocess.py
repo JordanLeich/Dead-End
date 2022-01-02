@@ -4,7 +4,7 @@ from chapters.chapter2 import Chapter2
 from chapters.chapter3 import Chapter3
 
 from choices import _player_choice
-from other.colors import print_blue, print_green, print_sleep, print_yellow, print_red
+from other.colors import print_green, print_sleep, print_yellow, print_red
 from game import player1, sounds, game_data, Difficulty
 from random import randint
 
@@ -64,7 +64,9 @@ def _difficulty_set_health():
 
 
 def game():
+    """Simply plays the beginning of chapter 1."""
     Chapter1().game()
+
 
 def xp_level_system():
     """Used for leveling and award the player with their respective XP amount based their difficulty level."""
@@ -152,9 +154,9 @@ def go_to_checkpoint():
     story = {1: Chapter1,
              2: Chapter2,
              3: Chapter3,
-    }
+             }
     while 'exit' not in player1.check_point:
-        chapter_checkpoints = story[player1.chapter]().checkpoints()
+        chapter_checkpoints = story[player1.chapter]().checkpoints()  # TODO: Fix crash error here
         if 'bad' in player1.check_point:
             chapter_checkpoints[len(chapter_checkpoints) - 1]()
         else:
