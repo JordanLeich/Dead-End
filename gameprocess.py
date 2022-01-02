@@ -161,7 +161,7 @@ def go_to_checkpoint():
     while 'exit' not in player1.check_point:
         chapter_checkpoints = story[player1.chapter]().checkpoints()
         if 'bad' in player1.check_point:
-            chapter_checkpoints[len(chapter_checkpoints) - 1]()
+            chapter_checkpoints[str(len(chapter_checkpoints) - 1)]()
         else:
             chapter_checkpoints[player1.check_point]()
 
