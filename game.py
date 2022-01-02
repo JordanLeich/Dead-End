@@ -46,14 +46,14 @@ def open_github(print_text, website_append=''):
     """Open GitHub in the users default web browser"""
     print_green(print_text)
     webbrowser.open_new(f'https://github.com/JordanLeich/Dead-End{website_append}')
-    sleep(1)
+    time.sleep(1)
 
 
 def donation_opener():
     """Open a donation page in the users default web browser"""
     print_green("Opening PayPal Donation page...\n")
     webbrowser.open_new("https://www.paypal.com/donate/?business=8FGHU8Z4EJPME&no_recurring=0&currency_code=USD")
-    sleep(2)
+    time.sleep(2)
 
 
 def list_achievements():
@@ -63,7 +63,7 @@ def list_achievements():
             print(f'\nAll {k[1]} Achievements')
         print(f'{k[0]}. {v["name"]} - {v["desc"]}')
     print()
-    sleep(5)
+    time.sleep(5)
 
 
 def list_cheat_codes():
@@ -72,7 +72,7 @@ def list_cheat_codes():
     print_yellow('--- Cheat codes must be entered at the main menu screen of the game ---\n', 1)
     for x in ['unlock_all_cheat', 'infinite_health_cheat', 'infinite_money_cheat\n']:
         print(x)
-    sleep(3)
+    time.sleep(3)
 
 
 def concept_art():  # sourcery no-metrics
@@ -107,7 +107,7 @@ def concept_art():  # sourcery no-metrics
         image_path = f'images/concept art/{artwork_data[choice]["filename"]}.jpg'
         img = Image.open(image_path)
         img.show(image_path)
-        sleep(2)
+        time.sleep(2)
         return concept_art()
 
 

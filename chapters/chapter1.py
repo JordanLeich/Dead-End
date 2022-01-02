@@ -29,7 +29,7 @@ class Chapter1(Chapter):
     def good_ending_and_continue(self):
         """Simply plays the good ending scene and then drops the player into chapter 2."""
         self.good_ending()
-        Chapter2.game()
+        chapter2().game()
 
     def game(self):
         """Intro section of the game that begins in the apartment room, checkpoint area # 0"""
