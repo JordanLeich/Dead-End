@@ -155,6 +155,9 @@ def go_to_checkpoint():
              2: Chapter2,
              3: Chapter3,
              }
+    if player1.chapter not in story:
+        print('Sorry, there is no recent checkpoint for you to go to')
+        return
     while 'exit' not in player1.check_point:
         chapter_checkpoints = story[player1.chapter]().checkpoints()  # TODO: Fix crash error here
         if 'bad' in player1.check_point:
