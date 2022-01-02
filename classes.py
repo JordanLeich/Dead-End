@@ -136,6 +136,7 @@ class Player:
         self.difficulty = Difficulty(int(user_data['difficulty']))
         self.weapon_dict = user_data['weapon_dict']
         self.consumables = user_data['consumables']
+        self.chapter = user_data['chapter']
         self.check_point = user_data['check_point']
         for k, v in user_data['achievement_list'].items():
             self.achievement_list[(k.split(' ', 1)[0], k.split(' ', 1)[1])] = v
