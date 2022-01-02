@@ -114,7 +114,7 @@ def difficulty():
                                     choice_options)
             if choice.lower() in ['c', 'continue', 'chapter2', 'chapter 2']:
                 print_yellow('You will now begin Chapter 2.\n', 2)
-                Chapter2.game()
+                Chapter2().game()
             elif choice.lower() in ['r', 'replay', 'chapter1', 'chapter 1']:
                 print_yellow('You will now replay Chapter 1.\n', 2)
                 Chapter1.game()
