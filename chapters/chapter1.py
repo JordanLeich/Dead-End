@@ -57,7 +57,6 @@ class Chapter1(Chapter):
             'While sitting down in the living room of your house, you can either (1) Look around (2) Walk outside (3) '
             'Travel down the hidden door in the floor: ']
         choice = _player_choice(choices, choice_options)
-        print()
 
         if choice == '1':
             print(
@@ -142,7 +141,7 @@ consuming the moldy and old smells of the basement.\n''', 2)
             player1.checkpoint_save('2')
         elif user_choice == '2':
             sounds.good_luck()
-            print_green(f'The man hands over some cash ({player1.get_money()} dollars.\n', 1.5)
+            print_green(f'The man hands over some cash ({player1.get_money()}) dollars.\n', 1.5)
             print_sleep('He tells you about a mysterious lurking salesman who would wonder around the town quite '
                         'often...\n', 2.5)
             print_sleep('The man says that he has not seen him since the apocalypse has happened but keep the money on '

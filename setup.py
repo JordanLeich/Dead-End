@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='Dead End',
-    version='v5.0',
+    version='v6.0',
     packages=[''],
     url='https://github.com/JordanLeich/Dead-End',
     license='MIT',

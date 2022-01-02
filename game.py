@@ -113,7 +113,7 @@ def concept_art():  # sourcery no-metrics
 
 def game_version():
     """ Allows the user to see what version of the game they are currently playing on. """
-    current_game_version = 6.4
+    current_game_version = 6.5
     latest_stable_release_version = 6.0
 
     if current_game_version == latest_stable_release_version:
