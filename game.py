@@ -184,12 +184,13 @@ def game_menu():
     choice_dict = {'1': [difficulty, game, go_to_checkpoint],
                    '2': [load_or_save_data, difficulty, go_to_checkpoint],
                    '3': [options],
-                   '4': [exit],
+                   '4': [False],
                    'unlock_all_cheat': [unlock_all_cheat, game],
                    'infinite_health_cheat': [infinite_health_cheat, game],
                    'infinite_money_cheat': [infinite_money_cheat, game]
                    }
-    while True:
+    run_game = True
+    while run_game:
         sounds.intro_sounds()
         print_green('Welcome to Dead End!\n')
         print_sleep('This is a zombie survival game where you must make the best choices and '
@@ -197,7 +198,10 @@ def game_menu():
                     'and a merchant to buy from with an in-game currency.\nEvery decision you make has a cause and '
                     'effect while some lead you to fortune and others lead you to death.\n')
         for item in choice_dict[_player_choice(list(choice_dict.keys()), choice_options)]:
-            item()
+            if not item:
+                run_game = False
+            else:
+                item()
 
 
 def audio_options():
