@@ -106,14 +106,14 @@ def concept_art():  # sourcery no-metrics
         print_blue(f'Artwork by: {artwork_data[choice]["author"]}\n')
         image_path = f'images/concept art/{artwork_data[choice]["filename"]}.jpg'
         img = Image.open(image_path)
-        img.show(image_path)
+        img.show()
         time.sleep(2)
         return concept_art()
 
 
 def game_version():
     """ Allows the user to see what version of the game they are currently playing on. """
-    current_game_version = 6.6
+    current_game_version = 6.7
     latest_stable_release_version = 6.0
 
     if current_game_version == latest_stable_release_version:
