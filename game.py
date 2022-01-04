@@ -184,24 +184,23 @@ def game_menu():
     choice_dict = {'1': [difficulty, game, go_to_checkpoint],
                    '2': [load_or_save_data, difficulty, go_to_checkpoint],
                    '3': [options],
-                   '4': [False],
+                   '4': [exit],
                    'unlock_all_cheat': [unlock_all_cheat, game],
                    'infinite_health_cheat': [infinite_health_cheat, game],
                    'infinite_money_cheat': [infinite_money_cheat, game]
                    }
-    run_game = True
-    while run_game:
+    while True:
         sounds.intro_sounds()
         print_green('Welcome to Dead End!\n')
         print_sleep('This is a zombie survival game where you must make the best choices and '
                     'decisions possible in order to live.\nAs a survivor, you will encounter zombies, weapons, people, '
                     'and a merchant to buy from with an in-game currency.\nEvery decision you make has a cause and '
                     'effect while some lead you to fortune and others lead you to death.\n')
-        for item in choice_dict[_player_choice(list(choice_dict.keys()), choice_options)]:
-            if not item:
-                run_game = False
-            else:
-                item()
+        choice = _player_choice(list(choice_dict.keys()), choice_options)
+        if choice == '4':  # to be more explicit with exiting -- though this isn't needed with the original system unless there is a unknown bug 
+            exit()
+        for item in choice_dict[choice]:
+            item()
 
 
 def audio_options():
