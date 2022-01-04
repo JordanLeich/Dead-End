@@ -24,5 +24,5 @@ def name_of_the_area(self):
         print_green('You have successfully killed the enemy!\n', 1)
         self.next_area()  # use this if the player is going to a new location or area.
     elif choice == '2':
-        print_sleep('Story effects of picking option 1...\n', 2)
+        print_sleep('Story effects of picking option 2...\n', 2)
         self.next_area()  # use this if the player is going to a new location or area.

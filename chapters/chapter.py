@@ -1,7 +1,6 @@
 """ This file holds all the chapter 3 areas of the game. """
-from sys import exit
+import sys
 from time import sleep
-# from classes import Player, Difficulty
 from other.sounds_effects import GameSounds
 from game import player1, sounds, Difficulty
 from choices import _player_choice, error_message
@@ -57,9 +56,9 @@ class Chapter:
             go_to_checkpoint()
         elif restart_choice in ['n', 'no']:
             print_sleep('Ending game...', 1)
-            exit()
+            sys.exit()
 
     def continue_message(self):
         """Only for development purposes and has no impact on the game"""
         print_sleep('Continue here...', 3)
-        exit(1)
+        sys.exit()

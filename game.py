@@ -3,7 +3,6 @@
 
 # Created on 5/11/2021
 import sys
-from time import sleep
 import time
 import webbrowser
 from PIL import Image
@@ -101,7 +100,7 @@ def concept_art():  # sourcery no-metrics
     if choice == str(len(artwork_data) + 1):
         return
     elif choice == str(len(artwork_data) + 2):
-        exit()
+        sys.exit()
     else:
         print_blue(f'Artwork by: {artwork_data[choice]["author"]}\n')
         image_path = f'images/concept art/{artwork_data[choice]["filename"]}.jpg'
@@ -113,7 +112,7 @@ def concept_art():  # sourcery no-metrics
 
 def game_version():
     """ Allows the user to see what version of the game they are currently playing on. """
-    current_game_version = 6.8
+    current_game_version = 6.9
     latest_stable_release_version = 6.0
 
     if current_game_version == latest_stable_release_version:
@@ -163,7 +162,7 @@ def options(choice=''):
         choice = _player_choice([str(x) for x in range(1, len(choice_options))], choice_options)
 
         if choice == str(len(choice_options) - 1):
-            exit()
+            sys.exit()
         elif choice != str(len(choice_options) - 2):
             if len(choice_dict[choice]) > 1:
                 choice_dict[choice][0](choice_dict[choice][1], choice_dict[choice][2])
