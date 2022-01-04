@@ -23,7 +23,7 @@ class Chapter1(Chapter):
                 '4': self.parkview_area,
                 '5': self.broken_roads_area,
                 '6': self.good_ending_and_continue,
-                '7': self.bad_ending,
+                'bad': self.bad_ending,
                 }
 
     def good_ending_and_continue(self):
