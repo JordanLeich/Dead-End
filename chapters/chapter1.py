@@ -238,13 +238,13 @@ consuming the moldy and old smells of the basement.\n''', 2)
         """checkpoint area # 5"""
         sounds.zombie_attack_outside()
         print('You have reached the broken roads area and managed to find a running vehicle\nbut there are a group of '
-              'about 3 zombies surrounding the vehicle... The zombies begin to head directly towards you and you '
+              'about 3 zombies surrounding the vehicle...\nThe zombies begin to head directly towards you and you '
               'prepare to fight once more...\n')
         sleep(4.5)
         if not player1.user_attack():
             return
         player1.total_kills += 3
-        sounds.horror_sound_effects()
+        sounds.car_door_opening()
         print_green(
             'You have successfully fought off the zombies surrounding the running vehicle... You then enter the '
             'running vehicle...\nYou manage to put the vehicle into drive and you drive away into the sunrise...\n', 4)

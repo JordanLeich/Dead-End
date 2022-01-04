@@ -32,6 +32,22 @@ class GameSounds:
         """plays bad ending sound"""
         self._play_sound('sounds/dark_element_burst.wav')
 
+    def flame_ignite(self):
+        """plays a flame igniting sound"""
+        self._play_sound('sounds/flame_igniting.mp3')
+
+    def car_door_opening(self):
+        """plays car door opening sound"""
+        self._play_sound('sounds/car_door_opening.mp3')
+
+    def locked_door(self):
+        """plays a locked door sound"""
+        self._play_sound('sounds/locked_door.mp3')
+
+    def wood_sticks(self):
+        """plays a bundle of sticks rattling together"""
+        self._play_sound('sounds/wood_sticks.mp3')
+
     def difficulty_select_sound(self):
         """plays difficulty selection sound"""
         self._play_sound('sounds/deep_doom.wav')
