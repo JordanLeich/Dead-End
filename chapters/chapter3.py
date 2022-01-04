@@ -17,7 +17,7 @@ class Chapter3(Chapter):
         """runs movement to levels -- checkpoint when leaving area"""
         return {'0': self.game,
                 '1': self.good_ending_and_continue,
-                '2': self.bad_ending,
+                'bad': self.bad_ending,
                 }
 
     def good_ending_and_continue(self):
