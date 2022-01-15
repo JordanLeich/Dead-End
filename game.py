@@ -180,7 +180,7 @@ def horde_intro():
                       'Select a choice: ',
                       ]
     choice_dict = {1: [horde_difficulty, horde_mode, go_to_checkpoint],
-                   #2: [game_menu], # don't need as it creates an additional stack frame and will return to main menu anyways
+                   #2: [game_menu], # don't need as it creates an additional stack frame and will return to main menu anyway
                    3: [sys.exit],
                    #'unlock_all_cheat': [unlock_all_cheat, game],
                    #'infinite_health_cheat': [infinite_health_cheat, game],
@@ -198,7 +198,7 @@ def horde_intro():
 
 def horde_player_attack(beretta_pistol, horde_health, wave_number, horde_total_kills, player_alive):
     random_number_generator = randint(1, 3)
-    if beretta_pistol: # TODO better system of managing weapons? will the player be able to pick up weapons?
+    if beretta_pistol: # TODO allow the player to be able to access the merchant to buy weapons or food.
         beretta_pistol_health_loss = randint(20, 30)       
         zombies = (2 * random_number_generator) + 1
         
@@ -208,14 +208,18 @@ def horde_player_attack(beretta_pistol, horde_health, wave_number, horde_total_k
             return False, horde_health, horde_total_kills
         horde_total_kills += zombies
         print_green(f'You survived this wave while losing {beretta_pistol_health_loss} health.\n', 2)
+        xp_level_system()
+        time.sleep(1)
+        print_green(f'Health remaining: {horde_health}.\n', 1)
     else:
-        print_red('No weapon has been acquired or set to True!\n', 2) # which is impossible
+        print_red('No weapon has been acquired or set to True!\n', 2)
     return player_alive, horde_health, horde_total_kills
 
 
 def horde_mode(horde_health):
     print_yellow('You will start with the 1997 Beretta Pistol.\n', 1.5)
-    # default values --> TOOD move to a class object?
+    # default values --> TODO move these values to the player class
+    horde_health = 250 # TODO I had to set horde_health to 250 here or else the player will automatically die in horde mode.
     beretta_pistol = True 
     horde_total_kills = 0
     wave_number = 0
@@ -224,10 +228,24 @@ def horde_mode(horde_health):
     while player_alive:
         wave_number += 1
         print_yellow(f'Starting wave number: {wave_number}\n', 1)
+
+        if wave_number == 5:  # Allows the player to be awarded cash for reaching certain waves.
+            print_green('Due to reaching wave 5, you have earned 25 dollars!\n', 2)
+            player1.balance += 25
+        elif wave_number == 10:
+            print_green('Due to reaching wave 10, you have earned 50 dollars!\n', 2)
+            player1.balance += 50
+        elif wave_number == 15:
+            print_green('Due to reaching wave 15, you have earned 75 dollars!\n', 2)
+            player1.balance += 75
+        elif wave_number == 20:
+            print_green('Due to reaching wave 20, you have earned 100 dollars!\n', 2)
+            player1.balance += 100
+
         player_alive, horde_health, horde_total_kills = horde_player_attack(beretta_pistol, horde_health, horde_total_kills, wave_number, player_alive)
 
-    print_red(f'You have died! You survived a total of {wave_number} waves.\n', 2)
-    print_yellow(f'You killed a total of {horde_total_kills} zombies!\n', 1.5)
+    print_red(f'You have died! You survived a total of {wave_number} waves.\n', 2)  # TODO Once the player dies, there needs to be a save made so that variables like total kills, balance, and xp variables are saved to the data.json file.
+    print_green(f'You killed a total of {horde_total_kills} zombies!\n', 1.5)
     # game will auto return to main menu
 
 
