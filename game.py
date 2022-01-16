@@ -228,19 +228,11 @@ def horde_mode(horde_health):
     while player_alive:
         wave_number += 1
         print_yellow(f'Starting wave number: {wave_number}\n', 1)
-
-        if wave_number == 5:  # Allows the player to be awarded cash for reaching certain waves.
-            print_green('Due to reaching wave 5, you have earned 25 dollars!\n', 2)
-            player1.balance += 25
-        elif wave_number == 10:
-            print_green('Due to reaching wave 10, you have earned 50 dollars!\n', 2)
-            player1.balance += 50
-        elif wave_number == 15:
-            print_green('Due to reaching wave 15, you have earned 75 dollars!\n', 2)
-            player1.balance += 75
-        elif wave_number == 20:
-            print_green('Due to reaching wave 20, you have earned 100 dollars!\n', 2)
-            player1.balance += 100
+        
+        if wave_number % 5 == 0:  # award player cash for completing sets of waves
+            wave_reward = (wave_number / 5) * 25
+            player1.balance += wave_reward
+            print_green(f'Due to reaching wave {wave_number}, you have earned {wave_reward} dollars!\n', 2)
 
         player_alive, horde_health, horde_total_kills = horde_player_attack(beretta_pistol, horde_health, horde_total_kills, wave_number, player_alive)
 
