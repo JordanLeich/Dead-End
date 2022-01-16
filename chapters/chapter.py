@@ -18,8 +18,8 @@ class Chapter:
     def good_ending(self):
         """When the player has successfully reached the end of the game."""
         sounds.good_luck()
-        print_green(f'Congratulations, you have survived Chapter {self.chapter_num}...\n', 1)
-        print_green(f'You survived with a total of {player1.health} health left!\n', 1)
+        print_green(f'Congratulations, you have survived Chapter {self.chapter_num}...\n', 1.5)
+        print_green(f'You survived with a total of {player1.health} health left!\n', 1.5)
 
         difficulty_achievement = {Difficulty(1): ('2', 'Common'),
                                   Difficulty(2): ('2', 'Uncommon'),

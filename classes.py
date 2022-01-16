@@ -13,9 +13,10 @@ class Player:
     """This class is to set up the player with all variables needed throughout the game. If more variables are
     needed. they can be added here. """
 
-    def __init__(self, balance=0, health=0, difficulty=-1, xp_amount=0, user_level=0, player_deaths=0, total_kills=0,
+    def __init__(self, horde_health=0, balance=0, health=0, difficulty=-1, xp_amount=0, user_level=0, player_deaths=0, total_kills=0,
                  start_timer=0):
         # user attributes
+        self.horde_health = horde_health
         self.balance = balance
         self.health = health
         self.difficulty = Difficulty(difficulty)
@@ -313,7 +314,7 @@ class Player:
         self.check_point = checkpoint_name
         game_data.save_game(self.get_data())  # Sends self info to save file
         if self.health <= 0:  # extra check to see if the player has no more health left.
-            print_red('Sorry you have no more health! You have lost the game!\n', 1)
+            print_red('Sorry, you have no more health! You have lost the game!\n', 1)
             return  # restart()
         elif self.total_kills == 5:
             self.print_achievement(('4', 'Uncommon'))

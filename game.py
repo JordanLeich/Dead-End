@@ -36,9 +36,9 @@ def view_stats():
     weapons_owned = PrettyTable(['Weapons Owned'])
     weapons_owned.add_rows([[v[0]] for k, v in player1.weapon_dict.items() if v[2]])
     print(weapons_owned)
-    myTable3 = PrettyTable(['Items Used'])
-    myTable3.add_rows([[v[0]] for v in player1.consumables if v[2]])
-    print(myTable3, '\n')
+    items_used = PrettyTable(['Items Used'])
+    items_used.add_rows([[v[0]] for v in player1.consumables if v[2]])
+    print(items_used, '\n')
 
 
 def open_github(print_text, website_append=''):
@@ -171,29 +171,29 @@ def options(choice=''):
         elif choice == str(len(choice_options) - 2):
             break
 
-def horde_intro():    
+def horde_intro():
     print_green('Welcome to Horde Mode - A game mode set on defeating unlimited waves of zombies!\n', 2)
 
     choice_options = ['(1) Select a difficulty',
-                      '(2) Main menu',
-                      '(3) Exit game\n',
-                      'Select a choice: ',
-                      ]
+                        '(2) Main menu',
+                        '(3) Exit game\n',
+                        'Select a choice: ',
+                        ]
     choice_dict = {1: [horde_difficulty, horde_mode, go_to_checkpoint],
                    #2: [game_menu], # don't need as it creates an additional stack frame and will return to main menu anyway
                    3: [sys.exit],
-                   #'unlock_all_cheat': [unlock_all_cheat, game],
-                   #'infinite_health_cheat': [infinite_health_cheat, game],
-                   #'infinite_money_cheat': [infinite_money_cheat, game]
-                   }
+                    #'unlock_all_cheat': [unlock_all_cheat, game],
+                    #'infinite_health_cheat': [infinite_health_cheat, game],
+                    #'infinite_money_cheat': [infinite_money_cheat, game]
+                    }
 
     choices = [str(x) for x in range(1, len(choice_options))]
     choice = int(_player_choice(choices, choice_options))
-    
+
     if choice == 1:
-        horde_mode(horde_difficulty())
-    elif choice == 3: 
-        choice_dict[choice]()
+        horde_mode()
+    elif choice == 3:
+        sys.exit()
 
 
 def horde_player_attack(beretta_pistol, horde_health, wave_number, horde_total_kills, player_alive):
@@ -207,19 +207,20 @@ def horde_player_attack(beretta_pistol, horde_health, wave_number, horde_total_k
         if horde_health <= 0:
             return False, horde_health, horde_total_kills
         horde_total_kills += zombies
+        player1.total_kills += zombies
         print_green(f'You survived this wave while losing {beretta_pistol_health_loss} health.\n', 2)
         xp_level_system()
         time.sleep(1)
-        print_green(f'Health remaining: {horde_health}.\n', 1)
+        print_green(f'Health remaining: {horde_health}\n', 1)
     else:
         print_red('No weapon has been acquired or set to True!\n', 2)
     return player_alive, horde_health, horde_total_kills
 
 
-def horde_mode(horde_health):
+def horde_mode():
     print_yellow('You will start with the 1997 Beretta Pistol.\n', 1.5)
     # default values --> TODO move these values to the player class
-    horde_health = 250 # TODO I had to set horde_health to 250 here or else the player will automatically die in horde mode.
+    horde_health = 25 # TODO I had to set horde_health to a number here or else the player will automatically die in horde mode.
     beretta_pistol = True 
     horde_total_kills = 0
     wave_number = 0
@@ -236,22 +237,15 @@ def horde_mode(horde_health):
 
         player_alive, horde_health, horde_total_kills = horde_player_attack(beretta_pistol, horde_health, horde_total_kills, wave_number, player_alive)
 
-    print_red(f'You have died! You survived a total of {wave_number} waves.\n', 2)  # TODO Once the player dies, there needs to be a save made so that variables like total kills, balance, and xp variables are saved to the data.json file.
+    print_red(f'You have died! You survived a total of {wave_number} waves.\n', 2)
     print_green(f'You killed a total of {horde_total_kills} zombies!\n', 1.5)
+    player1.checkpoint_save(checkpoint_name='-5')
     # game will auto return to main menu
 
 
 def horde_difficulty():
     """allows the user to select a difficulty for horde mode only."""
-    previous_health = player1.health
-    previous_difficulty = player1.difficulty
-    # getting difficulty from the player
-    difficulty_select()    
-    horde_health = player1.health
-    # reset player stats
-    player1.health = previous_health
-    player1.difficulty = previous_difficulty
-    return horde_health
+    difficulty_select()
 
 
 def game_menu():
@@ -280,9 +274,9 @@ def game_menu():
                     'decisions possible in order to live.\nAs a survivor, you will encounter zombies, weapons, people, '
                     'and a merchant to buy from with an in-game currency.\nEvery decision you make has a cause and '
                     'effect while some lead you to fortune and others lead you to death.\n')
-        for item in choice := choice_dict[_player_choice(list(choice_dict.keys()), choice_options)]:
+        for item in (choice := choice_dict[_player_choice(list(choice_dict.keys()), choice_options)]):
             if choice == '3' and player1.chapter < 2:
-                print('Sorry, Horde Mode unlocks after completing a chapter.')
+                print_red('Sorry, Horde Mode unlocks after completing a chapter!\n', 2)
                 break
             if not item:
                 run_game = False

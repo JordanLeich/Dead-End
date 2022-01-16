@@ -24,6 +24,7 @@ class Chapter1(Chapter):
                 '5': self.broken_roads_area,
                 '6': self.good_ending_and_continue,
                 'bad': self.bad_ending,
+                '-5': self.horde_mode,
                 }
 
     def good_ending_and_continue(self):
@@ -141,7 +142,7 @@ consuming the moldy and old smells of the basement.\n''', 2)
             player1.checkpoint_save('2')
         elif user_choice == '2':
             sounds.good_luck()
-            print_green(f'The man hands over some cash ({player1.get_money()}) dollars.\n', 1.5)
+            print_green(f'The man hands over some cash, ({player1.get_money()}) dollars.\n', 1.5)
             print_sleep('He tells you about a mysterious lurking salesman who would wonder around the town quite '
                         'often...\n', 2.5)
             print_sleep('The man says that he has not seen him since the apocalypse has happened but keep the money on '
@@ -206,10 +207,9 @@ consuming the moldy and old smells of the basement.\n''', 2)
 
         if user_choice == '1':
             sounds.good_luck()
-            print(
+            print_green(
                 f'After finishing up your entire search of the diner,\nyou find a total of {player1.get_money()} '
-                f'dollars and you refresh up on some food and gain a total of {player1.get_health(5, 15)} health!\n')
-            sleep(3)
+                f'dollars and you refresh up on some food and gain a total of {player1.get_health(5, 15)} health!\n', 3)
             print('You also manage to find a bloody photograph on the ground and upon looking at the image, you see a '
                   'familiar face...')
             print(
