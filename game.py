@@ -284,7 +284,7 @@ def game_menu():
                     'effect while some lead you to fortune and others lead you to death.\n')
         for item in (choice := choice_dict[_player_choice(list(choice_dict.keys()), choice_options)]):
             if choice == '3' and player1.chapter < 2:
-                print_red('Sorry, Horde Mode unlocks after completing a chapter!\n', 2)
+                print_red('Sorry, Horde Mode unlocks after completing a chapter!\n', 2)  # TODO Needs to be fixed, player should not be able to access horde mode if their chapter number is set 1
                 break
             if not item:
                 run_game = False
