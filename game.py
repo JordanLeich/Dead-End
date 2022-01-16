@@ -238,7 +238,7 @@ def horde_mode():
         player_alive, horde_health, horde_total_kills = horde_player_attack(beretta_pistol, horde_health, horde_total_kills, wave_number, player_alive)
 
     print_red(f'You have died! You survived a total of {wave_number} waves.\n', 2)
-    print_green(f'You killed a total of {horde_total_kills} zombies!\n', 1.5)
+    print_green(f'You now have killed a total of {player1.total_kills} zombies in both story and horde mode!\n', 1.5)
     player1.checkpoint_save(checkpoint_name='-5')
     # game will auto return to main menu
 
