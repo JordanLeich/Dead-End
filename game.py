@@ -172,14 +172,13 @@ def options(choice=''):
             break
 
 def horde_intro():
-    print_green('Welcome to Horde Mode - A game mode set on defeating unlimited waves of zombies!\n', 2)
-
+    print_green('Welcome to Horde Mode - A game mode set on defeating unlimited waves of zombies!\n')
     choice_options = ['(1) Select a difficulty',
                         '(2) Main menu',
                         '(3) Exit game\n',
                         'Select a choice: ',
                         ]
-    choice_dict = {1: [horde_difficulty, horde_mode, go_to_checkpoint],
+    choice_dict = {1: [horde_difficulty],
                    #2: [game_menu], # don't need as it creates an additional stack frame and will return to main menu anyway
                    3: [sys.exit],
                     #'unlock_all_cheat': [unlock_all_cheat, game],
@@ -191,19 +190,19 @@ def horde_intro():
     choice = int(_player_choice(choices, choice_options))
 
     if choice == 1:
-        horde_mode()
+        horde_difficulty()
     elif choice == 3:
         sys.exit()
 
 
-def horde_player_attack(beretta_pistol, horde_health, wave_number, horde_total_kills, player_alive):
+def horde_player_attack(beretta_pistol, horde_health, horde_total_kills, player_alive):
     random_number_generator = randint(1, 3)
     if beretta_pistol: # TODO allow the player to be able to access the merchant to buy weapons or food.
         beretta_pistol_health_loss = randint(20, 30)       
         zombies = (2 * random_number_generator) + 1
         
         print_red(f'A group of {zombies} zombies begin to head towards you and you begin to fight!\n', 1.5)
-        horde_health -= beretta_pistol_health_loss
+        horde_health -= beretta_pistol_health_loss  # TODO fix horde health not displaying the correct amount
         if horde_health <= 0:
             return False, horde_health, horde_total_kills
         horde_total_kills += zombies
@@ -211,16 +210,14 @@ def horde_player_attack(beretta_pistol, horde_health, wave_number, horde_total_k
         print_green(f'You survived this wave while losing {beretta_pistol_health_loss} health.\n', 2)
         xp_level_system()
         time.sleep(1)
-        print_green(f'Health remaining: {horde_health}\n', 1)
+        print_green(f'Health remaining: {horde_health}\n', 1)  # TODO fix horde health not displaying the correct amount
     else:
         print_red('No weapon has been acquired or set to True!\n', 2)
     return player_alive, horde_health, horde_total_kills
 
 
-def horde_mode():
+def horde_mode(horde_health):
     print_yellow('You will start with the 1997 Beretta Pistol.\n', 1.5)
-    # default values --> TODO move these values to the player class
-    horde_health = 25 # TODO I had to set horde_health to a number here or else the player will automatically die in horde mode.
     beretta_pistol = True 
     horde_total_kills = 0
     wave_number = 0
@@ -234,18 +231,38 @@ def horde_mode():
             wave_reward = (wave_number / 5) * 25
             player1.balance += wave_reward
             print_green(f'Due to reaching wave {wave_number}, you have earned {wave_reward} dollars!\n', 2)
-
-        player_alive, horde_health, horde_total_kills = horde_player_attack(beretta_pistol, horde_health, horde_total_kills, wave_number, player_alive)
-
+        horde_player_attack(player_alive, horde_health, horde_total_kills, player_alive)
     print_red(f'You have died! You survived a total of {wave_number} waves.\n', 2)
     print_green(f'You now have killed a total of {player1.total_kills} zombies in both story and horde mode!\n', 1.5)
     player1.checkpoint_save(checkpoint_name='-5')
     # game will auto return to main menu
 
 
-def horde_difficulty():
+def horde_difficulty():  # horde mode health and difficulty should be separate from story mode health and difficulty.
     """allows the user to select a difficulty for horde mode only."""
-    difficulty_select()
+    horde_health = int
+    print_sleep('--- All difficulty levels ---\n')
+    print_green('(1) Easy - Start with 200 Health\n')
+    print_yellow('(2) Medium - Start with 100 Health\n')
+    print_red('(3) Hardcore - Start with 50 Health\n')
+    difficulty_choice = int(input('Select a difficulty: '))
+    print()
+    sounds.difficulty_select_sound()
+
+    if difficulty_choice == 1:
+        horde_difficulty = 'Easy'
+        horde_health = 200
+    elif difficulty_choice == 2:
+        horde_difficulty = 'Medium'
+        horde_health = 100
+    elif difficulty_choice == 3:
+        horde_difficulty = 'Hardcore'
+        horde_health = 50
+    else:
+        print_red('Error found!\n', 2)
+
+    print_sleep(f'Difficulty set to {horde_difficulty} and Health set to {horde_health}.\n', 1.5)
+    horde_mode(horde_health)
 
 
 def game_menu():
