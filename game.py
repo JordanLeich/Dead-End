@@ -195,52 +195,44 @@ def horde_intro():
         sys.exit()
 
 
-def horde_player_attack(beretta_pistol, horde_health, horde_total_kills, player_alive):
-    random_number_generator = randint(1, 3)
-    if beretta_pistol: # TODO allow the player to be able to access the merchant to buy weapons or food.
-        beretta_pistol_health_loss = randint(20, 30)       
-        zombies = (2 * random_number_generator) + 1
-        
-        print_red(f'A group of {zombies} zombies begin to head towards you and you begin to fight!\n', 1.5)
-        horde_health -= beretta_pistol_health_loss  # TODO fix horde health not displaying the correct amount
-        if horde_health <= 0:
-            return False, horde_health, horde_total_kills
-        horde_total_kills += zombies
-        player1.total_kills += zombies
-        print_green(f'You survived this wave while losing {beretta_pistol_health_loss} health.\n', 2)
-        xp_level_system()
-        time.sleep(1)
-        print_green(f'Health remaining: {horde_health}\n', 1)  # TODO fix horde health not displaying the correct amount
-    else:
-        print_red('No weapon has been acquired or set to True!\n', 2)
-    return player_alive, horde_health, horde_total_kills
-
 
 def horde_mode(horde_health):
     print_yellow('You will start with the 1997 Beretta Pistol.\n', 1.5)
-    beretta_pistol = True 
     horde_total_kills = 0
     wave_number = 0
     player_alive = True
-    
+    beretta_pistol = True
     while player_alive:
         wave_number += 1
         print_yellow(f'Starting wave number: {wave_number}\n', 1)
-        
         if wave_number % 5 == 0:  # award player cash for completing sets of waves
             wave_reward = (wave_number / 5) * 25
             player1.balance += wave_reward
             print_green(f'Due to reaching wave {wave_number}, you have earned {wave_reward} dollars!\n', 2)
-        horde_player_attack(player_alive, horde_health, horde_total_kills, player_alive)
+        random_number_generator = randint(1, 3)
+        if beretta_pistol:
+            beretta_pistol_health_loss = randint(20, 30)
+            zombies = (2 * random_number_generator) + 1
+            print_red(f'A group of {zombies} zombies begin to head towards you and you begin to fight!\n', 1.5)
+            horde_health -= beretta_pistol_health_loss
+            if horde_health <= 0:
+                player_alive = False
+            horde_total_kills += zombies
+            player1.total_kills += zombies
+            print_green(f'You survived this wave while losing {beretta_pistol_health_loss} health.\n', 2)
+            xp_level_system()
+            time.sleep(1)
+            print_green(f'Health remaining: {horde_health}\n', 1)
+        else:
+            print_red('No weapon has been acquired or set to True!\n', 2)
     print_red(f'You have died! You survived a total of {wave_number} waves.\n', 2)
     print_green(f'You now have killed a total of {player1.total_kills} zombies in both story and horde mode!\n', 1.5)
-    player1.checkpoint_save(checkpoint_name='-5')
+    # TODO add a save point here so that the players horde_total_kills saves for player.total_kills and horde xp saves for player1 xp.
     # game will auto return to main menu
 
 
 def horde_difficulty():  # horde mode health and difficulty should be separate from story mode health and difficulty.
     """allows the user to select a difficulty for horde mode only."""
-    horde_health = int
     print_sleep('--- All difficulty levels ---\n')
     print_green('(1) Easy - Start with 200 Health\n')
     print_yellow('(2) Medium - Start with 100 Health\n')
@@ -260,7 +252,6 @@ def horde_difficulty():  # horde mode health and difficulty should be separate f
         horde_health = 50
     else:
         print_red('Error found!\n', 2)
-
     print_sleep(f'Difficulty set to {horde_difficulty} and Health set to {horde_health}.\n', 1.5)
     horde_mode(horde_health)
 
