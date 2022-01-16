@@ -282,7 +282,7 @@ def game_menu():
                     'decisions possible in order to live.\nAs a survivor, you will encounter zombies, weapons, people, '
                     'and a merchant to buy from with an in-game currency.\nEvery decision you make has a cause and '
                     'effect while some lead you to fortune and others lead you to death.\n')
-        for item in (choice := choice_dict[_player_choice(list(choice_dict.keys()), choice_options)]):
+        for item in choice_dict[(choice := _player_choice(list(choice_dict.keys()), choice_options))]:
             if choice == '3' and player1.chapter < 2:
                 print_red('Sorry, Horde Mode unlocks after completing a chapter!\n', 2)
                 break
