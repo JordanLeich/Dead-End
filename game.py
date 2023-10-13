@@ -17,9 +17,7 @@ player1 = Player()  # Player Instance
 game_data = GameData()  # load/save functions Instance
 sounds = GameSounds()  # audio that will be played Instance
 
-
 # MENUS
-
 def view_stats():
     """Prints the users current in game stats based upon a load file. Usage in Options"""
     player1.load_data(game_data.load_game())
@@ -39,20 +37,17 @@ def view_stats():
     items_used.add_rows([[v[0]] for v in player1.consumables if v[2]])
     print(items_used, '\n')
 
-
 def open_github(print_text, website_append=''):
     """Open GitHub in the users default web browser"""
     print_green(print_text)
     webbrowser.open_new(f'https://github.com/JordanLeich/Dead-End{website_append}')
     time.sleep(1)
 
-
 def donation_opener():
     """Open a donation page in the users default web browser"""
     print_green("Opening PayPal Donation page...\n")
     webbrowser.open_new("https://www.paypal.com/donate/?business=8FGHU8Z4EJPME&no_recurring=0&currency_code=USD")
     time.sleep(2)
-
 
 def list_achievements():
     """Simply prints an entire list of all the achievements found in the classes file"""
@@ -63,7 +58,6 @@ def list_achievements():
     print()
     time.sleep(5)
 
-
 def list_cheat_codes():
     """Simply prints an entire list of all the cheat codes"""
     print_yellow('--- Please keep in mind these cheat codes contain heavy spoilers ---\n', 1)
@@ -71,7 +65,6 @@ def list_cheat_codes():
     for x in ['unlock_all_cheat', 'infinite_health_cheat', 'infinite_money_cheat\n']:
         print(x)
     time.sleep(3)
-
 
 def concept_art():  # sourcery no-metrics
     """contains options and image openings for all concept art pieces"""
@@ -114,9 +107,9 @@ def game_version():
     latest_stable_release_version = 7.0
 
     if current_game_version == latest_stable_release_version:
-        print(f'You are playing on version {current_game_version}. This version matches the most stable release of {latest_stable_release_version} on GitHub.\n')
+        print_green(f'You are playing on version {current_game_version}. This version matches the most stable release of {latest_stable_release_version} on GitHub.\n')
     elif current_game_version < latest_stable_release_version:
-        print(f'You are playing on version {current_game_version}. This version is outdated from the most stable release of {latest_stable_release_version} on GitHub. It is recommended to update to the latest release version on GitHub!\n')
+        print_red(f'You are playing on version {current_game_version}. This version is outdated from the most stable release of {latest_stable_release_version} on GitHub. It is recommended to update to the latest release version on GitHub!\n')
         
         # Ask the user if they want to upgrade
         user_input = input("Do you want to upgrade to the latest version on GitHub? (yes/no): ")
@@ -128,10 +121,9 @@ def game_version():
         else:
             print_yellow("Returning to outdated game...\n")
     elif current_game_version > latest_stable_release_version:
-        print(f'You are playing on version {current_game_version}. This version is updated beyond the most stable release of {latest_stable_release_version} on GitHub. Beware of bugs that may occur!\n')
+        print_yellow(f'You are playing on version {current_game_version}. This version is updated beyond the most stable release of {latest_stable_release_version} on GitHub. Beware of bugs that may occur!\n')
     else:
         print('Game version could not be found...\n')
-
 
 def options(choice=''):
     """UI for the user to view additional info or extra parts of this project"""
@@ -198,8 +190,6 @@ def horde_intro():
     elif choice == 3:
         sys.exit()
 
-
-
 def horde_mode(horde_health):
     print_yellow('You will start with the 1997 Beretta Pistol.\n', 1.5)
     horde_total_kills = 0
@@ -234,7 +224,6 @@ def horde_mode(horde_health):
     # TODO add a save point here so that the players horde_total_kills saves for player.total_kills and horde xp saves for player1 xp.
     # game will auto return to main menu
 
-
 def horde_difficulty():  # horde mode health and difficulty should be separate from story mode health and difficulty.
     """allows the user to select a difficulty for horde mode only."""
     print_sleep('--- All difficulty levels ---\n')
@@ -258,7 +247,6 @@ def horde_difficulty():  # horde mode health and difficulty should be separate f
         print_red('Error found!\n', 2)
     print_sleep(f'Difficulty set to {horde_difficulty} and Health set to {horde_health}.\n', 1.5)
     horde_mode(horde_health)
-
 
 def game_menu():
     """handles the main menu UI options"""
@@ -295,7 +283,6 @@ def game_menu():
             else:
                 item()
 
-
 def audio_options():
     """allows the player to control or disable in game audio"""
     choice_options = ['What would you like to set your volume level to (0 - 100) or exit: ']
@@ -311,18 +298,15 @@ def audio_options():
         sounds.zombie_attack_outside()
         print_sleep(f'Your current volume level is set at {choice}%\n', 1)
 
-
 def start_background_timer():
     """Acts as a background timer that starts as soon as the game is run."""
     player1.start_timer = time.time()  # Starts the background timer as soon as the game starts
-
 
 def display_background_timer():
     """Acts as a background timer that starts as soon as the game is run."""
     end_timer = time.time()
     temporary_time_played = int((int(end_timer) - (int(player1.start_timer))) / 60)
     return print_blue(f'{temporary_time_played} Minutes played.\n', 1)
-
 
 if __name__ == '__main__':
     start_background_timer()

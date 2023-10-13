@@ -240,8 +240,8 @@ class Player:
                                    'What would you like to buy: ',
                                    ])
             while buy_item != exit_merchant_menu:
-                print_green(f'Health: {self.health}\n', 1)
-                print_green(f'Balance: {self.balance}\n', 1)
+                print_green(f'Health: {self.health}', 0)
+                print_green(f'Balance: {self.balance}\n', 0)
                 buy_item = _player_choice([str(x) for x in range(1, total_items + 1)], choice_options)
                 consumable_index = int(buy_item) - num_item
 
