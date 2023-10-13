@@ -1,4 +1,4 @@
-""" File is used to control/call all sounds and music. """
+""" This file is used to control/call all sounds and music of the game. """
 from random import choice
 import pygame
 

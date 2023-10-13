@@ -31,7 +31,7 @@ class Chapter2(Chapter):
         """start of ch2"""
         self.start()
         print_sleep(
-            'Upon driving the car through the broken roads area, the sun is certainly dwindling and time in the car'
+            'Upon driving the car through the broken roads area, the sun is certainly dwindling and time in the car '
             'says 2:35 AM.\nYou continue to grow yourself tired and restless from everything that had led to this '
             'point\n', 2.5)
         choices = [str(x) for x in range(1, 3)]

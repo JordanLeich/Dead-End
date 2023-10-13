@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 """ This file holds all the main menus of the game and starts the game. """
 
 # Created on 5/11/2021
@@ -78,11 +77,11 @@ def concept_art():  # sourcery no-metrics
     """contains options and image openings for all concept art pieces"""
     print_yellow('--- Please keep in mind these images contain heavy spoilers ---\n', 1)
     artwork_data = {
-        '1': {'author': 'Malek Mansour', 'filename': 'ch1 gas station'},
-        '2': {'author': 'Xavier Rault', 'filename': 'ch1 broken roads 1'},
-        '3': {'author': 'Xavier Rault', 'filename': 'ch1 broken roads 2'},
-        '4': {'author': 'Xavier Rault', 'filename': 'ch1 broken roads 3'},
-        '5': {'author': 'Marcus Marcussen', 'filename': 'ch2 woods'},
+        '1': {'author': 'Malek Mansour', 'filename': 'chapter 1 gas station'},
+        '2': {'author': 'Xavier Rault', 'filename': 'chapter 1 broken roads 1'},
+        '3': {'author': 'Xavier Rault', 'filename': 'chapter 1 broken roads 2'},
+        '4': {'author': 'Xavier Rault', 'filename': 'chapter 1 broken roads 3'},
+        '5': {'author': 'Marcus Marcussen', 'filename': 'chapter 2 woods'},
         '6': {'author': 'Dark Souls', 'filename': 'merchant 1'},
         '7': {'author': 'Dark Souls', 'filename': 'merchant 2'},
         '8': {'author': 'Dmitry Pantiukhov', 'filename': 'rookie protagonist 1'},
@@ -109,24 +108,29 @@ def concept_art():  # sourcery no-metrics
         time.sleep(2)
         return concept_art()
 
-
 def game_version():
-    """ Allows the user to see what version of the game they are currently playing on. """
+    """ Allows the user to see what version of the game they are currently playing on and upgrade their version if they are outdated. """
     current_game_version = 7.0
-    latest_stable_release_version = 6.0
+    latest_stable_release_version = 7.0
 
     if current_game_version == latest_stable_release_version:
-        print_green(f'You are playing on {current_game_version}, this version matches the most stable release of '
-                    f'{latest_stable_release_version} on GitHub.\n', 2)
+        print(f'You are playing on version {current_game_version}. This version matches the most stable release of {latest_stable_release_version} on GitHub.\n')
     elif current_game_version < latest_stable_release_version:
-        print_red(f'You are playing on {current_game_version}, this version is outdated from the most '
-                  f'stable release of 'f'{latest_stable_release_version} on GitHub. It is recommended to update to '
-                  f'the latest release version on GitHub!\n', 2)
+        print(f'You are playing on version {current_game_version}. This version is outdated from the most stable release of {latest_stable_release_version} on GitHub. It is recommended to update to the latest release version on GitHub!\n')
+        
+        # Ask the user if they want to upgrade
+        user_input = input("Do you want to upgrade to the latest version on GitHub? (yes/no): ")
+        print()
+        if user_input.lower() == 'yes':
+            github_release_url = 'https://github.com/JordanLeich/Dead-End/releases'
+            webbrowser.open(github_release_url)
+            exit()
+        else:
+            print_yellow("Returning to outdated game...\n")
     elif current_game_version > latest_stable_release_version:
-        print_yellow(f'You are playing on {current_game_version}, this version is updated beyond the most stable '
-                     f'release of 'f'{latest_stable_release_version} on GitHub. Beware of bugs that may occur!\n', 2)
+        print(f'You are playing on version {current_game_version}. This version is updated beyond the most stable release of {latest_stable_release_version} on GitHub. Beware of bugs that may occur!\n')
     else:
-        return print_red('Game version could not be found...\n', 2)
+        print('Game version could not be found...\n')
 
 
 def options(choice=''):
@@ -322,4 +326,5 @@ def display_background_timer():
 
 if __name__ == '__main__':
     start_background_timer()
+    game_version()
     game_menu()
